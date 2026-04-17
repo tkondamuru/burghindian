@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Places to Visit in Pittsburgh - Indians in Pittsburgh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        surface: '#F8F9FA',
+                        'surface-container-low': '#F3F4F5',
+                        'surface-container-lowest': '#FFFFFF',
+                        'surface-container-high': '#E7E8E9',
+                        primary: '#9F3D00',
+                        'primary-container': '#C74E00',
+                        secondary: '#006A60',
+                        'secondary-container': '#8CF5E4',
+                        'secondary-dim': '#6FD8C8',
+                        'on-surface': '#191C1D',
+                        'outline-variant': '#E1BFB2',
+                        'primary-fixed-dim': '#FFB596'
+                    },
+                    fontFamily: {
+                        headline: ['Manrope', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'editorial': '0px 12px 32px rgba(141, 113, 101, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #F8F9FA; color: #191C1D; }
+        .gradient-primary { background: linear-gradient(135deg, #9F3D00 0%, #C74E00 100%); }
+    </style>
+</head>
+<body class="font-body antialiased selection:bg-primary-fixed-dim selection:text-on-surface">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-surface/85 backdrop-blur-md border-b-[1px] border-outline-variant/15 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-8">
+                    <a href="/index.html" class="text-primary font-headline font-bold text-2xl tracking-tight">Indians in Pittsburgh</a>
+                    
+                    <div class="hidden md:flex space-x-6 text-sm font-medium text-on-surface/80">
+                        <a href="/events/index.html" class="hover:text-primary transition-colors pb-1">Events</a>
+                        <a href="/businesses/index.html" class="hover:text-primary transition-colors pb-1">Businesses</a>
+                        <a href="/newcomers/index.html" class="hover:text-primary transition-colors pb-1">Newcomers</a>
+                        <a href="/places/index.html" class="text-primary border-b-2 border-primary pb-1">Places</a>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="py-12 md:py-20">
+        <!-- Header -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+            <div class="max-w-3xl">
+                <p class="text-secondary text-sm font-bold tracking-widest uppercase mb-3 text-[#006A60]">Tourist Attractions</p>
+                <h1 class="font-headline text-5xl md:text-6xl font-extrabold leading-tight mb-6 text-on-surface">
+                    Places to Visit
+                </h1>
+                <p class="text-lg text-on-surface/80 leading-relaxed">
+                    Our compiled list of top-rated attractions, parks, and museums in Pittsburgh. Perfect for a family outing or showing visitors around the Steel City. Email us if you know an awesome place!
+                </p>
+            </div>
+        </div>
+
+        <!-- Grid -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            
+            <!-- Cards (Using alternate curated Unsplash photos based on type) -->
+            <!-- Art/Museum -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1518998053401-b254313fb8b0?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Andy Warhol Museum</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">The museum holds an extensive permanent collection of art and archives from the Pittsburgh-born pop art icon Andy Warhol.</p>
+                </div>
+            </div>
+
+            <!-- Park/Nature -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Moraine State Park</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">16,725 acres, perfectly suited for a family picnic or group outing. A place where kids and adults will love to be.</p>
+                </div>
+            </div>
+
+            <!-- Tech/Science -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Allegheny Observatory</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">One of the major astronomical research institutions of the world. Free tours and a chance to see celestial objects!</p>
+                </div>
+            </div>
+
+            <!-- Park/Nature -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Pittsburgh Botanic Garden</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">Spans across 452 acres making it among the top 10 largest American botanical gardens.</p>
+                </div>
+            </div>
+
+            <!-- Building/Entertainment -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1518133835878-5a93ac3bfb4f?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Rivers Casino</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">Features non-stop fun with 2900 slots, 100+ table games, restaurants and live entertainment.</p>
+                </div>
+            </div>
+
+            <!-- Amusement -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1549557431-7e8e1e72183e?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Kennywood</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">A premier amusement park located near Downtown Pittsburgh. Offers fun for everyone, from thrilling rides to delicious food.</p>
+                </div>
+            </div>
+
+            <!-- Water/Fun -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Spray parks!</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">Cool off during hot days at Pittsburgh's coolest free aquatic facilities. Located at Beechview, Burgwin, East Hills, and more.</p>
+                </div>
+            </div>
+
+            <!-- Nature/Animals -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1552728089-571692df9108?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">National Aviary</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">The country's largest aviary, home to over 600 animals representing about 200 species.</p>
+                </div>
+            </div>
+
+            <!-- Building/Entertainment -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Station Square</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">A 52-acre indoor and outdoor shopping and entertainment complex, attracting millions annually.</p>
+                </div>
+            </div>
+
+            <!-- Water/Kayaking -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1437482078625-728add932782?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Kayak Pittsburgh North Shore</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">Located under the 6th Street Bridge, next to PNC Park. Easy walking distance to explore the rivers.</p>
+                </div>
+            </div>
+
+            <!-- Water -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1549557431-7e8e1e72183e?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Fountain Shows</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">Every 20 minutes with water jets soaring up to 40 feet in the air, choreographed to music.</p>
+                </div>
+            </div>
+
+            <!-- Park/Nature -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Hartwood Acres</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">629-acre equestrian estate park, hosting many free concerts and special events throughout the year.</p>
+                </div>
+            </div>
+
+            <!-- Food/Candy -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Sarris Candies</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">A specialty chocolate and candies company located in Canonsburg. Features an incredible old-fashioned ice cream parlour.</p>
+                </div>
+            </div>
+
+            <!-- Amusement/Water -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Sandcastle Water Park</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">15 waterslides, a wave pool, a lazy river and two children's areas right in the heart of Pittsburgh.</p>
+                </div>
+            </div>
+
+            <!-- Transport/Tour -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1518133835878-5a93ac3bfb4f?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Just Ducky Tours</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">Fun drive taking riders through the city on land and water in an amphibious vehicle. Begins at Station Square.</p>
+                </div>
+            </div>
+
+            <!-- Science Museum -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1518998053401-b254313fb8b0?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Carnegie Science Center</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">Dedicated to educating and inspiring through science and tech. Don't miss the Robotics floor.</p>
+                </div>
+            </div>
+
+            <!-- Kids Museum -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">The Children's Museum</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">A hands-on interactive children's museum located in Pittsburgh's Northside.</p>
+                </div>
+            </div>
+
+            <!-- Point state park -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Point State Park</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">A 36-acre state park at the confluence of the rivers with a massive fountain that sprays water up to 150 feet.</p>
+                </div>
+            </div>
+
+            <!-- Mount Washington Overlook -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1549557431-7e8e1e72183e?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Mount Washington Overlook</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">View Pittsburgh's Golden Triangle from this 450-foot high hill. Named the "second best view in America" by USA Weekend.</p>
+                </div>
+            </div>
+
+            <!-- Incline -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Duquesne & Monongahela Inclines</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">Hitch a ride up a century-old cable car that still functions just as it did when constructed back in the 1870s.</p>
+                </div>
+            </div>
+
+            <!-- Tanger Outlets -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1518133835878-5a93ac3bfb4f?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Tanger Outlets Pittsburgh</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">Open-air outlet mall within 30 mins drive from down town Pittsburgh. Offers a wonderful shopping experience.</p>
+                </div>
+            </div>
+
+            <!-- Pittsburgh Zoo -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1552728089-571692df9108?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="font-headline text-lg font-bold mb-2">Pittsburgh Zoo & PPG Aquarium</h3>
+                    <p class="text-sm text-on-surface/70 leading-relaxed mb-4">4000 animals representing 475 species on 77 acres. It is one of only six major zoo and aquarium combinations in the US.</p>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-surface py-10 border-t border-outline-variant/15 mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0 text-center md:text-left">
+                    <p class="font-headline font-bold text-xl text-on-surface mb-2">Indians in Pittsburgh</p>
+                    <p class="text-sm text-on-surface/60">&copy; 2024 Indians in Pittsburgh. The Civic Ledger.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-6 text-sm text-on-surface/80 font-medium">
+                    <a href="#" class="hover:text-primary">About</a>
+                    <a href="#" class="hover:text-primary">Contact</a>
+                    <a href="#" class="hover:text-primary">Add Event</a>
+                    <a href="#" class="hover:text-primary">Add Business</a>
+                    <a href="#" class="hover:text-primary">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events - Indians in Pittsburgh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        surface: '#F8F9FA',
+                        'surface-container-low': '#F3F4F5',
+                        'surface-container-lowest': '#FFFFFF',
+                        'surface-container-high': '#E7E8E9',
+                        primary: '#9F3D00',
+                        'primary-container': '#C74E00',
+                        secondary: '#006A60',
+                        'secondary-container': '#8CF5E4',
+                        'secondary-dim': '#6FD8C8',
+                        'on-surface': '#191C1D',
+                        'outline-variant': '#E1BFB2',
+                        'primary-fixed-dim': '#FFB596'
+                    },
+                    fontFamily: {
+                        headline: ['Manrope', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'editorial': '0px 12px 32px rgba(141, 113, 101, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #F8F9FA; color: #191C1D; }
+        .gradient-primary { background: linear-gradient(135deg, #9F3D00 0%, #C74E00 100%); }
+    </style>
+</head>
+<body class="font-body antialiased selection:bg-primary-fixed-dim selection:text-on-surface">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-surface/85 backdrop-blur-md border-b-[1px] border-outline-variant/15 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-8">
+                    <a href="/index.html" class="text-primary font-headline font-bold text-2xl tracking-tight">Indians in Pittsburgh</a>
+                    
+                    <div class="hidden md:flex space-x-6 text-sm font-medium text-on-surface/80">
+                        <a href="/events/index.html" class="text-primary border-b-2 border-primary pb-1">Events</a>
+                        <a href="/businesses/index.html" class="hover:text-primary transition-colors pb-1">Businesses</a>
+                        <a href="/newcomers/index.html" class="hover:text-primary transition-colors pb-1">Newcomers</a>
+                        <a href="/places/index.html" class="hover:text-primary transition-colors pb-1">Places</a>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 space-y-8 md:space-y-0">
+            <div class="max-w-2xl">
+                <p class="text-primary text-sm font-bold tracking-widest uppercase mb-3">Community Ledger</p>
+                <h1 class="font-headline text-5xl md:text-6xl font-extrabold leading-tight mb-4 text-on-surface">
+                    The City's Cultural <br> Calendar
+                </h1>
+                <p class="text-lg text-on-surface/80 leading-relaxed max-w-xl">
+                    From religious gatherings to tech meetups, explore the vibrant pulse of the Indian diaspora in Pittsburgh.
+                </p>
+            </div>
+            
+            <!-- Category Chips -->
+            <div class="flex flex-wrap gap-2">
+                <button class="bg-secondary text-white px-5 py-2 rounded-full text-sm font-bold tracking-wide hover:opacity-90 transition-opacity">All</button>
+                <button class="bg-secondary-container text-secondary-dim font-bold px-5 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Festival</button>
+                <button class="bg-secondary-container text-secondary-dim font-bold px-5 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Kids</button>
+                <button class="bg-secondary-container text-secondary-dim font-bold px-5 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Religious</button>
+                <button class="bg-secondary-container text-secondary-dim font-bold px-5 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Social</button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <!-- Left Column: Events List -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Event Card 1 -->
+                <div class="bg-surface-container-lowest p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow group flex flex-col sm:flex-row gap-8">
+                    <!-- Date Column -->
+                    <div class="sm:w-32 flex flex-col border-r border-outline-variant/15 pr-6 hidden sm:flex">
+                        <span class="text-primary font-headline text-3xl font-extrabold uppercase">Oct 24</span>
+                        <span class="text-on-surface/60 text-sm font-semibold tracking-wider mt-1 uppercase">Thursday</span>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="flex-1">
+                        <div class="flex gap-2 mb-4">
+                            <span class="bg-secondary-container text-secondary px-2 py-1 rounded-sm text-xs font-bold uppercase tracking-wider">Festival</span>
+                            <span class="bg-secondary-container text-secondary px-2 py-1 rounded-sm text-xs font-bold uppercase tracking-wider">Family</span>
+                        </div>
+                        <h3 class="font-headline text-2xl font-bold mb-3 group-hover:text-primary transition-colors">Diwali Lights at Market Square</h3>
+                        <p class="text-on-surface/80 leading-relaxed mb-6">A grand celebration of the Festival of Lights in the heart of downtown. Experience traditional dance performances, artisan crafts, and a...</p>
+                        
+                        <div class="flex flex-col sm:flex-row sm:items-center text-sm font-medium text-on-surface/70 gap-4">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                Market Square, Pittsburgh, PA
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                06:00 PM — 09:30 PM
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event Card 2 -->
+                <div class="bg-surface-container-lowest p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow group flex flex-col sm:flex-row gap-8">
+                    <!-- Date Column -->
+                    <div class="sm:w-32 flex flex-col border-r border-outline-variant/15 pr-6 hidden sm:flex">
+                        <span class="text-primary font-headline text-3xl font-extrabold uppercase">Nov 02</span>
+                        <span class="text-on-surface/60 text-sm font-semibold tracking-wider mt-1 uppercase">Saturday</span>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="flex-1">
+                        <div class="flex gap-2 mb-4">
+                            <span class="bg-primary/10 text-primary px-2 py-1 rounded-sm text-xs font-bold uppercase tracking-wider">Religious</span>
+                        </div>
+                        <h3 class="font-headline text-2xl font-bold mb-3 group-hover:text-primary transition-colors">SV Temple Annual Bhajans</h3>
+                        <p class="text-on-surface/80 leading-relaxed mb-6">Join us for a peaceful evening of devotional music and community prayers. Prasad will be served following the concluding aarti.</p>
+                        
+                        <div class="flex flex-col sm:flex-row sm:items-center text-sm font-medium text-on-surface/70 gap-4">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                Penn Hills, Pittsburgh
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                10:00 AM — 01:00 PM
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event Card 3 -->
+                <div class="bg-surface-container-lowest p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow group flex flex-col sm:flex-row gap-8">
+                    <!-- Date Column -->
+                    <div class="sm:w-32 flex flex-col border-r border-outline-variant/15 pr-6 hidden sm:flex">
+                        <span class="text-primary font-headline text-3xl font-extrabold uppercase">Nov 15</span>
+                        <span class="text-on-surface/60 text-sm font-semibold tracking-wider mt-1 uppercase">Friday</span>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="flex-1">
+                        <div class="flex gap-2 mb-4">
+                            <span class="bg-secondary-container text-secondary px-2 py-1 rounded-sm text-xs font-bold uppercase tracking-wider">Social</span>
+                            <span class="bg-secondary-container text-secondary px-2 py-1 rounded-sm text-xs font-bold uppercase tracking-wider">Professional</span>
+                        </div>
+                        <h3 class="font-headline text-2xl font-bold mb-3 group-hover:text-primary transition-colors">Indian Professionals Networking Mixer</h3>
+                        <p class="text-on-surface/80 leading-relaxed mb-6">Connect with fellow tech professionals, entrepreneurs, and students. A casual evening of conversation, mentorship, and appetizers at a...</p>
+                        
+                        <div class="flex flex-col sm:flex-row sm:items-center text-sm font-medium text-on-surface/70 gap-4">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                The Highline, South Side
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                07:00 PM — 10:00 PM
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column: Forms & Promos -->
+            <div class="space-y-6">
+                <!-- Promo Image -->
+                <div class="relative rounded-xl overflow-hidden aspect-[4/3] group block">
+                    <img src="https://images.unsplash.com/photo-1603831518712-421711681284?auto=format&fit=crop&q=80&w=800" alt="Indian Women in Sarees" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
+                        <h3 class="font-headline text-2xl font-bold text-white leading-tight">Keep the community connected.</h3>
+                    </div>
+                </div>
+
+                <!-- Host an Event Form -->
+                <div class="bg-surface-container-low p-8 rounded-xl shadow-sm">
+                    <h3 class="font-headline text-2xl font-bold mb-6 text-on-surface">Host an Event?</h3>
+                    <form class="space-y-5">
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface/60 uppercase tracking-widest mb-2">Event Title</label>
+                            <input type="text" placeholder="e.g. Classical Music Night" class="w-full bg-surface-container-lowest border-b-2 border-outline-variant/30 px-3 py-3 rounded-t-sm focus:outline-none focus:border-primary transition-colors text-sm">
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-on-surface/60 uppercase tracking-widest mb-2">Date</label>
+                                <input type="date" class="w-full bg-surface-container-lowest border-b-2 border-outline-variant/30 px-3 py-3 rounded-t-sm focus:outline-none focus:border-primary transition-colors text-sm text-on-surface/80">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-on-surface/60 uppercase tracking-widest mb-2">Time</label>
+                                <input type="time" class="w-full bg-surface-container-lowest border-b-2 border-outline-variant/30 px-3 py-3 rounded-t-sm focus:outline-none focus:border-primary transition-colors text-sm text-on-surface/80">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface/60 uppercase tracking-widest mb-2">Category</label>
+                            <select class="w-full bg-surface-container-lowest border-b-2 border-outline-variant/30 px-3 py-3 rounded-t-sm focus:outline-none focus:border-primary transition-colors text-sm appearance-none">
+                                <option>Social</option>
+                                <option>Religious</option>
+                                <option>Professional</option>
+                                <option>Festival</option>
+                            </select>
+                        </div>
+
+                        <button type="button" class="w-full gradient-primary text-white font-bold py-3 mt-4 rounded-md hover:opacity-90 transition-opacity">Submit for Review</button>
+                        <p class="text-xs text-center text-on-surface/60 mt-4 px-4 leading-relaxed">Submissions are reviewed by our editorial team before publication.</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-surface py-10 border-t border-outline-variant/15 mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0 text-center md:text-left">
+                    <p class="font-headline font-bold text-xl text-on-surface mb-2">Indians in Pittsburgh</p>
+                    <p class="text-sm text-on-surface/60">&copy; 2024 Indians in Pittsburgh. The Civic Ledger.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-6 text-sm text-on-surface/80 font-medium">
+                    <a href="#" class="hover:text-primary">About</a>
+                    <a href="#" class="hover:text-primary">Contact</a>
+                    <a href="#" class="text-secondary font-bold">Add Event</a>
+                    <a href="#" class="hover:text-primary">Add Business</a>
+                    <a href="#" class="hover:text-primary">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

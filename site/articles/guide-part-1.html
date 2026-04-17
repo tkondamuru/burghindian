@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pittsburgh Desi Guide Part 1 - Indians in Pittsburgh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        surface: '#F8F9FA', 'surface-container-low': '#F3F4F5', 'surface-container-lowest': '#FFFFFF', 'surface-container-high': '#E7E8E9',
+                        primary: '#9F3D00', 'primary-container': '#C74E00',
+                        secondary: '#006A60', 'secondary-container': '#8CF5E4', 'secondary-dim': '#6FD8C8',
+                        'on-surface': '#191C1D', 'outline-variant': '#E1BFB2', 'primary-fixed-dim': '#FFB596'
+                    },
+                    fontFamily: { headline: ['Manrope', 'sans-serif'], body: ['Inter', 'sans-serif'], },
+                    boxShadow: { 'editorial': '0px 12px 32px rgba(141, 113, 101, 0.08)' }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style> body { background-color: #F8F9FA; color: #191C1D; } .gradient-primary { background: linear-gradient(135deg, #9F3D00 0%, #C74E00 100%); } </style>
+</head>
+<body class="font-body antialiased selection:bg-primary-fixed-dim selection:text-on-surface">
+
+    <nav class="sticky top-0 z-50 bg-surface/85 backdrop-blur-md border-b-[1px] border-outline-variant/15 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-8">
+                    <a href="/index.html" class="text-primary font-headline font-bold text-2xl tracking-tight">Indians in Pittsburgh</a>
+                    <div class="hidden md:flex space-x-6 text-sm font-medium text-on-surface/80">
+                        <a href="/events/index.html" class="hover:text-primary transition-colors">Events</a>
+                        <a href="/businesses/index.html" class="hover:text-primary transition-colors">Businesses</a>
+                        <a href="/newcomers/index.html" class="hover:text-primary transition-colors">Newcomers</a>
+                        <a href="/places/index.html" class="hover:text-primary transition-colors">Places</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="py-12 md:py-20">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <a href="/index.html" class="text-sm font-bold text-primary uppercase tracking-widest hover:underline mb-4 block">&larr; Back Home</a>
+            <h1 class="font-headline text-4xl md:text-5xl font-extrabold leading-tight mb-8 text-on-surface">
+                Pittsburgh Desi Guide Part 1
+            </h1>
+            
+            <div class="relative h-64 md:h-96 w-full rounded-2xl overflow-hidden mb-10 shadow-editorial">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200" alt="Pittsburgh Cityscape" class="w-full h-full object-cover">
+            </div>
+
+            <article class="prose prose-lg text-on-surface/80 leading-relaxed font-body">
+                <p class="text-xl">Relocating to a new city can be daunting. I began researching Pittsburgh just a week prior to my arrival, having minimal time to prepare for my first assignment abroad. I landed with few expectations and a lot of doubts about navigating a foreign land. To my pleasant surprise, settling into the Steel City was remarkably seamless.</p>
+                
+                <p class="mt-6">After a brief period of orientation, Pittsburgh truly felt like home. The city is renowned for its welcoming nature, but for the Indian diaspora specifically, there is an established and thriving ecosystem that makes you feel connected. Here are some insights from a desi perspective.</p>
+
+                <h3 class="font-headline font-bold text-2xl mt-10 mb-4 text-on-surface">For the Short-term Visitor</h3>
+                <p>If you are visiting temporarily, Pittsburgh—famed as "The City of Bridges"—has plenty to offer. Sports fans will love PNC Park and Heinz Field. For breathtaking skyline views, scaling Mt. Washington is a must, while the Strip District provides an eclectic and rich cultural atmosphere.</p>
+
+                <h3 class="font-headline font-bold text-2xl mt-10 mb-4 text-on-surface">Navigating the Weather</h3>
+                <p>Pittsburgh winters are notoriously harsh, often freezing even without snow. Proper winter clothing is absolutely essential. If you are arriving from India, purchase quality winter gear immediately upon arrival—a warm scarf, insulated gloves, and a good beanie are indispensable. Because Downtown is situated at the confluence of three rivers, the wind chill makes it feel significantly colder. With the right layers, however, you can still enjoy an outdoor coffee.</p>
+
+                <h3 class="font-headline font-bold text-2xl mt-10 mb-4 text-on-surface">Social Networks and Support</h3>
+                <p>Pittsburgh boasts numerous WhatsApp and Telegram groups tailored to the Indian community. While many are invitation-only, our Telegram group, "Indian Community Pittsburgh," is the largest in the region. Active members frequently post regarding ride shares, moving sales, event information, and trusted local services.</p>
+
+                <h3 class="font-headline font-bold text-2xl mt-10 mb-4 text-on-surface">Public Transportation</h3>
+                <p>The city's public transport system is centrally focused around Downtown, served by Port Authority buses and the 'T' (light rail). Fares require exact change if paying in cash, but it is highly recommended to purchase a ConnectCard from local grocery stores like Giant Eagle for seamless transit.</p>
+            </article>
+        </div>
+    </main>
+
+    <footer class="bg-surface py-10 border-t border-outline-variant/15 mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left text-sm text-on-surface/60">
+            &copy; 2024 Indians in Pittsburgh. The Civic Ledger.
+        </div>
+    </footer>
+</body>
+</html>

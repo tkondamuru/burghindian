@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MassMutual Ice Rink at PPG Place - Indians in Pittsburgh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        surface: '#F8F9FA', 'surface-container-low': '#F3F4F5', 'surface-container-lowest': '#FFFFFF', 'surface-container-high': '#E7E8E9',
+                        primary: '#9F3D00', 'primary-container': '#C74E00',
+                        secondary: '#006A60', 'secondary-container': '#8CF5E4', 'secondary-dim': '#6FD8C8',
+                        'on-surface': '#191C1D', 'outline-variant': '#E1BFB2', 'primary-fixed-dim': '#FFB596'
+                    },
+                    fontFamily: { headline: ['Manrope', 'sans-serif'], body: ['Inter', 'sans-serif'], },
+                    boxShadow: { 'editorial': '0px 12px 32px rgba(141, 113, 101, 0.08)' }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style> body { background-color: #F8F9FA; color: #191C1D; } .gradient-primary { background: linear-gradient(135deg, #9F3D00 0%, #C74E00 100%); } </style>
+</head>
+<body class="font-body antialiased selection:bg-primary-fixed-dim selection:text-on-surface">
+
+    <nav class="sticky top-0 z-50 bg-surface/85 backdrop-blur-md border-b-[1px] border-outline-variant/15 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-8">
+                    <a href="/index.html" class="text-primary font-headline font-bold text-2xl tracking-tight">Indians in Pittsburgh</a>
+                    <div class="hidden md:flex space-x-6 text-sm font-medium text-on-surface/80">
+                        <a href="/events/index.html" class="hover:text-primary transition-colors">Events</a>
+                        <a href="/businesses/index.html" class="hover:text-primary transition-colors">Businesses</a>
+                        <a href="/newcomers/index.html" class="hover:text-primary transition-colors">Newcomers</a>
+                        <a href="/places/index.html" class="hover:text-primary transition-colors">Places</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="py-12 md:py-20">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <a href="/index.html" class="text-sm font-bold text-primary uppercase tracking-widest hover:underline mb-4 block">&larr; Back Home</a>
+            <h1 class="font-headline text-4xl md:text-5xl font-extrabold leading-tight mb-8 text-on-surface">
+                MassMutual Pittsburgh Ice Rink at PPG Place
+            </h1>
+            
+            <div class="relative h-64 md:h-96 w-full rounded-2xl overflow-hidden mb-10 shadow-editorial">
+                <img src="https://images.unsplash.com/photo-1544320496-e13768b37ad6?auto=format&fit=crop&q=80&w=1200" alt="Ice Rink" class="w-full h-full object-cover">
+            </div>
+
+            <article class="prose prose-lg text-on-surface/80 leading-relaxed font-body">
+                <p class="text-xl">Pittsburgh's extended winters offer a wide range of venues for public skating. However, one spectacular, one-of-a-kind destination stands out: the stunning ice rink constructed directly inside the gorgeous gothic glass spires of PPG Place.</p>
+                
+                <h3 class="font-headline font-bold text-2xl mt-10 mb-4 text-on-surface">The Experience</h3>
+                <p>Officially the MassMutual Pittsburgh Ice Rink at PPG Place, this seasonal attraction usually opens on Light Up Night and operates through March 1st. During the summer, this identical space features a beautiful, synchronized water fountain.</p>
+                <p class="mt-4">The rink comfortably holds up to 350 people. It's an expansive 116′ x 116′ circular ice loop centered around a towering, beautifully decorated Christmas tree. Colored lights and holiday songs immediately turn the plaza into a cheerful winter wonderland.</p>
+
+                <h3 class="font-headline font-bold text-2xl mt-10 mb-4 text-on-surface">Location & Surroundings</h3>
+                <p>Located in the heart of Downtown between Third and Fourth Avenues, it sits directly in the shadow of One PPG Center. Just a minute away from Market Square, transitioning from ice skating to a warm dinner is incredibly easy. During the holiday season, you can also view the stunning local Gingerbread House displays inside the adjacent PPG Wintergarden.</p>
+
+                <h3 class="font-headline font-bold text-2xl mt-10 mb-4 text-on-surface">A Note for Absolute Beginners</h3>
+                <p>While taking a lap around PPG Place is incredibly picturesque, the ice conditions can get somewhat gouged due to heavy foot traffic entirely throughout the day. If you are lacing up skates for the absolute first time, prepare yourself for crowds and the occasional minor bump from a fellow skater. Despite these very minor inconveniences, the sheer ambiance of the glass castle surroundings makes it an unforgettable outing for the whole family.</p>
+            </article>
+        </div>
+    </main>
+
+    <footer class="bg-surface py-10 border-t border-outline-variant/15 mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left text-sm text-on-surface/60">
+            &copy; 2024 Indians in Pittsburgh. The Civic Ledger.
+        </div>
+    </footer>
+</body>
+</html>

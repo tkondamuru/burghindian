@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newcomer's Guide - Indians in Pittsburgh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        surface: '#F8F9FA',
+                        'surface-container-low': '#F3F4F5',
+                        'surface-container-lowest': '#FFFFFF',
+                        'surface-container-high': '#E7E8E9',
+                        primary: '#9F3D00',
+                        'primary-container': '#C74E00',
+                        secondary: '#006A60',
+                        'secondary-container': '#8CF5E4',
+                        'secondary-dim': '#6FD8C8',
+                        'on-surface': '#191C1D',
+                        'outline-variant': '#E1BFB2',
+                        'primary-fixed-dim': '#FFB596'
+                    },
+                    fontFamily: {
+                        headline: ['Manrope', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'editorial': '0px 12px 32px rgba(141, 113, 101, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #F8F9FA; color: #191C1D; }
+        .gradient-primary { background: linear-gradient(135deg, #9F3D00 0%, #C74E00 100%); }
+    </style>
+</head>
+<body class="font-body antialiased selection:bg-primary-fixed-dim selection:text-on-surface">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-surface/85 backdrop-blur-md border-b-[1px] border-outline-variant/15 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-8">
+                    <a href="/index.html" class="text-primary font-headline font-bold text-2xl tracking-tight">Indians in Pittsburgh</a>
+                    
+                    <div class="hidden md:flex space-x-6 text-sm font-medium text-on-surface/80">
+                        <a href="/events/index.html" class="hover:text-primary transition-colors pb-1">Events</a>
+                        <a href="/businesses/index.html" class="hover:text-primary transition-colors pb-1">Businesses</a>
+                        <a href="/newcomers/index.html" class="text-primary border-b-2 border-primary pb-1">Newcomers</a>
+                        <a href="/places/index.html" class="hover:text-primary transition-colors pb-1">Places</a>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
+            
+            <!-- Left Column: Guide Content -->
+            <div class="lg:col-span-2 space-y-12">
+                <!-- Header -->
+                <div>
+                    <p class="text-secondary text-sm font-bold tracking-widest uppercase mb-3 text-[#006A60]">Essential Resource</p>
+                    <h1 class="font-headline text-4xl md:text-5xl font-extrabold leading-tight mb-6 text-on-surface">
+                        Navigating the Steel City: <br> A Newcomer's Guide
+                    </h1>
+                    <p class="text-lg text-on-surface/80 leading-relaxed max-w-2xl">
+                        Welcome to Pittsburgh. Whether you're here for CMU, Pitt, UPMC, or a new tech role, transitioning to life in Western Pennsylvania has its own unique rhythm. This guide is curated by the community to help you settle in swiftly.
+                    </p>
+                </div>
+
+                <!-- Section 1 -->
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="bg-secondary-container p-3 rounded-lg text-secondary-dim text-[#006A60]"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg></div>
+                        <h2 class="font-headline text-2xl font-bold">Settling into Neighborhoods</h2>
+                    </div>
+                    <p class="text-on-surface/80 mb-6 leading-relaxed">Pittsburgh is a city of 90 neighborhoods. For Indian newcomers, the choice often depends on proximity to work and the density of the community.</p>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-primary mt-1 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <span class="text-on-surface/80 leading-relaxed"><strong class="font-bold text-on-surface">Shadyside & Squirrel Hill:</strong> High density of students and young professionals. Walkable, with easy access to major universities.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-primary mt-1 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <span class="text-on-surface/80 leading-relaxed"><strong class="font-bold text-on-surface">Wexford & Cranberry:</strong> Preferred by families for highly-rated school districts (North Allegheny, Pine-Richland) and suburban space.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-primary mt-1 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <span class="text-on-surface/80 leading-relaxed"><strong class="font-bold text-on-surface">South Fayette & Upper St. Clair:</strong> Emerging hubs with newer housing developments and strong community presence.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Section 2: Grocery Box Format -->
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="bg-primary/10 p-3 rounded-lg text-primary"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path></svg></div>
+                        <h2 class="font-headline text-2xl font-bold">Grocery & Desi Flavors</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                        <div class="bg-surface-container-low p-6 rounded-lg border-l-4 border-transparent hover:border-primary transition-colors cursor-pointer">
+                            <h3 class="font-bold mb-2">Patel Brothers</h3>
+                            <p class="text-sm text-on-surface/70 leading-relaxed">Located in Monroeville, this is the go-to for bulk grains, spices, and fresh Indian vegetables.</p>
+                        </div>
+                        <div class="bg-surface-container-low p-6 rounded-lg border-l-4 border-transparent hover:border-primary transition-colors cursor-pointer">
+                            <h3 class="font-bold mb-2">Kohli's Indian Imports</h3>
+                            <p class="text-sm text-on-surface/70 leading-relaxed">Perfect for those living in Oakland or Shadyside; smaller footprint but carries all essentials.</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-on-surface/60 italic">Pro-tip: Giant Eagle and Whole Foods also carry dedicated "International" aisles with basic lentils and spices.</p>
+                </div>
+
+                <!-- Section 3: Winter -->
+                <div class="bg-surface-container-low p-8 rounded-lg relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 bg-secondary-container/30 w-32 h-32 rounded-full blur-3xl group-hover:bg-secondary-container/50 transition-colors"></div>
+                    <div class="flex items-center gap-4 mb-6 relative z-10">
+                        <div class="bg-secondary-container/50 p-3 rounded-lg text-secondary"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v20M17 5l-5 5-5-5M5 12h14M17 19l-5-5-5 5M8.5 7.5L15.5 14.5M15.5 7.5L8.5 14.5"></path></svg></div>
+                        <h2 class="font-headline text-2xl font-bold">Surviving Your First Winter</h2>
+                    </div>
+                    
+                    <ul class="space-y-4 ml-2 list-disc pl-5 text-on-surface/80 relative z-10 marker:text-primary">
+                        <li class="pl-2 leading-relaxed"><strong class="font-bold text-on-surface">Layers are Key:</strong> Invest in a high-quality down parka (rated for -10°F) and thermal base layers.</li>
+                        <li class="pl-2 leading-relaxed"><strong class="font-bold text-on-surface">Vehicle Prep:</strong> Switch to all-season tires by November. Keep an ice scraper and a small shovel in your trunk.</li>
+                        <li class="pl-2 leading-relaxed"><strong class="font-bold text-on-surface">Salt your Sidewalk:</strong> Use rock salt early to prevent ice build-up; it's a neighborly courtesy and often a city requirement.</li>
+                    </ul>
+                </div>
+
+                <!-- Section 4 -->
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="bg-surface-container-high p-3 rounded-lg text-on-surface"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg></div>
+                        <h2 class="font-headline text-2xl font-bold">DMV & Legal Setup</h2>
+                    </div>
+                    <div class="border-l-4 border-primary pl-6 py-2">
+                        <p class="text-on-surface/80 mb-4 leading-relaxed">The PennDOT Driver License Centers (often called the DMV) require specific documentation for visa holders. Bring your original I-20 or H1B papers, SSN card, and two proofs of residency.</p>
+                        <p class="font-bold text-primary">Popular Centers: Bridgeville (Southern suburbs) and Duncan Manor (Northern suburbs).</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column: Navigation & Promos -->
+            <div class="space-y-8">
+                <!-- Chapters Links -->
+                <div class="bg-surface-container-low p-6 rounded-lg sticky top-28">
+                    <h3 class="text-xs font-bold text-on-surface/50 tracking-widest uppercase mb-4">Guide Chapters</h3>
+                    <ul class="space-y-1">
+                        <li><a href="#" class="flex justify-between items-center py-3 px-4 bg-surface-container-lowest rounded-md text-sm font-medium hover:text-primary group transition-colors">Housing <span class="text-on-surface/30 group-hover:text-primary transition-colors">›</span></a></li>
+                        <li><a href="#" class="flex justify-between items-center py-3 px-4 hover:bg-surface-container-lowest rounded-md text-sm font-medium hover:text-primary group transition-colors">Grocery <span class="text-on-surface/30 group-hover:text-primary transition-colors">›</span></a></li>
+                        <li><a href="#" class="flex justify-between items-center py-3 px-4 hover:bg-surface-container-lowest rounded-md text-sm font-medium hover:text-primary group transition-colors">Winter Tips <span class="text-on-surface/30 group-hover:text-primary transition-colors">›</span></a></li>
+                        <li><a href="#" class="flex justify-between items-center py-3 px-4 hover:bg-surface-container-lowest rounded-md text-sm font-medium hover:text-primary group transition-colors">DMV & Schools <span class="text-on-surface/30 group-hover:text-primary transition-colors">›</span></a></li>
+                    </ul>
+                </div>
+
+                <!-- WhatsApp Promo -->
+                <div class="gradient-primary rounded-xl p-8 relative overflow-hidden text-center sm:text-left">
+                    <div class="absolute -right-10 -bottom-10 bg-white/10 w-32 h-32 rounded-full blur-2xl"></div>
+                    <h3 class="font-headline text-2xl font-bold text-white mb-3">Join the WhatsApp Group</h3>
+                    <p class="text-white/80 text-sm mb-6 leading-relaxed">Connect with 500+ other newcomers in the Pittsburgh Indian Community group for real-time answers.</p>
+                    <button class="w-full bg-white text-primary font-bold py-3 rounded-md hover:bg-surface transition-colors shadow-sm">Request Invite</button>
+                </div>
+
+                <!-- Landmarks -->
+                <div class="bg-surface-container-lowest rounded-xl shadow-editorial overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=600" alt="Map View" class="w-full h-40 object-cover grayscale contrast-125">
+                    <div class="p-6">
+                        <h3 class="font-bold text-on-surface mb-2">Key Landmarks</h3>
+                        <p class="text-xs text-on-surface/60 mb-4">Click to explore pins for temples, stores, and more.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-secondary-container text-secondary-dim text-[#006A60] px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">S.V. Temple</span>
+                            <span class="bg-secondary-container text-secondary-dim text-[#006A60] px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">India Garden</span>
+                            <span class="bg-secondary-container text-secondary-dim text-[#006A60] px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Point Park</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-surface py-10 border-t border-outline-variant/15 mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0 text-center md:text-left">
+                    <p class="font-headline font-bold text-xl text-on-surface mb-2">Indians in Pittsburgh</p>
+                    <p class="text-sm text-on-surface/60">&copy; 2024 Indians in Pittsburgh. The Civic Ledger.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-6 text-sm text-on-surface/80 font-medium">
+                    <a href="#" class="hover:text-primary">About</a>
+                    <a href="#" class="hover:text-primary">Contact</a>
+                    <a href="#" class="hover:text-primary">Add Event</a>
+                    <a href="#" class="hover:text-primary">Add Business</a>
+                    <a href="#" class="hover:text-primary">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indians in Pittsburgh - Civic Ledger</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        surface: '#F8F9FA',
+                        'surface-container-low': '#F3F4F5',
+                        'surface-container-lowest': '#FFFFFF',
+                        'surface-container-high': '#E7E8E9',
+                        primary: '#9F3D00',
+                        'primary-container': '#C74E00',
+                        secondary: '#006A60',
+                        'secondary-container': '#8CF5E4',
+                        'secondary-dim': '#6FD8C8',
+                        'on-surface': '#191C1D',
+                        'outline-variant': '#E1BFB2',
+                        'primary-fixed-dim': '#FFB596'
+                    },
+                    fontFamily: {
+                        headline: ['Manrope', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'editorial': '0px 12px 32px rgba(141, 113, 101, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background-color: #F8F9FA;
+            color: #191C1D;
+        }
+
+        .gradient-primary {
+            background: linear-gradient(135deg, #9F3D00 0%, #C74E00 100%);
+        }
+    </style>
+</head>
+
+<body class="font-body antialiased selection:bg-primary-fixed-dim selection:text-on-surface">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-surface/85 backdrop-blur-md border-b-[1px] border-outline-variant/15 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-8">
+                    <a href="/" class="text-primary font-headline font-bold text-2xl tracking-tight">Indians in
+                        Pittsburgh</a>
+
+                    <div class="hidden md:flex space-x-6 text-sm font-medium text-on-surface/80">
+                        <a href="/events/index.html" class="hover:text-primary transition-colors">Events</a>
+                        <a href="/businesses/index.html" class="hover:text-primary transition-colors">Businesses</a>
+                        <a href="/newcomers/index.html" class="hover:text-primary transition-colors">Newcomers</a>
+                        <a href="/places/index.html" class="hover:text-primary transition-colors">Places</a>
+                    </div>
+                </div>
+
+                <!-- Search & Action -->
+                <div class="flex items-center gap-4">
+                    <div class="hidden md:flex items-center bg-surface-container-low px-4 py-2 rounded-lg">
+                        <svg class="w-4 h-4 text-on-surface/50 mr-2" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <input type="text" placeholder="Search community..."
+                            class="bg-transparent border-none focus:ring-0 text-sm w-48 text-on-surface placeholder-on-surface/50">
+                    </div>
+                    <button
+                        class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <span
+                        class="inline-block bg-secondary-container text-secondary px-3 py-1 text-xs font-bold tracking-wider uppercase mb-6 rounded-sm">The
+                        Civic Ledger</span>
+                    <h1 class="font-headline text-5xl md:text-7xl font-extrabold leading-tight mb-6 text-on-surface">
+                        Indians in <br>
+                        <span class="text-primary italic">Pittsburgh</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-on-surface/80 mb-10 max-w-lg leading-relaxed">
+                        The authoritative portal for events, local businesses, and community resources for the Indian
+                        diaspora in the Steel City.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="/businesses/index.html"
+                            class="gradient-primary text-white px-8 py-3 rounded-md font-medium items-center inline-flex hover:opacity-90 transition-opacity">
+                            Explore Community <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                            </svg>
+                        </a>
+                        <a href="/businesses/index.html"
+                            class="bg-surface-container-high text-on-surface px-8 py-3 rounded-md font-medium items-center inline-flex hover:bg-surface-container-low transition-colors">
+                            View Directory
+                        </a>
+                    </div>
+                </div>
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1619697940685-5c224f34dfbd?auto=format&fit=crop&q=80&w=1200&h=800"
+                        alt="Pittsburgh Skyline"
+                        class="rounded-xl shadow-editorial object-cover h-[500px] w-full grayscale contrast-125">
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Events Section -->
+        <div class="bg-surface-container-low py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-end mb-10">
+                    <div>
+                        <p class="text-primary text-sm font-bold tracking-widest uppercase mb-2">Cultural Calendar</p>
+                        <h2 class="font-headline text-3xl font-bold">Upcoming Events</h2>
+                    </div>
+                    <a href="/events/index.html" class="text-secondary font-medium hover:underline flex items-center">
+                        View All Events <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Event Card 1 -->
+                    <div
+                        class="bg-surface-container-lowest p-8 rounded-lg hover:bg-white transition-colors cursor-pointer group">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="bg-primary/10 text-primary text-center px-4 py-2 rounded-md">
+                                <span class="block font-bold text-xl">24</span>
+                                <span class="block text-xs font-bold uppercase">Oct</span>
+                            </div>
+                            <span
+                                class="bg-secondary-container text-secondary text-xs px-2 py-1 rounded-full font-bold uppercase tracking-wider">Festival</span>
+                        </div>
+                        <h3 class="font-headline text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                            Diwali Mahotsav at SV Temple</h3>
+                        <p class="text-sm text-on-surface/70 mb-6 leading-relaxed">A grand celebration of the festival
+                            of lights with traditional food stalls, cultural performances, and fireworks.</p>
+                        <div class="text-xs text-on-surface/60 flex items-center mb-6">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            Penn Hills, PA
+                        </div>
+                        <div class="flex gap-2">
+                            <span
+                                class="bg-surface-container-low px-2 py-1 rounded-sm text-xs font-medium text-on-surface/70">Community</span>
+                            <span
+                                class="bg-surface-container-low px-2 py-1 rounded-sm text-xs font-medium text-on-surface/70">Free</span>
+                        </div>
+                    </div>
+
+                    <!-- Event Card 2 -->
+                    <div
+                        class="bg-surface-container-lowest p-8 rounded-lg hover:bg-white transition-colors cursor-pointer group">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="bg-primary/10 text-primary text-center px-4 py-2 rounded-md">
+                                <span class="block font-bold text-xl">02</span>
+                                <span class="block text-xs font-bold uppercase">Nov</span>
+                            </div>
+                            <span
+                                class="bg-secondary-container text-secondary text-xs px-2 py-1 rounded-full font-bold uppercase tracking-wider">Concert</span>
+                        </div>
+                        <h3 class="font-headline text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                            Bollywood Night - Live in Strip District</h3>
+                        <p class="text-sm text-on-surface/70 mb-6 leading-relaxed">Experience the magic of Bollywood
+                            with DJ beats and authentic street food in the heart of Pittsburgh.</p>
+                        <div class="text-xs text-on-surface/60 flex items-center mb-6">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            The Strip District, PA
+                        </div>
+                        <div class="flex gap-2">
+                            <span
+                                class="bg-surface-container-low px-2 py-1 rounded-sm text-xs font-medium text-on-surface/70">Nightlife</span>
+                            <span
+                                class="bg-surface-container-low px-2 py-1 rounded-sm text-xs font-medium text-on-surface/70">Ticketed</span>
+                        </div>
+                    </div>
+
+                    <!-- Event Card 3 -->
+                    <div
+                        class="bg-surface-container-lowest p-8 rounded-lg hover:bg-white transition-colors cursor-pointer group">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="bg-primary/10 text-primary text-center px-4 py-2 rounded-md">
+                                <span class="block font-bold text-xl">15</span>
+                                <span class="block text-xs font-bold uppercase">Nov</span>
+                            </div>
+                            <span
+                                class="bg-secondary-container text-secondary text-xs px-2 py-1 rounded-full font-bold uppercase tracking-wider">Workshop</span>
+                        </div>
+                        <h3 class="font-headline text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                            Startups & Chai Networking</h3>
+                        <p class="text-sm text-on-surface/70 mb-6 leading-relaxed">Professional networking event for
+                            tech founders and professionals from the Indian community at CMU.</p>
+                        <div class="text-xs text-on-surface/60 flex items-center mb-6">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            Oakland (CMU Campus), PA
+                        </div>
+                        <div class="flex gap-2">
+                            <span
+                                class="bg-surface-container-low px-2 py-1 rounded-sm text-xs font-medium text-on-surface/70">Professional</span>
+                            <span
+                                class="bg-surface-container-low px-2 py-1 rounded-sm text-xs font-medium text-on-surface/70">RSVP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Directory Overview -->
+        <div class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-secondary text-sm font-bold tracking-widest uppercase mb-2">Local Directory</p>
+            <h2 class="font-headline text-3xl font-bold mb-10">Popular Businesses</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Large Feature -->
+                <a href="/businesses/index.html"
+                    class="relative group rounded-xl overflow-hidden shadow-editorial aspect-[4/3] block">
+                    <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=800"
+                        alt="Restaurant Interior"
+                        class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8">
+                        <h3 class="font-headline text-3xl font-bold text-white mb-2">Restaurants</h3>
+                        <p class="text-white/80">From authentic street chaat to fine dining Mughlai experiences across
+                            the city.</p>
+                    </div>
+                </a>
+
+                <!-- 3 Smaller Features -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <a href="/businesses/index.html"
+                        class="relative group rounded-xl overflow-hidden shadow-editorial sm:col-span-2 h-48 block">
+                        <img src="https://images.unsplash.com/photo-1596700547631-c49b0773d4d4?auto=format&fit=crop&q=80&w=1200"
+                            alt="Spices"
+                            class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div
+                            class="absolute inset-0 bg-secondary/80 flex flex-col justify-center p-8 mix-blend-multiply">
+                        </div>
+                        <div class="absolute inset-0 flex flex-col justify-center p-8">
+                            <h3 class="font-headline text-2xl font-bold text-white mb-2">Grocery & Markets</h3>
+                            <p class="text-white/90 text-sm">Authentic spices, fresh produce, and essentials.</p>
+                        </div>
+                    </a>
+
+                    <a href="/businesses/index.html"
+                        class="gradient-primary rounded-xl p-8 flex flex-col items-center justify-center text-center shadow-editorial group hover:opacity-95 transition-opacity block">
+                        <svg class="w-10 h-10 text-white mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                            </path>
+                        </svg>
+                        <h3 class="font-headline text-xl font-bold text-white mb-1">Temples</h3>
+                        <p class="text-white/80 text-xs uppercase tracking-wider">Spiritual Centers</p>
+                    </a>
+
+                    <a href="/businesses/index.html"
+                        class="bg-surface-container-high rounded-xl p-8 flex flex-col items-center justify-center text-center group hover:bg-surface-container-low transition-colors block">
+                        <svg class="w-10 h-10 text-secondary mb-4" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        <h3 class="font-headline text-xl font-bold text-on-surface mb-1">Services</h3>
+                        <p class="text-on-surface/60 text-xs uppercase tracking-wider">Tax, Legal & Professional</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Articles / Guides Section -->
+        <div class="bg-surface-container-low py-20 border-t border-outline-variant/15">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <p class="text-secondary text-sm font-bold tracking-widest uppercase mb-2">Curated Reads</p>
+                <h2 class="font-headline text-3xl font-bold mb-10">Community Guides</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Article 1 -->
+                    <a href="/articles/guide-part-1.html" class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-editorial group hover:shadow-lg transition-all flex flex-col h-full block">
+                        <div class="h-40 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <h3 class="font-headline font-bold text-xl mb-3 text-on-surface group-hover:text-primary transition-colors">Pittsburgh Desi Guide Part 1</h3>
+                            <p class="text-on-surface/70 text-sm leading-relaxed mb-4 flex-1">Settling into the Steel City is remarkably seamless. Uncover essential tips from public transport to braving the winter.</p>
+                            <span class="text-primary text-xs font-bold uppercase tracking-wider">Read Article &rarr;</span>
+                        </div>
+                    </a>
+
+                    <!-- Article 2 -->
+                    <a href="/articles/guide-part-2.html" class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-editorial group hover:shadow-lg transition-all flex flex-col h-full block">
+                        <div class="h-40 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1549557431-7e8e1e72183e?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <h3 class="font-headline font-bold text-xl mb-3 text-on-surface group-hover:text-primary transition-colors">Pittsburgh Desi Guide Part 2</h3>
+                            <p class="text-on-surface/70 text-sm leading-relaxed mb-4 flex-1">Building on our first guide, explore the strategic advantages of living here—from East Coast road trips to spiritual getaways.</p>
+                            <span class="text-primary text-xs font-bold uppercase tracking-wider">Read Article &rarr;</span>
+                        </div>
+                    </a>
+
+                    <!-- Article 3 -->
+                    <a href="/articles/massmutual-ice-rink.html" class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-editorial group hover:shadow-lg transition-all flex flex-col h-full block">
+                        <div class="h-40 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1544320496-e13768b37ad6?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <h3 class="font-headline font-bold text-xl mb-3 text-on-surface group-hover:text-primary transition-colors">Ice Rink at PPG Place</h3>
+                            <p class="text-on-surface/70 text-sm leading-relaxed mb-4 flex-1">Pittsburgh's winters offer an incredible public skating venue constructed directly underneath beautiful glass spires.</p>
+                            <span class="text-primary text-xs font-bold uppercase tracking-wider">Read Article &rarr;</span>
+                        </div>
+                    </a>
+
+                    <!-- Article 4 -->
+                    <a href="/articles/join-telegram.html" class="bg-[#2AABEE] text-white rounded-xl shadow-editorial group hover:shadow-lg transition-all flex flex-col justify-between p-8 h-full block relative overflow-hidden">
+                        <svg class="absolute top-5 right-5 w-24 h-24 text-white/20 -rotate-12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/></svg>
+                        <div class="relative z-10">
+                            <h3 class="font-headline font-bold text-2xl mb-3 leading-tight">Join our Community Telegram</h3>
+                            <p class="text-white/90 text-sm leading-relaxed mb-6">Connect with over 1,300 active members for updates, moving sales, events, and networking.</p>
+                        </div>
+                        <span class="bg-white text-[#2AABEE] px-4 py-2 rounded font-bold text-sm tracking-wider inline-block text-center relative z-10">Join Group &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-surface py-10 border-t border-outline-variant/15">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b-0">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <p class="font-headline font-bold text-xl text-on-surface mb-2">Indians in Pittsburgh</p>
+                    <p class="text-sm text-on-surface/60">&copy; 2024 Indians in Pittsburgh. The Civic Ledger.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-6 text-sm text-on-surface/80 font-medium">
+                    <a href="#" class="hover:text-primary">About</a>
+                    <a href="#" class="hover:text-primary">Contact</a>
+                    <a href="#" class="hover:text-primary">Add Event</a>
+                    <a href="#" class="hover:text-primary">Add Business</a>
+                    <a href="#" class="hover:text-primary">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
