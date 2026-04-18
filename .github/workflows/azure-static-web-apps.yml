@@ -23,17 +23,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-
-      - name: Restore Azure Functions project
-        run: dotnet restore api.csproj
-
-      - name: Publish Azure Functions project
-        run: dotnet publish api.csproj -c Release -o published-api
-
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
         with:
@@ -43,8 +32,6 @@ jobs:
           app_location: site
           output_location: ''
           skip_app_build: true
-          api_location: published-api
-          skip_api_build: true
 
   close_pull_request:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
