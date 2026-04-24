@@ -39,6 +39,20 @@
     <style>
         body { background-color: #F8F9FA; color: #191C1D; }
         .gradient-primary { background: linear-gradient(135deg, #9F3D00 0%, #C74E00 100%); }
+        .business-shell {
+            background:
+                radial-gradient(circle at top right, rgba(140, 245, 228, 0.16), transparent 32%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 252, 248, 0.98));
+        }
+        .business-meta-card {
+            background: linear-gradient(180deg, #fffaf4 0%, #f4efe8 100%);
+            border: 1px solid rgba(159, 61, 0, 0.08);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+        .business-contact-card {
+            background: linear-gradient(135deg, rgba(159, 61, 0, 0.06), rgba(0, 106, 96, 0.08));
+            border: 1px solid rgba(0, 106, 96, 0.10);
+        }
     </style>
 </head>
 <body class="font-body antialiased selection:bg-primary-fixed-dim selection:text-on-surface">
@@ -53,219 +67,211 @@
                     <div class="hidden md:flex space-x-6 text-sm font-medium text-on-surface/80">
                         <a href="/events/index.html" class="hover:text-primary transition-colors pb-1">Events</a>
                         <a href="/businesses/index.html" class="text-primary border-b-2 border-primary pb-1">Businesses</a>
-                        <a href="/newcomers/index.html" class="hover:text-primary transition-colors pb-1">Newcomers</a>
+
                         <a href="/places/index.html" class="hover:text-primary transition-colors pb-1">Places</a>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <button class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post</button>
+                    <!--<button class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post</button>-->
                 </div>
             </div>
         </div>
     </nav>
 
-    <main class="py-12 md:py-20">
-        
-        <!-- Header -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8">
-                <div class="max-w-2xl">
-                    <p class="text-primary text-sm font-bold tracking-widest uppercase mb-3">Community Directory</p>
-                    <h1 class="font-headline text-5xl md:text-6xl font-extrabold leading-tight mb-4 text-on-surface">
-                        Local Businesses
-                    </h1>
-                    <p class="text-lg text-on-surface/80 leading-relaxed">
-                        Discover trusted Indian-owned and Indian-focused businesses across the Greater Pittsburgh area, from authentic regional cuisine to specialized services.
-                    </p>
-                </div>
-                <button class="bg-secondary-container text-[#005048] px-6 py-3 rounded-md font-bold text-sm hover:bg-secondary/20 transition-colors flex items-center whitespace-nowrap">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                    Add Business
-                </button>
-            </div>
-        </div>
-
-        <!-- Filters Bar -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex flex-wrap gap-3 w-full md:w-auto">
-                <button class="bg-secondary text-white px-5 py-2 rounded-lg text-sm font-bold shadow-sm">All Businesses</button>
-                <button class="bg-secondary-container text-secondary-dim font-bold px-5 py-2 rounded-lg text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Restaurants</button>
-                <button class="bg-secondary-container text-secondary-dim font-bold px-5 py-2 rounded-lg text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Grocery</button>
-                <button class="bg-secondary-container text-secondary-dim font-bold px-5 py-2 rounded-lg text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Temples</button>
-                <button class="bg-secondary-container text-secondary-dim font-bold px-5 py-2 rounded-lg text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Services</button>
-            </div>
-            
-            <div class="w-full md:w-auto flex items-center bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant/20">
-                <svg class="w-5 h-5 text-on-surface/40 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                <input type="text" placeholder="Search by name or keyword..." class="bg-transparent border-none focus:ring-0 text-sm w-full md:w-64 text-on-surface placeholder-on-surface/40">
-            </div>
-        </div>
-
-        <!-- Grid -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            <!-- Card 1 -->
-            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group flex flex-col">
-                <div class="relative h-48">
-                    <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute top-4 left-4 bg-surface-container-lowest px-3 py-1 rounded-sm text-xs font-bold tracking-wider uppercase shadow-sm">Restaurants</div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="font-headline text-xl font-bold group-hover:text-primary transition-colors">Spice Route Kitchen</h3>
-                        <div class="flex items-center text-primary font-bold text-sm">
-                            ★ <span class="ml-1">4.8</span>
-                        </div>
-                    </div>
-                    <div class="text-sm text-on-surface/70 mb-2 flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> 1245 Forbes Ave, Pittsburgh, PA 15213</div>
-                    <div class="text-sm text-on-surface/70 mb-6 flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg> (412) 555-0123</div>
-                    
-                    <div class="mt-auto pt-4">
-                        <button class="w-full bg-surface-container-low text-primary font-bold py-3 rounded-md hover:bg-surface-container-high transition-colors flex items-center justify-center text-sm">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg> View on Maps
-                        </button>
-                    </div>
-                </div>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        <div class="grid grid-cols-1 xl:grid-cols-[1.4fr_1.1fr] gap-8 items-end mb-16">
+            <div class="max-w-2xl">
+                <p class="text-primary text-sm font-bold tracking-widest uppercase mb-3">Community Directory</p>
+                <h1 class="font-headline text-5xl md:text-6xl font-extrabold leading-tight mb-4 text-on-surface">Local Businesses in Pittsburgh</h1>
+                <p class="text-lg text-on-surface/80 leading-relaxed max-w-xl">
+                    Find trusted Indian-owned and community-loved restaurants, groceries, and services in and around Pittsburgh.
+                </p>
             </div>
 
-            <!-- Card 2 -->
-            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group flex flex-col">
-                <div class="relative h-48">
-                    <img src="https://images.unsplash.com/photo-1596700547631-c49b0773d4d4?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute top-4 left-4 bg-surface-container-lowest px-3 py-1 rounded-sm text-xs font-bold tracking-wider uppercase shadow-sm">Grocery</div>
+            <div class="space-y-5">
+                <div class="flex flex-wrap gap-2 xl:justify-end" data-business-filters>
+                    <button type="button" data-filter="all" class="bg-secondary text-white px-4 py-2 rounded-full text-sm font-bold tracking-wide hover:bg-secondary/90 transition-colors">All</button>
+                    <button type="button" data-filter="restaurant" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Restaurant</button>
+                    <button type="button" data-filter="grocery" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Grocery</button>
+                    <button type="button" data-filter="temple" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Temple</button>
+                    <button type="button" data-filter="service" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Service</button>
+                    <button type="button" data-filter="shopping" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Shopping</button>
+                    <button type="button" data-filter="education" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Education</button>
+                    <button type="button" data-filter="health" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Health</button>
+                    <button type="button" data-filter="other" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Other</button>
                 </div>
-                <div class="p-6 flex-1 flex flex-col">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="font-headline text-xl font-bold group-hover:text-primary transition-colors">Patel Brothers</h3>
-                        <div class="flex items-center text-primary font-bold text-sm">
-                            ★ <span class="ml-1">4.6</span>
-                        </div>
-                    </div>
-                    <div class="text-sm text-on-surface/70 mb-2 flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> 10700 Frankstown Rd, Penn Hills, PA 15235</div>
-                    <div class="text-sm text-on-surface/70 mb-6 flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg> (412) 555-8899</div>
-                    
-                    <div class="mt-auto pt-4">
-                        <button class="w-full bg-surface-container-low text-primary font-bold py-3 rounded-md hover:bg-surface-container-high transition-colors flex items-center justify-center text-sm">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg> View on Maps
-                        </button>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Card 3 -->
-            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group flex flex-col">
-                <div class="relative h-48">
-                    <img src="https://images.unsplash.com/photo-1590483864700-112328ff9a84?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute top-4 left-4 bg-surface-container-lowest px-3 py-1 rounded-sm text-xs font-bold tracking-wider uppercase shadow-sm">Temples</div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="font-headline text-xl font-bold group-hover:text-primary transition-colors pr-2">S.V. Temple Pittsburgh <svg class="inline w-4 h-4 text-primary ml-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg></h3>
-                    </div>
-                    <div class="text-sm text-on-surface/70 mb-2 flex items-center"><svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> <span class="break-words">1230 McCully Dr, Monroeville, PA 15146</span></div>
-                    <div class="text-sm text-on-surface/70 mb-6 flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg> (412) 373-3380</div>
-                    
-                    <div class="mt-auto pt-4">
-                        <button class="w-full bg-surface-container-low text-primary font-bold py-3 rounded-md hover:bg-surface-container-high transition-colors flex items-center justify-center text-sm">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg> View on Maps
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group flex flex-col">
-                <div class="relative h-48">
-                    <img src="https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute top-4 left-4 bg-surface-container-lowest px-3 py-1 rounded-sm text-xs font-bold tracking-wider uppercase shadow-sm">Services</div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="font-headline text-xl font-bold group-hover:text-primary transition-colors">Mehta Law Firm</h3>
-                        <div class="flex items-center text-primary font-bold text-sm">
-                            ★ <span class="ml-1">5.0</span>
-                        </div>
-                    </div>
-                    <div class="text-sm text-on-surface/70 mb-2 flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> 600 Grant St, Pittsburgh, PA 15219</div>
-                    <div class="text-sm text-on-surface/70 mb-6 flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg> (412) 555-0987</div>
-                    
-                    <div class="mt-auto pt-4">
-                        <button class="w-full bg-surface-container-low text-primary font-bold py-3 rounded-md hover:bg-surface-container-high transition-colors flex items-center justify-center text-sm">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg> View on Maps
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 5 -->
-            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group flex flex-col">
-                <div class="relative h-48">
-                    <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute top-4 left-4 bg-surface-container-lowest px-3 py-1 rounded-sm text-xs font-bold tracking-wider uppercase shadow-sm">Restaurants</div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="font-headline text-xl font-bold group-hover:text-primary transition-colors">Curry & Craft</h3>
-                        <div class="flex items-center text-primary font-bold text-sm">
-                            ★ <span class="ml-1">4.4</span>
-                        </div>
-                    </div>
-                    <div class="text-sm text-on-surface/70 mb-2 flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> 2121 Murray Ave, Pittsburgh, PA 15217</div>
-                    <div class="text-sm text-on-surface/70 mb-6 flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg> (412) 555-4422</div>
-                    
-                    <div class="mt-auto pt-4">
-                        <button class="w-full bg-surface-container-low text-primary font-bold py-3 rounded-md hover:bg-surface-container-high transition-colors flex items-center justify-center text-sm">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg> View on Maps
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Get Listed Card -->
-            <div class="border-2 border-dashed border-outline-variant/50 rounded-xl p-8 flex flex-col items-center justify-center text-center bg-transparent group">
-                <div class="bg-surface-container-high w-16 h-16 rounded-full flex items-center justify-center mb-6">
-                    <svg class="w-8 h-8 text-on-surface/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                </div>
-                <h3 class="font-headline text-2xl font-bold mb-3 text-on-surface">Own a Business?</h3>
-                <p class="text-on-surface/70 text-sm mb-6 max-w-[200px] leading-relaxed">List your business here to reach thousands of community members.</p>
-                <button class="gradient-primary text-white font-bold py-3 px-8 rounded-md hover:opacity-90 transition-opacity">Get Listed Now</button>
-            </div>
-            
-        </div>
-
-        <!-- Map Section -->
-        <div class="mt-24 bg-surface-container-low max-w-7xl mx-auto rounded-xl overflow-hidden shadow-sm">
-            <div class="grid grid-cols-1 lg:grid-cols-2">
-                <div class="p-10 md:p-16 flex flex-col justify-center">
-                    <h2 class="font-headline text-4xl font-bold mb-6 text-on-surface">Find us in the 412</h2>
-                    <p class="text-on-surface/80 text-lg mb-10 leading-relaxed max-w-md">Our interactive map helps you locate the nearest Indian groceries, cultural centers, and eateries across neighborhoods like Oakland, Squirrel Hill, and Monroeville.</p>
-                    
-                    <div class="flex gap-8">
-                        <div class="bg-surface-container-lowest p-6 rounded-lg w-full">
-                            <div class="text-primary font-headline text-3xl font-bold mb-1">45+</div>
-                            <div class="text-on-surface/60 text-xs font-bold uppercase tracking-wider">Restaurants</div>
-                        </div>
-                        <div class="bg-surface-container-lowest p-6 rounded-lg w-full">
-                            <div class="text-primary font-headline text-3xl font-bold mb-1">12+</div>
-                            <div class="text-on-surface/60 text-xs font-bold uppercase tracking-wider">Grocery Hubs</div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Map Placeholder -->
-                <div class="bg-surface-container-highest min-h-[400px] relative">
-                    <div class="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=1200')] bg-cover bg-center"></div>
-                    <div class="absolute bottom-6 left-6 right-6 bg-surface-container-lowest p-4 rounded-lg shadow-sm flex items-center">
-                        <div class="bg-primary-container/20 p-2 rounded-full mr-4 text-primary"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg></div>
-                        <div>
-                            <div class="text-[10px] font-bold text-on-surface/60 uppercase tracking-widest">Current Neighborhood</div>
-                            <div class="font-medium text-sm text-on-surface">Oakland / University District</div>
-                        </div>
-                    </div>
+                <div class="gradient-primary rounded-2xl p-7 relative overflow-hidden text-center xl:text-left shadow-editorial">
+                    <div class="absolute -right-10 -bottom-10 bg-white/10 w-32 h-32 rounded-full blur-2xl"></div>
+                    <h3 class="font-headline text-2xl font-bold text-white mb-3">Want your business listed here?</h3>
+                    <p class="text-white/90 text-sm leading-relaxed mb-5">Use the self-service form or share your business name, address, phone, category, tags, and description in our Telegram group <span class="font-bold text-white">@pittsburghindian</span>.</p>
+                    <a href="/submit/index.html?type=business" class="inline-block bg-white text-primary font-bold text-sm px-4 py-2 rounded-lg hover:bg-white/90 transition-colors">Add Business</a>
                 </div>
             </div>
         </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" data-business-grid>
+            <article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-record data-categories="restaurant" data-entity="business">
+                <div class="rounded-2xl overflow-hidden border border-outline-variant/10 mb-4" data-field-group="image">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80" alt="Mintt storefront" class="w-full h-44 object-cover" loading="lazy" data-field="imageUrl">
+                </div>
+                <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
+                    <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10">Restaurant</span>
+                </div>
+
+                <div class="flex flex-col gap-4 h-full">
+                    <div>
+                        <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="name">Mintt @ Banksville</h2>
+                        <p class="text-sm text-on-surface/78 leading-7" data-field="description">Savor the rich flavors, indulge in chef-crafted specials, and make every bite count. From sizzling starters to comforting classics, your perfect weekend feast is waiting! Gather your friends and family and treat yourself.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="category">
+                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Category</p>
+                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="category">Restaurant</p>
+                        </div>
+                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="phone">
+                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Phone</p>
+                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="phone">412-306-1831</p>
+                        </div>
+                    </div>
+
+                    <div class="business-contact-card rounded-2xl px-5 py-4" data-field-group="address">
+                        <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Address</p>
+                        <p class="text-sm font-semibold text-on-surface leading-6" data-field="address">3033 BANKSVILLE ROAD PITTSBURGH PA 15216</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-record data-categories="restaurant" data-entity="business">
+                <div class="rounded-2xl overflow-hidden border border-outline-variant/10 mb-4" data-field-group="image">
+                    <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&w=1200&q=80" alt="Spice Route Kitchen" class="w-full h-44 object-cover" loading="lazy" data-field="imageUrl">
+                </div>
+                <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
+                    <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10">Restaurant</span>
+                </div>
+
+                <div class="flex flex-col gap-4 h-full">
+                    <div>
+                        <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="name">Spice Route Kitchen</h2>
+                        <p class="text-sm text-on-surface/78 leading-7" data-field="description">Contemporary Indian plates with rotating regional specials and a cozy dine-in setup for families and small groups.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="category">
+                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Category</p>
+                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="category">Restaurant</p>
+                        </div>
+                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="phone">
+                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Phone</p>
+                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="phone">412-555-0123</p>
+                        </div>
+                    </div>
+
+                    <div class="business-contact-card rounded-2xl px-5 py-4" data-field-group="address">
+                        <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Address</p>
+                        <p class="text-sm font-semibold text-on-surface leading-6" data-field="address">1245 Forbes Ave, Pittsburgh, PA 15213</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-record data-categories="grocery" data-entity="business">
+                <div class="rounded-2xl overflow-hidden border border-outline-variant/10 mb-4" data-field-group="image">
+                    <img src="https://images.unsplash.com/photo-1596700547631-c49b0773d4d4?auto=format&fit=crop&w=1200&q=80" alt="Patel Brothers" class="w-full h-44 object-cover" loading="lazy" data-field="imageUrl">
+                </div>
+                <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
+                    <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10">Grocery</span>
+                </div>
+
+                <div class="flex flex-col gap-4 h-full">
+                    <div>
+                        <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="name">Patel Brothers Penn Hills</h2>
+                        <p class="text-sm text-on-surface/78 leading-7" data-field="description">Indian grocery essentials, fresh produce, frozen snacks, and festive supplies for weekly and seasonal shopping.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="category">
+                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Category</p>
+                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="category">Grocery</p>
+                        </div>
+                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="phone">
+                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Phone</p>
+                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="phone">412-555-8899</p>
+                        </div>
+                    </div>
+
+                    <div class="business-contact-card rounded-2xl px-5 py-4" data-field-group="address">
+                        <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Address</p>
+                        <p class="text-sm font-semibold text-on-surface leading-6" data-field="address">10700 Frankstown Rd, Penn Hills, PA 15235</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-record data-categories="service" data-entity="business">
+                <div class="rounded-2xl overflow-hidden border border-outline-variant/10 mb-4" data-field-group="image">
+                    <img src="https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1200&q=80" alt="Mehta Legal" class="w-full h-44 object-cover" loading="lazy" data-field="imageUrl">
+                </div>
+                <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
+                    <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10">Service</span>
+                </div>
+
+                <div class="flex flex-col gap-4 h-full">
+                    <div>
+                        <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="name">Mehta Legal & Immigration</h2>
+                        <p class="text-sm text-on-surface/78 leading-7" data-field="description">Professional legal support for immigration, family documentation, and business filings with appointment-based consultation.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="category">
+                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Category</p>
+                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="category">Service</p>
+                        </div>
+                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="phone">
+                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Phone</p>
+                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="phone">412-555-0987</p>
+                        </div>
+                    </div>
+
+                    <div class="business-contact-card rounded-2xl px-5 py-4" data-field-group="address">
+                        <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Address</p>
+                        <p class="text-sm font-semibold text-on-surface leading-6" data-field="address">600 Grant St, Pittsburgh, PA 15219</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-record data-categories="temple" data-entity="business">
+                <div class="rounded-2xl overflow-hidden border border-outline-variant/10 mb-4" data-field-group="image">
+                    <img src="https://images.unsplash.com/photo-1574529929569-a8c2f131f928?auto=format&fit=crop&w=1200&q=80" alt="Temple exterior" class="w-full h-44 object-cover" loading="lazy" data-field="imageUrl">
+                </div>
+                <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
+                    <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10">Temple</span>
+                </div>
+
+                <div class="flex flex-col gap-4 h-full">
+                    <div>
+                        <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="name">Sri Venkateswara Temple</h2>
+                        <p class="text-sm text-on-surface/78 leading-7" data-field="description">A major spiritual and cultural center serving the Indian community with daily darshan, weekend prasad, and volunteer-led events.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="category">
+                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Category</p>
+                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="category">Temple</p>
+                        </div>
+                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="phone">
+                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Phone</p>
+                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="phone">412-373-3380</p>
+                        </div>
+                    </div>
+
+                    <div class="business-contact-card rounded-2xl px-5 py-4" data-field-group="address">
+                        <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Address</p>
+                        <p class="text-sm font-semibold text-on-surface leading-6" data-field="address">1230 McCully Dr, Monroeville, PA 15146</p>
+                    </div>
+                </div>
+            </article>
+        </div>
     </main>
 
     <!-- Footer -->
@@ -279,13 +285,82 @@
                 <div class="flex flex-wrap justify-center gap-6 text-sm text-on-surface/80 font-medium">
                     <a href="#" class="hover:text-primary">About</a>
                     <a href="#" class="hover:text-primary">Contact</a>
-                    <a href="#" class="hover:text-primary">Add Event</a>
-                    <a href="#" class="hover:text-primary">Add Business</a>
+                    <a href="/submit/index.html?type=event" class="hover:text-primary">Add Event</a>
+                    <a href="/submit/index.html?type=business" class="hover:text-primary">Add Business</a>
                     <a href="#" class="hover:text-primary">Privacy</a>
                 </div>
             </div>
         </div>
     </footer>
+
+    <script>
+        (() => {
+            const filterBar = document.querySelector('[data-business-filters]');
+            const businessCards = Array.from(document.querySelectorAll('[data-business-record]'));
+
+            if (!filterBar || businessCards.length === 0) {
+                return;
+            }
+
+            const buttons = Array.from(filterBar.querySelectorAll('[data-filter]'));
+            const allowedFilters = new Set(buttons.map((button) => button.dataset.filter));
+
+            const setActiveButton = (activeValue) => {
+                buttons.forEach((button) => {
+                    const isActive = button.dataset.filter === activeValue;
+                    button.classList.toggle('bg-secondary', isActive);
+                    button.classList.toggle('!text-white', isActive);
+                    button.classList.toggle('hover:bg-secondary/90', isActive);
+                    button.classList.toggle('bg-secondary-container', !isActive);
+                    button.classList.toggle('text-secondary-dim', !isActive);
+                    button.classList.toggle('!text-[#005048]', !isActive);
+                    button.classList.toggle('hover:bg-secondary/20', !isActive);
+                });
+            };
+
+            const applyFilter = (filterValue) => {
+                businessCards.forEach((card) => {
+                    const categories = (card.dataset.categories || '').split(/\s+/).filter(Boolean);
+                    const shouldShow = filterValue === 'all' || categories.includes(filterValue);
+                    card.classList.toggle('hidden', !shouldShow);
+                });
+
+                setActiveButton(filterValue);
+            };
+
+            const getInitialFilter = () => {
+                const queryFilter = new URLSearchParams(window.location.search).get('category');
+                const hashFilter = window.location.hash ? window.location.hash.slice(1) : '';
+                const candidate = (queryFilter || hashFilter || 'all').toLowerCase();
+                return allowedFilters.has(candidate) ? candidate : 'all';
+            };
+
+            const updateUrlForFilter = (filterValue) => {
+                const url = new URL(window.location.href);
+                if (filterValue === 'all') {
+                    url.searchParams.delete('category');
+                    url.hash = '';
+                } else {
+                    url.searchParams.set('category', filterValue);
+                    url.hash = '';
+                }
+                window.history.replaceState({}, '', url.toString());
+            };
+
+            filterBar.addEventListener('click', (event) => {
+                const button = event.target.closest('[data-filter]');
+                if (!button) {
+                    return;
+                }
+
+                const filterValue = button.dataset.filter;
+                applyFilter(filterValue);
+                updateUrlForFilter(filterValue);
+            });
+
+            applyFilter(getInitialFilter());
+        })();
+    </script>
 
 </body>
 </html>

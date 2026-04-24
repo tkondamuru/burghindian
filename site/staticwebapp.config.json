@@ -1,0 +1,35 @@
+{
+  "routes": [
+    {
+      "route": "/api/events",
+      "methods": ["POST"],
+      "allowedRoles": ["authenticated"]
+    },
+    {
+      "route": "/api/businesses",
+      "methods": ["POST"],
+      "allowedRoles": ["authenticated"]
+    },
+    {
+      "route": "/api/posts/lookup",
+      "methods": ["POST"],
+      "allowedRoles": ["authenticated"]
+    },
+    {
+      "route": "/api/events/*",
+      "methods": ["PUT"],
+      "allowedRoles": ["authenticated"]
+    },
+    {
+      "route": "/api/businesses/*",
+      "methods": ["PUT"],
+      "allowedRoles": ["authenticated"]
+    }
+  ],
+  "responseOverrides": {
+    "401": {
+      "redirect": "/.auth/login/google",
+      "statusCode": 302
+    }
+  }
+}

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Event or Business - Indians in Pittsburgh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        surface: '#F8F9FA',
+                        'surface-container-low': '#F3F4F5',
+                        'surface-container-lowest': '#FFFFFF',
+                        'surface-container-high': '#E7E8E9',
+                        primary: '#9F3D00',
+                        'primary-container': '#C74E00',
+                        secondary: '#006A60',
+                        'secondary-container': '#8CF5E4',
+                        'secondary-dim': '#6FD8C8',
+                        'on-surface': '#191C1D',
+                        'outline-variant': '#E1BFB2',
+                        'primary-fixed-dim': '#FFB596'
+                    },
+                    fontFamily: {
+                        headline: ['Manrope', 'sans-serif'],
+                        body: ['Inter', 'sans-serif']
+                    },
+                    boxShadow: {
+                        editorial: '0px 12px 32px rgba(141, 113, 101, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #F8F9FA; color: #191C1D; }
+        .gradient-primary { background: linear-gradient(135deg, #9F3D00 0%, #C74E00 100%); }
+        .submit-shell {
+            background:
+                radial-gradient(circle at top right, rgba(140, 245, 228, 0.16), transparent 30%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(255, 252, 248, 0.98));
+        }
+        .field-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            margin-bottom: 0.55rem;
+            text-transform: uppercase;
+            color: rgba(159, 61, 0, 0.76);
+        }
+        .field-control {
+            width: 100%;
+            border-radius: 1rem;
+            border: 1px solid rgba(225, 191, 178, 0.75);
+            background: rgba(255, 255, 255, 0.88);
+            padding: 0.85rem 1rem;
+            color: #191C1D;
+            outline: none;
+            transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+        }
+        .field-control:focus {
+            border-color: rgba(159, 61, 0, 0.65);
+            box-shadow: 0 0 0 4px rgba(255, 181, 150, 0.32);
+            background: #FFFFFF;
+        }
+        .field-control:disabled,
+        .field-control[readonly] {
+            background: rgba(243, 244, 245, 0.9);
+            color: rgba(25, 28, 29, 0.58);
+            cursor: not-allowed;
+        }
+        .tag-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            border: 1px solid rgba(225, 191, 178, 0.85);
+            background: rgba(255, 255, 255, 0.92);
+            padding: 0.7rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: rgba(25, 28, 29, 0.76);
+            cursor: pointer;
+            transition: all 160ms ease;
+        }
+        .tag-chip:hover {
+            border-color: rgba(159, 61, 0, 0.45);
+            color: #9F3D00;
+        }
+        .tag-toggle:checked + .tag-chip {
+            background: #006A60;
+            border-color: #006A60;
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body class="font-body antialiased selection:bg-primary-fixed-dim selection:text-on-surface">
+
+    <nav class="sticky top-0 z-50 bg-surface/85 backdrop-blur-md border-b-[1px] border-outline-variant/15 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-8">
+                    <a href="/index.html" class="text-primary font-headline font-bold text-2xl tracking-tight">Indians in Pittsburgh</a>
+
+                    <div class="hidden md:flex space-x-6 text-sm font-medium text-on-surface/80">
+                        <a href="/events/index.html" class="hover:text-primary transition-colors pb-1">Events</a>
+                        <a href="/businesses/index.html" class="hover:text-primary transition-colors pb-1">Businesses</a>
+                        <a href="/places/index.html" class="hover:text-primary transition-colors pb-1">Places</a>
+                    </div>
+                </div>
+
+                <a href="/index.html#post-options" class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post Options</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        <section class="grid grid-cols-1 xl:grid-cols-[1.4fr_0.9fr] gap-8 items-end mb-12">
+            <div class="max-w-3xl">
+                <p class="text-primary text-sm font-bold tracking-widest uppercase mb-3">Self-Service Listing</p>
+                <h1 class="font-headline text-5xl md:text-6xl font-extrabold leading-tight mb-4 text-on-surface">Submit an Event or Business</h1>
+                <p class="text-lg text-on-surface/80 leading-relaxed max-w-2xl">
+                    Add your details using the tabs below. We only collect an image link, not an upload. Your Gmail email will be used as the ownership key, and after saving you will receive an <span class="font-bold text-on-surface">EditCode</span> for future changes.
+                </p>
+            </div>
+
+            <aside class="gradient-primary rounded-2xl p-7 relative overflow-hidden shadow-editorial">
+                <div class="absolute -right-10 -bottom-10 bg-white/10 w-32 h-32 rounded-full blur-2xl"></div>
+                <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-white/75 mb-3">Important</p>
+                <h2 class="font-headline text-2xl font-bold text-white mb-3">Keep your EditCode safe</h2>
+                <p class="text-white/90 text-sm leading-relaxed">
+                    The EditCode is generated when the form is saved. Keep it safe. Future edits should be validated using both your Gmail email and this EditCode.
+                </p>
+            </aside>
+        </section>
+
+        <section class="submit-shell rounded-[2rem] shadow-editorial border border-outline-variant/10 overflow-hidden">
+            <div class="p-5 md:p-6 border-b border-outline-variant/15">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+                    <div class="inline-flex w-fit rounded-full bg-surface-container-low p-1 border border-outline-variant/20" role="tablist" aria-label="Submission type">
+                        <button type="button" data-tab-button="event" class="tab-button rounded-full px-5 py-2 text-sm font-bold transition-colors bg-secondary text-white" aria-selected="true">Add Event</button>
+                        <button type="button" data-tab-button="business" class="tab-button rounded-full px-5 py-2 text-sm font-bold transition-colors text-on-surface/70 hover:text-primary" aria-selected="false">Add Business</button>
+                    </div>
+
+                    <div id="auth-panel" class="rounded-2xl bg-surface-container-lowest border border-outline-variant/15 px-4 py-3 shadow-editorial flex flex-col sm:flex-row sm:items-center gap-3">
+                        <div>
+                            <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-primary/70">Gmail Login</p>
+                            <p id="auth-status" class="text-sm text-on-surface/70">Sign in to unlock the form fields. Your Gmail email will be used for ownership verification later.</p>
+                        </div>
+                        <button type="button" id="gmail-login-button" class="rounded-xl bg-white border border-outline-variant/30 px-4 py-2 text-sm font-bold text-on-surface hover:border-primary hover:text-primary transition-colors">
+                            Continue with Gmail
+                        </button>
+                        <button type="button" id="gmail-logout-button" class="hidden rounded-xl bg-surface-container-high px-4 py-2 text-sm font-bold text-on-surface/75 hover:text-primary transition-colors">
+                            Sign Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-5 md:p-10">
+                <div class="max-w-5xl">
+                    <form id="event-form" class="submission-form space-y-7" data-form-type="event">
+                        <div>
+                            <p class="text-primary text-sm font-bold tracking-widest uppercase mb-2">Event Table</p>
+                            <h2 class="font-headline text-3xl font-extrabold text-on-surface">Add Event</h2>
+                            <p class="text-sm text-on-surface/65 mt-2">Sign in with Google to unlock submission. Your Gmail email will be used as the ownership key for future edits.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <label class="md:col-span-2">
+                                <span class="field-label">Gmail Email</span>
+                                <input class="field-control verification-email" name="SubmitterEmail" type="email" placeholder="Sign in to fill this email" readonly>
+                            </label>
+                            <label>
+                                <span class="field-label">Title</span>
+                                <input class="field-control" name="Title" type="text" placeholder="Biryani Mela" required>
+                            </label>
+                            <label>
+                                <span class="field-label">Date</span>
+                                <input class="field-control" name="Date" type="text" placeholder="Every weekend or May 3, 2026" required>
+                            </label>
+                            <label>
+                                <span class="field-label">Time</span>
+                                <input class="field-control" name="Time" type="text" placeholder="7:00 PM">
+                            </label>
+                            <label class="md:col-span-2">
+                                <span class="field-label">Location</span>
+                                <input class="field-control" name="Location" type="text" placeholder="Venue name, street, city, state" required>
+                            </label>
+                            <label class="md:col-span-2">
+                                <span class="field-label">Summary</span>
+                                <input class="field-control" name="Summary" type="text" placeholder="Short one-line summary for cards" required>
+                            </label>
+                            <label class="md:col-span-2">
+                                <span class="field-label">Description</span>
+                                <textarea class="field-control min-h-[150px]" name="Description" placeholder="Full event details, menu, instructions, contact info, or notes" required></textarea>
+                            </label>
+                            <div class="md:col-span-2" data-tag-picker data-tag-input-name="Tags">
+                                <span class="field-label">Tags</span>
+                                <div class="flex flex-wrap gap-3">
+                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Community"><span class="tag-chip">Community</span></label>
+                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Culture"><span class="tag-chip">Culture</span></label>
+                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Family"><span class="tag-chip">Family</span></label>
+                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Food"><span class="tag-chip">Food</span></label>
+                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Temple"><span class="tag-chip">Temple</span></label>
+                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Professional"><span class="tag-chip">Professional</span></label>
+                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Kids"><span class="tag-chip">Kids</span></label>
+                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Other"><span class="tag-chip">Other</span></label>
+                                </div>
+                                <p class="text-sm text-on-surface/60 mt-3">Choose one or more tags for filtering.</p>
+                                <input class="hidden-tag-input" name="Tags" type="hidden">
+                            </div>
+                            <label>
+                                <span class="field-label">ImageUrl</span>
+                                <input class="field-control" name="ImageUrl" type="url" placeholder="https://example.com/event-image.jpg">
+                            </label>
+                        </div>
+
+                        <input name="EditCode" type="hidden">
+                        <button type="submit" class="save-button gradient-primary text-white px-7 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-45 disabled:cursor-not-allowed">Save Event</button>
+                    </form>
+
+                    <form id="business-form" class="submission-form hidden space-y-7" data-form-type="business">
+                        <div>
+                            <p class="text-primary text-sm font-bold tracking-widest uppercase mb-2">Business Table</p>
+                            <h2 class="font-headline text-3xl font-extrabold text-on-surface">Add Business</h2>
+                            <p class="text-sm text-on-surface/65 mt-2">Sign in with Google to unlock submission. Your Gmail email will be used as the ownership key for future edits.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <label class="md:col-span-2">
+                                <span class="field-label">Gmail Email</span>
+                                <input class="field-control verification-email" name="SubmitterEmail" type="email" placeholder="Sign in to fill this email" readonly>
+                            </label>
+                            <label>
+                                <span class="field-label">Name</span>
+                                <input class="field-control" name="Name" type="text" placeholder="Mintt @ Banksville" required>
+                            </label>
+                            <label>
+                                <span class="field-label">Phone</span>
+                                <input class="field-control" name="Phone" type="text" placeholder="412-306-1831">
+                            </label>
+                            <label class="md:col-span-2">
+                                <span class="field-label">Address</span>
+                                <input class="field-control" name="Address" type="text" placeholder="3033 Banksville Road, Pittsburgh PA 15216" required>
+                            </label>
+                            <label class="md:col-span-2">
+                                <span class="field-label">Summary</span>
+                                <input class="field-control" name="Summary" type="text" placeholder="Short one-line summary for cards" required>
+                            </label>
+                            <label class="md:col-span-2">
+                                <span class="field-label">Description</span>
+                                <textarea class="field-control min-h-[150px]" name="Description" placeholder="Full business details, specials, services, hours, or notes" required></textarea>
+                            </label>
+                            <div class="md:col-span-2" data-tag-picker data-tag-input-name="Tags">
+                                <span class="field-label">Tags</span>
+                                <div class="flex flex-wrap gap-3">
+                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Restaurant"><span class="tag-chip">Restaurant</span></label>
+                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Grocery"><span class="tag-chip">Grocery</span></label>
+                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Temple"><span class="tag-chip">Temple</span></label>
+                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Service"><span class="tag-chip">Service</span></label>
+                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Shopping"><span class="tag-chip">Shopping</span></label>
+                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Education"><span class="tag-chip">Education</span></label>
+                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Health"><span class="tag-chip">Health</span></label>
+                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Other"><span class="tag-chip">Other</span></label>
+                                </div>
+                                <p class="text-sm text-on-surface/60 mt-3">Choose one or more tags for filtering.</p>
+                                <input class="hidden-tag-input" name="Tags" type="hidden">
+                            </div>
+                            <label class="md:col-span-2">
+                                <span class="field-label">ImageUrl</span>
+                                <input class="field-control" name="ImageUrl" type="url" placeholder="https://example.com/business-image.jpg">
+                            </label>
+                        </div>
+
+                        <input name="EditCode" type="hidden">
+                        <button type="submit" class="save-button gradient-primary text-white px-7 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-45 disabled:cursor-not-allowed">Save Business</button>
+                    </form>
+
+                    <div id="success-panel" class="hidden mt-8 rounded-2xl bg-surface-container-lowest p-6 shadow-editorial border border-secondary/15">
+                        <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-secondary/80 mb-3">Submission Saved</p>
+                        <h2 class="font-headline text-2xl font-bold mb-2">Keep This EditCode</h2>
+                        <div class="flex items-center gap-3 mb-5">
+                            <code id="edit-code-output" class="rounded-xl bg-secondary-container text-[#005048] px-4 py-3 font-bold tracking-[0.22em]"></code>
+                            <button type="button" id="copy-code-button" class="rounded-xl bg-secondary text-white px-4 py-3 text-sm font-bold hover:bg-secondary/90 transition-colors">Copy</button>
+                        </div>
+                        <p class="text-sm text-on-surface/70 leading-7">
+                            This is currently a client-side save confirmation only. Once a backend is connected, this same code can be returned by the server after the record is saved.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-surface py-10 border-t border-outline-variant/15 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0 text-center md:text-left">
+                    <p class="font-headline font-bold text-xl text-on-surface mb-2">Indians in Pittsburgh</p>
+                    <p class="text-sm text-on-surface/60">&copy; 2024 Indians in Pittsburgh. The Civic Ledger.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-6 text-sm text-on-surface/80 font-medium">
+                    <a href="/events/index.html" class="hover:text-primary">Events</a>
+                    <a href="/businesses/index.html" class="hover:text-primary">Businesses</a>
+                    <a href="/submit/index.html?type=event" class="hover:text-primary">Add Event</a>
+                    <a href="/submit/index.html?type=business" class="hover:text-primary">Add Business</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (() => {
+            const tabButtons = Array.from(document.querySelectorAll('[data-tab-button]'));
+            const forms = Array.from(document.querySelectorAll('.submission-form'));
+            const authStatus = document.getElementById('auth-status');
+            const loginButton = document.getElementById('gmail-login-button');
+            const logoutButton = document.getElementById('gmail-logout-button');
+            const successPanel = document.getElementById('success-panel');
+            const editCodeOutput = document.getElementById('edit-code-output');
+            const copyCodeButton = document.getElementById('copy-code-button');
+            const verificationEmailFields = Array.from(document.querySelectorAll('.verification-email'));
+            const tagPickers = Array.from(document.querySelectorAll('[data-tag-picker]'));
+            let signedInEmail = '';
+
+            const getEditCode = () => {
+                const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+                const values = new Uint32Array(5);
+
+                if (window.crypto && window.crypto.getRandomValues) {
+                    window.crypto.getRandomValues(values);
+                } else {
+                    values.forEach((_, index) => {
+                        values[index] = Math.floor(Math.random() * alphabet.length);
+                    });
+                }
+
+                return Array.from(values, (value) => alphabet[value % alphabet.length]).join('');
+            };
+
+            const updateAuthUi = () => {
+                const isSignedIn = Boolean(signedInEmail);
+
+                authStatus.textContent = isSignedIn
+                    ? `Signed in as ${signedInEmail}. You can now edit and submit the form, and this Gmail email will be used for ownership verification.`
+                    : 'Sign in to unlock the form fields. Your Gmail email will be used for ownership verification later.';
+
+                loginButton.classList.toggle('hidden', isSignedIn);
+                logoutButton.classList.toggle('hidden', !isSignedIn);
+
+                verificationEmailFields.forEach((field) => {
+                    field.value = signedInEmail;
+                    field.placeholder = isSignedIn ? signedInEmail : 'Sign in to fill this email';
+                });
+
+                forms.forEach((form) => {
+                    Array.from(form.elements).forEach((field) => {
+                        if (field.name === 'SubmitterEmail') {
+                            field.readOnly = true;
+                            field.disabled = false;
+                            return;
+                        }
+
+                        field.disabled = !isSignedIn;
+                    });
+                });
+            };
+
+            const setActiveTab = (type) => {
+                const activeType = type === 'business' ? 'business' : 'event';
+
+                tabButtons.forEach((button) => {
+                    const isActive = button.dataset.tabButton === activeType;
+                    button.setAttribute('aria-selected', String(isActive));
+                    button.classList.toggle('bg-secondary', isActive);
+                    button.classList.toggle('text-white', isActive);
+                    button.classList.toggle('text-on-surface/70', !isActive);
+                    button.classList.toggle('hover:text-primary', !isActive);
+                });
+
+                forms.forEach((form) => {
+                    form.classList.toggle('hidden', form.dataset.formType !== activeType);
+                });
+
+                const url = new URL(window.location.href);
+                url.searchParams.set('type', activeType);
+                window.history.replaceState({}, '', url.toString());
+            };
+
+            const getPayloadFromForm = (form) => {
+                const formData = new FormData(form);
+                const payload = {};
+
+                formData.forEach((value, key) => {
+                    payload[key] = String(value).trim();
+                });
+
+                payload.EditCode = getEditCode();
+                form.elements.EditCode.value = payload.EditCode;
+
+                return payload;
+            };
+
+            const syncTagPicker = (picker) => {
+                const toggles = Array.from(picker.querySelectorAll('.tag-toggle'));
+                const hiddenInput = picker.querySelector('.hidden-tag-input');
+                if (!hiddenInput) {
+                    return;
+                }
+
+                const values = toggles.filter((toggle) => toggle.checked).map((toggle) => toggle.value.trim());
+                hiddenInput.value = values.join(', ');
+            };
+
+            const getCurrentTabType = () => {
+                const activeButton = tabButtons.find((button) => button.getAttribute('aria-selected') === 'true');
+                return activeButton?.dataset.tabButton || 'event';
+            };
+
+            const buildSubmitRedirectUrl = () => {
+                const url = new URL(window.location.href);
+                url.searchParams.set('type', getCurrentTabType());
+                return url.pathname + url.search;
+            };
+
+            const refreshAuthSession = async () => {
+                try {
+                    const response = await fetch('/api/auth/session', {
+                        headers: {
+                            'Accept': 'application/json'
+                        },
+                        cache: 'no-store'
+                    });
+
+                    if (!response.ok) {
+                        signedInEmail = '';
+                        updateAuthUi();
+                        return;
+                    }
+
+                    const session = await response.json();
+                    signedInEmail = session?.authenticated ? String(session.email || '').trim().toLowerCase() : '';
+                    updateAuthUi();
+                } catch (error) {
+                    signedInEmail = '';
+                    updateAuthUi();
+                }
+            };
+
+            tagPickers.forEach((picker) => {
+                const toggles = Array.from(picker.querySelectorAll('.tag-toggle'));
+                toggles.forEach((toggle) => {
+                    toggle.addEventListener('change', () => syncTagPicker(picker));
+                });
+                syncTagPicker(picker);
+            });
+
+            tabButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    setActiveTab(button.dataset.tabButton);
+                });
+            });
+
+            loginButton.addEventListener('click', () => {
+                const redirectTarget = encodeURIComponent(buildSubmitRedirectUrl());
+                window.location.href = `/.auth/login/google?post_login_redirect_uri=${redirectTarget}`;
+            });
+
+            logoutButton.addEventListener('click', () => {
+                signedInEmail = '';
+                successPanel.classList.add('hidden');
+                editCodeOutput.textContent = '';
+                forms.forEach((form) => form.reset());
+                tagPickers.forEach((picker) => syncTagPicker(picker));
+                updateAuthUi();
+                const redirectTarget = encodeURIComponent(buildSubmitRedirectUrl());
+                window.location.href = `/.auth/logout?post_logout_redirect_uri=${redirectTarget}`;
+            });
+
+            forms.forEach((form) => {
+                form.addEventListener('submit', (event) => {
+                    event.preventDefault();
+
+                    if (!signedInEmail) {
+                        const redirectTarget = encodeURIComponent(buildSubmitRedirectUrl());
+                        window.location.href = `/.auth/login/google?post_login_redirect_uri=${redirectTarget}`;
+                        return;
+                    }
+
+                    if (!form.reportValidity()) {
+                        return;
+                    }
+
+                    const tagsValue = String(form.elements.Tags?.value || '').trim();
+                    if (!tagsValue) {
+                        window.alert('Please choose at least one tag before submitting.');
+                        return;
+                    }
+
+                    const payload = getPayloadFromForm(form);
+                    editCodeOutput.textContent = payload.EditCode;
+                    successPanel.classList.remove('hidden');
+                    successPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                });
+            });
+
+            copyCodeButton.addEventListener('click', async () => {
+                const code = editCodeOutput.textContent.trim();
+                if (!code) {
+                    return;
+                }
+
+                try {
+                    await navigator.clipboard.writeText(code);
+                    copyCodeButton.textContent = 'Copied';
+                    window.setTimeout(() => {
+                        copyCodeButton.textContent = 'Copy';
+                    }, 1400);
+                } catch (error) {
+                    copyCodeButton.textContent = 'Select Code';
+                }
+            });
+
+            const initialType = new URLSearchParams(window.location.search).get('type');
+            setActiveTab(initialType);
+            refreshAuthSession();
+        })();
+    </script>
+</body>
+</html>

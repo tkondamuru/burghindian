@@ -28,7 +28,7 @@
                         body: ['Inter', 'sans-serif'],
                     },
                     boxShadow: {
-                        'editorial': '0px 12px 32px rgba(141, 113, 101, 0.08)'
+                        editorial: '0px 12px 32px rgba(141, 113, 101, 0.08)'
                     }
                 }
             }
@@ -39,200 +39,192 @@
     <style>
         body { background-color: #F8F9FA; color: #191C1D; }
         .gradient-primary { background: linear-gradient(135deg, #9F3D00 0%, #C74E00 100%); }
+        .event-shell {
+            background:
+                radial-gradient(circle at top right, rgba(140, 245, 228, 0.18), transparent 28%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 252, 248, 0.98));
+        }
+        .event-meta-card {
+            background: linear-gradient(180deg, #fffaf4 0%, #f4efe8 100%);
+            border: 1px solid rgba(159, 61, 0, 0.08);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+        .event-location-card {
+            background: linear-gradient(135deg, rgba(159, 61, 0, 0.06), rgba(0, 106, 96, 0.08));
+            border: 1px solid rgba(0, 106, 96, 0.10);
+        }
     </style>
 </head>
 <body class="font-body antialiased selection:bg-primary-fixed-dim selection:text-on-surface">
 
-    <!-- Navigation -->
     <nav class="sticky top-0 z-50 bg-surface/85 backdrop-blur-md border-b-[1px] border-outline-variant/15 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <div class="flex-shrink-0 flex items-center gap-8">
                     <a href="/index.html" class="text-primary font-headline font-bold text-2xl tracking-tight">Indians in Pittsburgh</a>
-                    
+
                     <div class="hidden md:flex space-x-6 text-sm font-medium text-on-surface/80">
                         <a href="/events/index.html" class="text-primary border-b-2 border-primary pb-1">Events</a>
                         <a href="/businesses/index.html" class="hover:text-primary transition-colors pb-1">Businesses</a>
-                        <a href="/newcomers/index.html" class="hover:text-primary transition-colors pb-1">Newcomers</a>
+
                         <a href="/places/index.html" class="hover:text-primary transition-colors pb-1">Places</a>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <button class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post</button>
+                    <!--<button class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post</button>-->
                 </div>
             </div>
         </div>
     </nav>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-        
-        <!-- Header -->
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 space-y-8 md:space-y-0">
+
+        <div class="grid grid-cols-1 xl:grid-cols-[1.4fr_1.1fr] gap-8 items-end mb-16">
             <div class="max-w-2xl">
                 <p class="text-primary text-sm font-bold tracking-widest uppercase mb-3">Community Ledger</p>
-                <h1 class="font-headline text-5xl md:text-6xl font-extrabold leading-tight mb-4 text-on-surface">
-                    The City's Cultural <br> Calendar
-                </h1>
+                <h1 class="font-headline text-5xl md:text-6xl font-extrabold leading-tight mb-4 text-on-surface">What's Happening in Pittsburgh</h1>
                 <p class="text-lg text-on-surface/80 leading-relaxed max-w-xl">
-                    From religious gatherings to tech meetups, explore the vibrant pulse of the Indian diaspora in Pittsburgh.
+                    Discover community dinners, cultural gatherings, temple events, and local meetups happening across Pittsburgh and nearby neighborhoods.
                 </p>
             </div>
-            
-            <!-- Category Chips -->
-            <div class="flex flex-wrap gap-2">
-                <button class="bg-secondary text-white px-5 py-2 rounded-full text-sm font-bold tracking-wide hover:opacity-90 transition-opacity">All</button>
-                <button class="bg-secondary-container text-secondary-dim font-bold px-5 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Festival</button>
-                <button class="bg-secondary-container text-secondary-dim font-bold px-5 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Kids</button>
-                <button class="bg-secondary-container text-secondary-dim font-bold px-5 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Religious</button>
-                <button class="bg-secondary-container text-secondary-dim font-bold px-5 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Social</button>
+
+            <div class="space-y-5">
+                <div class="flex flex-wrap gap-2 xl:justify-end" data-event-filters>
+                    <button type="button" data-filter="all" class="bg-secondary text-white px-4 py-2 rounded-full text-sm font-bold tracking-wide hover:opacity-90 transition-opacity">All</button>
+                    <button type="button" data-filter="community" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Community</button>
+                    <button type="button" data-filter="culture" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Culture</button>
+                    <button type="button" data-filter="family" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Family</button>
+                    <button type="button" data-filter="food" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Food</button>
+                    <button type="button" data-filter="temple" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Temple</button>
+                    <button type="button" data-filter="professional" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Professional</button>
+                    <button type="button" data-filter="kids" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Kids</button>
+                    <button type="button" data-filter="other" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Other</button>
+                </div>
+
+                <div class="gradient-primary rounded-2xl p-7 relative overflow-hidden text-center xl:text-left shadow-editorial">
+                    <div class="absolute -right-10 -bottom-10 bg-white/10 w-32 h-32 rounded-full blur-2xl"></div>
+                    <h3 class="font-headline text-2xl font-bold text-white mb-3">Want to post your event for free?</h3>
+                    <p class="text-white/90 text-sm leading-relaxed mb-5">Use the self-service form or share it in our Telegram group <span class="font-bold text-white">@pittsburghindian</span> and tag the admins so we can help get it listed.</p>
+                    <a href="/submit/index.html?type=event" class="inline-block bg-white text-primary font-bold text-sm px-4 py-2 rounded-lg hover:bg-white/90 transition-colors">Add Event</a>
+                </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            <!-- Left Column: Events List -->
-            <div class="lg:col-span-2 space-y-6">
-                <!-- Event Card 1 -->
-                <div class="bg-surface-container-lowest p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow group flex flex-col sm:flex-row gap-8">
-                    <!-- Date Column -->
-                    <div class="sm:w-32 flex flex-col border-r border-outline-variant/15 pr-6 hidden sm:flex">
-                        <span class="text-primary font-headline text-3xl font-extrabold uppercase">Oct 24</span>
-                        <span class="text-on-surface/60 text-sm font-semibold tracking-wider mt-1 uppercase">Thursday</span>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" data-event-grid>
+                <article class="event-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-event-record data-categories="food">
+                    <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
+                        <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10" data-tag="Food">Food</span>
                     </div>
-                    
-                    <!-- Content -->
-                    <div class="flex-1">
-                        <div class="flex gap-2 mb-4">
-                            <span class="bg-secondary-container text-secondary px-2 py-1 rounded-sm text-xs font-bold uppercase tracking-wider">Festival</span>
-                            <span class="bg-secondary-container text-secondary px-2 py-1 rounded-sm text-xs font-bold uppercase tracking-wider">Family</span>
-                        </div>
-                        <h3 class="font-headline text-2xl font-bold mb-3 group-hover:text-primary transition-colors">Diwali Lights at Market Square</h3>
-                        <p class="text-on-surface/80 leading-relaxed mb-6">A grand celebration of the Festival of Lights in the heart of downtown. Experience traditional dance performances, artisan crafts, and a...</p>
-                        
-                        <div class="flex flex-col sm:flex-row sm:items-center text-sm font-medium text-on-surface/70 gap-4">
-                            <div class="flex items-center">
-                                <svg class="w-4 h-4 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                Market Square, Pittsburgh, PA
-                            </div>
-                            <div class="flex items-center">
-                                <svg class="w-4 h-4 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                06:00 PM — 09:30 PM
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Event Card 2 -->
-                <div class="bg-surface-container-lowest p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow group flex flex-col sm:flex-row gap-8">
-                    <!-- Date Column -->
-                    <div class="sm:w-32 flex flex-col border-r border-outline-variant/15 pr-6 hidden sm:flex">
-                        <span class="text-primary font-headline text-3xl font-extrabold uppercase">Nov 02</span>
-                        <span class="text-on-surface/60 text-sm font-semibold tracking-wider mt-1 uppercase">Saturday</span>
-                    </div>
-                    
-                    <!-- Content -->
-                    <div class="flex-1">
-                        <div class="flex gap-2 mb-4">
-                            <span class="bg-primary/10 text-primary px-2 py-1 rounded-sm text-xs font-bold uppercase tracking-wider">Religious</span>
-                        </div>
-                        <h3 class="font-headline text-2xl font-bold mb-3 group-hover:text-primary transition-colors">SV Temple Annual Bhajans</h3>
-                        <p class="text-on-surface/80 leading-relaxed mb-6">Join us for a peaceful evening of devotional music and community prayers. Prasad will be served following the concluding aarti.</p>
-                        
-                        <div class="flex flex-col sm:flex-row sm:items-center text-sm font-medium text-on-surface/70 gap-4">
-                            <div class="flex items-center">
-                                <svg class="w-4 h-4 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                Penn Hills, Pittsburgh
-                            </div>
-                            <div class="flex items-center">
-                                <svg class="w-4 h-4 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                10:00 AM — 01:00 PM
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Event Card 3 -->
-                <div class="bg-surface-container-lowest p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow group flex flex-col sm:flex-row gap-8">
-                    <!-- Date Column -->
-                    <div class="sm:w-32 flex flex-col border-r border-outline-variant/15 pr-6 hidden sm:flex">
-                        <span class="text-primary font-headline text-3xl font-extrabold uppercase">Nov 15</span>
-                        <span class="text-on-surface/60 text-sm font-semibold tracking-wider mt-1 uppercase">Friday</span>
-                    </div>
-                    
-                    <!-- Content -->
-                    <div class="flex-1">
-                        <div class="flex gap-2 mb-4">
-                            <span class="bg-secondary-container text-secondary px-2 py-1 rounded-sm text-xs font-bold uppercase tracking-wider">Social</span>
-                            <span class="bg-secondary-container text-secondary px-2 py-1 rounded-sm text-xs font-bold uppercase tracking-wider">Professional</span>
-                        </div>
-                        <h3 class="font-headline text-2xl font-bold mb-3 group-hover:text-primary transition-colors">Indian Professionals Networking Mixer</h3>
-                        <p class="text-on-surface/80 leading-relaxed mb-6">Connect with fellow tech professionals, entrepreneurs, and students. A casual evening of conversation, mentorship, and appetizers at a...</p>
-                        
-                        <div class="flex flex-col sm:flex-row sm:items-center text-sm font-medium text-on-surface/70 gap-4">
-                            <div class="flex items-center">
-                                <svg class="w-4 h-4 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                The Highline, South Side
-                            </div>
-                            <div class="flex items-center">
-                                <svg class="w-4 h-4 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                07:00 PM — 10:00 PM
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Right Column: Forms & Promos -->
-            <div class="space-y-6">
-                <!-- Promo Image -->
-                <div class="relative rounded-xl overflow-hidden aspect-[4/3] group block">
-                    <img src="https://images.unsplash.com/photo-1603831518712-421711681284?auto=format&fit=crop&q=80&w=800" alt="Indian Women in Sarees" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
-                        <h3 class="font-headline text-2xl font-bold text-white leading-tight">Keep the community connected.</h3>
-                    </div>
-                </div>
-
-                <!-- Host an Event Form -->
-                <div class="bg-surface-container-low p-8 rounded-xl shadow-sm">
-                    <h3 class="font-headline text-2xl font-bold mb-6 text-on-surface">Host an Event?</h3>
-                    <form class="space-y-5">
+                    <div class="flex flex-col gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-on-surface/60 uppercase tracking-widest mb-2">Event Title</label>
-                            <input type="text" placeholder="e.g. Classical Music Night" class="w-full bg-surface-container-lowest border-b-2 border-outline-variant/30 px-3 py-3 rounded-t-sm focus:outline-none focus:border-primary transition-colors text-sm">
+                            <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="title">Biryani Mela</h2>
+                            <p class="text-sm text-on-surface/78 leading-7 mb-4" data-field="description">
+                                    Experience the Biryani Mela featuring exquisite Indian cuisine from Hastina Royal Indian Cuisine. Our detailed menu includes a variety of non-veg and veg biryanis, appetizers, and curries, all available for take-out.
+                                    <a href="https://stburghindian8808.blob.core.windows.net/event-images/BiryaniMela-054653.jpg" data-field="imageUrl" class="text-primary font-semibold hover:underline underline-offset-4">Read more</a>
+                            </p>
                         </div>
-                        
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold text-on-surface/60 uppercase tracking-widest mb-2">Date</label>
-                                <input type="date" class="w-full bg-surface-container-lowest border-b-2 border-outline-variant/30 px-3 py-3 rounded-t-sm focus:outline-none focus:border-primary transition-colors text-sm text-on-surface/80">
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="date">
+                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Date</p>
+                                <p class="text-sm font-bold text-on-surface leading-tight" data-field="date">Every weekend</p>
                             </div>
-                            <div>
-                                <label class="block text-xs font-bold text-on-surface/60 uppercase tracking-widest mb-2">Time</label>
-                                <input type="time" class="w-full bg-surface-container-lowest border-b-2 border-outline-variant/30 px-3 py-3 rounded-t-sm focus:outline-none focus:border-primary transition-colors text-sm text-on-surface/80">
+                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="time">
+                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Time</p>
+                                <p class="text-sm font-bold text-on-surface leading-tight" data-field="time">Not specified</p>
                             </div>
                         </div>
 
-                        <div>
-                            <label class="block text-xs font-bold text-on-surface/60 uppercase tracking-widest mb-2">Category</label>
-                            <select class="w-full bg-surface-container-lowest border-b-2 border-outline-variant/30 px-3 py-3 rounded-t-sm focus:outline-none focus:border-primary transition-colors text-sm appearance-none">
-                                <option>Social</option>
-                                <option>Religious</option>
-                                <option>Professional</option>
-                                <option>Festival</option>
-                            </select>
+                        <div class="event-location-card rounded-2xl px-5 py-4" data-field-group="location">
+                            <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Location</p>
+                            <p class="text-sm font-semibold text-on-surface leading-6" data-field="location">Hastina Royal Indian Cuisine, 1120 Park Manor Blvd, Pittsburgh PA15205</p>
                         </div>
+                    </div>
+                </article>
 
-                        <button type="button" class="w-full gradient-primary text-white font-bold py-3 mt-4 rounded-md hover:opacity-90 transition-opacity">Submit for Review</button>
-                        <p class="text-xs text-center text-on-surface/60 mt-4 px-4 leading-relaxed">Submissions are reviewed by our editorial team before publication.</p>
-                    </form>
-                </div>
-            </div>
+                    <article class="event-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-event-record data-categories="culture family">
+                        <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
+                            <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10" data-tag="Culture">Culture</span>
+                            <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10" data-tag="Family">Family</span>
+                        </div>
+                        <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="title">Bollywood Dance Night</h2>
+                        <p class="text-sm text-on-surface/78 leading-7 mb-4" data-field="description">
+                            An upbeat community dance night with Bollywood hits, open floor sessions, and light snacks for families and friends.
+                            <a href="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80" data-field="imageUrl" class="text-primary font-semibold hover:underline underline-offset-4">Read more</a>
+                        </p>
+                        <div class="grid grid-cols-2 gap-3 mb-3">
+                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="date">
+                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Date</p>
+                                <p class="text-sm font-bold text-on-surface" data-field="date">May 3, 2026</p>
+                            </div>
+                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="time">
+                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Time</p>
+                                <p class="text-sm font-bold text-on-surface" data-field="time">7:00 PM</p>
+                            </div>
+                        </div>
+                        <div class="event-location-card rounded-2xl px-5 py-4" data-field-group="location">
+                            <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Location</p>
+                            <p class="text-sm font-semibold text-on-surface leading-6" data-field="location">Carnegie Library Lecture Hall, Oakland, Pittsburgh</p>
+                        </div>
+                    </article>
+
+                    <article class="event-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-event-record data-categories="temple family">
+                        <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
+                            <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10" data-tag="Temple">Temple</span>
+                            <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10" data-tag="Family">Family</span>
+                        </div>
+                        <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="title">Saturday Temple Lunch Seva</h2>
+                        <p class="text-sm text-on-surface/78 leading-7 mb-4" data-field="description">
+                            Join the weekly seva and shared lunch gathering after morning prayers. Families and volunteers are welcome to participate.
+                            <a href="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=80" data-field="imageUrl" class="text-primary font-semibold hover:underline underline-offset-4">Read more</a>
+                        </p>
+                        <div class="grid grid-cols-2 gap-3 mb-3">
+                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="date">
+                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Date</p>
+                                <p class="text-sm font-bold text-on-surface" data-field="date">Every Saturday</p>
+                            </div>
+                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="time">
+                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Time</p>
+                                <p class="text-sm font-bold text-on-surface" data-field="time">11:30 AM</p>
+                            </div>
+                        </div>
+                        <div class="event-location-card rounded-2xl px-5 py-4" data-field-group="location">
+                            <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Location</p>
+                            <p class="text-sm font-semibold text-on-surface leading-6" data-field="location">Sri Venkateswara Temple, Penn Hills, PA</p>
+                        </div>
+                    </article>
+
+                    <article class="event-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-event-record data-categories="professional">
+                        <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
+                            <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10" data-tag="Professional">Professional</span>
+                            <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10" data-tag="Culture">Culture</span>
+                        </div>
+                        <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="title">Startup Chai & Networking</h2>
+                        <p class="text-sm text-on-surface/78 leading-7 mb-4" data-field="description">
+                            Casual networking for founders, students, and working professionals with chai, intros, and short lightning conversations.
+                            <a href="https://images.unsplash.com/photo-1515169067868-5387ec356754?auto=format&fit=crop&w=1200&q=80" data-field="imageUrl" class="text-primary font-semibold hover:underline underline-offset-4">Read more</a>
+                        </p>
+                        <div class="grid grid-cols-2 gap-3 mb-3">
+                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="date">
+                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Date</p>
+                                <p class="text-sm font-bold text-on-surface" data-field="date">May 10, 2026</p>
+                            </div>
+                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="time">
+                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Time</p>
+                                <p class="text-sm font-bold text-on-surface" data-field="time">6:30 PM</p>
+                            </div>
+                        </div>
+                        <div class="event-location-card rounded-2xl px-5 py-4" data-field-group="location">
+                            <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Location</p>
+                            <p class="text-sm font-semibold text-on-surface leading-6" data-field="location">Ascender at Bakery Square, East Liberty</p>
+                        </div>
+                    </article>
         </div>
 
     </main>
 
-    <!-- Footer -->
     <footer class="bg-surface py-10 border-t border-outline-variant/15 mt-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-center">
@@ -243,13 +235,62 @@
                 <div class="flex flex-wrap justify-center gap-6 text-sm text-on-surface/80 font-medium">
                     <a href="#" class="hover:text-primary">About</a>
                     <a href="#" class="hover:text-primary">Contact</a>
-                    <a href="#" class="text-secondary font-bold">Add Event</a>
-                    <a href="#" class="hover:text-primary">Add Business</a>
+                    <a href="/submit/index.html?type=event" class="text-secondary font-bold">Add Event</a>
+                    <a href="/submit/index.html?type=business" class="hover:text-primary">Add Business</a>
                     <a href="#" class="hover:text-primary">Privacy</a>
                 </div>
             </div>
         </div>
     </footer>
+
+    <script>
+        (() => {
+            const filterBar = document.querySelector('[data-event-filters]');
+            const eventCards = Array.from(document.querySelectorAll('[data-event-record]'));
+
+            if (!filterBar || eventCards.length === 0) {
+                return;
+            }
+
+            const buttons = Array.from(filterBar.querySelectorAll('[data-filter]'));
+            const activeClasses = ['bg-secondary', 'text-white'];
+            const inactiveClasses = ['bg-secondary-container', 'text-secondary-dim'];
+
+            const setActiveButton = (activeValue) => {
+                buttons.forEach((button) => {
+                    const isActive = button.dataset.filter === activeValue;
+                    button.classList.toggle('bg-secondary', isActive);
+                    button.classList.toggle('!text-white', isActive);
+                    button.classList.toggle('hover:bg-secondary/90', isActive);
+                    button.classList.toggle('bg-secondary-container', !isActive);
+                    button.classList.toggle('text-secondary-dim', !isActive);
+                    button.classList.toggle('!text-[#005048]', !isActive);
+                    button.classList.toggle('hover:bg-secondary/20', !isActive);
+                });
+            };
+
+            const applyFilter = (filterValue) => {
+                eventCards.forEach((card) => {
+                    const categories = (card.dataset.categories || '').split(/\s+/).filter(Boolean);
+                    const shouldShow = filterValue === 'all' || categories.includes(filterValue);
+                    card.classList.toggle('hidden', !shouldShow);
+                });
+
+                setActiveButton(filterValue);
+            };
+
+            filterBar.addEventListener('click', (event) => {
+                const button = event.target.closest('[data-filter]');
+                if (!button) {
+                    return;
+                }
+
+                applyFilter(button.dataset.filter);
+            });
+
+            applyFilter('all');
+        })();
+    </script>
 
 </body>
 </html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Pittsburgh Desi Guide - Indians in Pittsburgh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        surface: '#F8F9FA', 'surface-container-low': '#F3F4F5', 'surface-container-lowest': '#FFFFFF', 'surface-container-high': '#E7E8E9',
+                        primary: '#9F3D00', 'primary-container': '#C74E00',
+                        secondary: '#006A60', 'secondary-container': '#8CF5E4', 'secondary-dim': '#6FD8C8',
+                        'on-surface': '#191C1D', 'outline-variant': '#E1BFB2', 'primary-fixed-dim': '#FFB596'
+                    },
+                    fontFamily: { headline: ['Manrope', 'sans-serif'], body: ['Inter', 'sans-serif'] },
+                    boxShadow: { editorial: '0px 12px 32px rgba(141, 113, 101, 0.08)' }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #F8F9FA; color: #191C1D; }
+        .gradient-primary { background: linear-gradient(135deg, #9F3D00 0%, #C74E00 100%); }
+        .section-divider {
+            background: linear-gradient(90deg, transparent, rgba(159,61,0,0.15), transparent);
+            height: 1px;
+        }
+        .toc-link {
+            border-left: 3px solid transparent;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .toc-link:hover {
+            border-left-color: #9F3D00;
+            color: #9F3D00;
+        }
+    </style>
+</head>
+<body class="font-body antialiased selection:bg-primary-fixed-dim selection:text-on-surface">
+
+    <nav class="sticky top-0 z-50 bg-surface/85 backdrop-blur-md border-b border-outline-variant/15 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-8">
+                    <a href="/index.html" class="text-primary font-headline font-bold text-2xl tracking-tight">Indians in Pittsburgh</a>
+                    <div class="hidden md:flex space-x-6 text-sm font-medium text-on-surface/80">
+                        <a href="/events/index.html" class="hover:text-primary transition-colors">Events</a>
+                        <a href="/businesses/index.html" class="hover:text-primary transition-colors">Businesses</a>
+
+                        <a href="/places/index.html" class="hover:text-primary transition-colors">Places</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="py-12 md:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Hero -->
+            <div class="max-w-3xl mb-10">
+                <a href="/index.html" class="text-sm font-bold text-primary uppercase tracking-widest hover:underline mb-4 block">&larr; Back Home</a>
+                <p class="text-primary text-sm font-bold tracking-widest uppercase mb-3">Community Guide</p>
+                <h1 class="font-headline text-4xl md:text-6xl font-extrabold leading-tight mb-4 text-on-surface">The Pittsburgh Desi Guide</h1>
+                <p class="text-lg text-on-surface/75 leading-relaxed">Everything you need to know about settling in, getting around, exploring the East Coast, finding community, and making the most of the Steel City — from a desi perspective.</p>
+            </div>
+
+            <div class="relative h-64 md:h-[460px] w-full rounded-2xl overflow-hidden mb-14 shadow-editorial">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1600" alt="Pittsburgh Cityscape" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                <div class="absolute bottom-6 left-8">
+                    <span class="text-white/80 text-sm font-medium">Pittsburgh, Pennsylvania</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-12 items-start">
+
+                <!-- Table of Contents (sticky sidebar) -->
+                <aside class="hidden lg:block sticky top-28">
+                    <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-primary/70 mb-4">In This Guide</p>
+                    <nav class="space-y-1 text-sm text-on-surface/70 font-medium">
+                        <a href="#arriving" class="toc-link block pl-3 py-1">Arriving in Pittsburgh</a>
+                        <a href="#weather" class="toc-link block pl-3 py-1">Navigating the Weather</a>
+                        <a href="#transport" class="toc-link block pl-3 py-1">Public Transportation</a>
+                        <a href="#networks" class="toc-link block pl-3 py-1">Social Networks</a>
+                        <a href="#visitor" class="toc-link block pl-3 py-1">Things To See</a>
+                        <a href="#outbound" class="toc-link block pl-3 py-1">East Coast Getaways</a>
+                        <a href="#iskcon" class="toc-link block pl-3 py-1">ISKCON New Vrindaban</a>
+                        <a href="#accommodation" class="toc-link block pl-3 py-1">Where To Stay &amp; Live</a>
+                    </nav>
+                </aside>
+
+                <!-- Article Body -->
+                <article class="space-y-14 text-on-surface/85 leading-relaxed">
+
+                    <section id="arriving">
+                        <p class="text-xl md:text-2xl leading-relaxed font-medium text-on-surface">Relocating to a new city can be daunting. I began researching Pittsburgh just a week prior to my arrival, having minimal time to prepare for my first assignment abroad. To my pleasant surprise, settling into the Steel City was remarkably seamless.</p>
+                        <p class="mt-6 text-lg">After a brief period of orientation, Pittsburgh truly felt like home. The city is renowned for its welcoming nature, and for the Indian diaspora specifically, there is an established and thriving ecosystem that makes you feel connected almost immediately.</p>
+                    </section>
+
+                    <div class="section-divider"></div>
+
+                    <section id="weather">
+                        <h2 class="font-headline text-3xl font-bold text-on-surface mb-5">🌨 Navigating the Weather</h2>
+                        <p class="text-lg">Pittsburgh winters are notoriously harsh, often freezing even without snow. Proper winter clothing is absolutely essential. If you are arriving from India, purchase quality winter gear immediately upon arrival — a warm scarf, insulated gloves, and a good beanie are indispensable.</p>
+                        <p class="mt-4 text-lg">Because Downtown is situated at the confluence of three rivers, the wind chill makes it feel significantly colder than the actual temperature. With the right layers, however, you can still enjoy an outdoor coffee in January.</p>
+                        <div class="mt-6 bg-[#fff8f2] border border-primary/15 rounded-2xl px-6 py-5">
+                            <p class="text-sm font-bold text-primary uppercase tracking-wider mb-2">Quick Tip</p>
+                            <p class="text-on-surface/80">Buy winter gear at Walmart within your first few days. Don't wait until the first snowfall — stores sell out quickly.</p>
+                        </div>
+                    </section>
+
+                    <div class="section-divider"></div>
+
+                    <section id="transport">
+                        <h2 class="font-headline text-3xl font-bold text-on-surface mb-5">🚌 Public Transportation</h2>
+                        <p class="text-lg">The city's public transport system is centrally focused around Downtown, served by Port Authority buses and the 'T' (light rail). Fares require exact change if paying in cash.</p>
+                        <p class="mt-4 text-lg">It is highly recommended to purchase a <strong>ConnectCard</strong> from local grocery stores like Giant Eagle. This reloadable card makes transit seamless and saves money on regular commutes.</p>
+                    </section>
+
+                    <div class="section-divider"></div>
+
+                    <section id="networks">
+                        <h2 class="font-headline text-3xl font-bold text-on-surface mb-5">💬 Social Networks and Community</h2>
+                        <p class="text-lg">Pittsburgh boasts numerous WhatsApp and Telegram groups tailored to the Indian community. While many are invitation-only, our Telegram group <strong>"Indian Community Pittsburgh"</strong> is the largest in the region.</p>
+                        <p class="mt-4 text-lg">Active members frequently post regarding ride shares, moving sales, event information, and trusted local services. Joining is the single fastest way to feel at home.</p>
+                        <div class="mt-6 bg-[#e9fbf7] border border-secondary/20 rounded-2xl px-6 py-5">
+                            <p class="text-sm font-bold text-secondary uppercase tracking-wider mb-2">Join the Community</p>
+                            <p class="text-on-surface/80">Search <strong>@pittsburghindian</strong> on Telegram or ask any member for a direct invite link.</p>
+                        </div>
+                    </section>
+
+                    <div class="section-divider"></div>
+
+                    <section id="visitor">
+                        <h2 class="font-headline text-3xl font-bold text-on-surface mb-5">🏙 Things To See in Pittsburgh</h2>
+                        <p class="text-lg">If you are visiting temporarily, Pittsburgh — famed as "The City of Bridges" — has plenty to offer.</p>
+                        <ul class="mt-6 space-y-4 text-lg">
+                            <li class="flex gap-3"><span class="text-primary font-bold mt-1">→</span><span><strong>PNC Park &amp; Acrisure Stadium</strong> — For sports fans, these are world-class venues worth a visit even outside of game days.</span></li>
+                            <li class="flex gap-3"><span class="text-primary font-bold mt-1">→</span><span><strong>Mt. Washington</strong> — Scale the incline for one of the most spectacular city skyline views in the United States.</span></li>
+                            <li class="flex gap-3"><span class="text-primary font-bold mt-1">→</span><span><strong>The Strip District</strong> — A rich, eclectic cultural atmosphere with food stalls, markets, and weekend energy.</span></li>
+                            <li class="flex gap-3"><span class="text-primary font-bold mt-1">→</span><span><strong>PPG Place Ice Rink</strong> — A seasonal ice rink built inside stunning gothic glass spires Downtown. A truly unique Pittsburgh experience.</span></li>
+                        </ul>
+
+                        <div class="mt-8 relative rounded-2xl overflow-hidden shadow-editorial">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Oneppgplace.jpg/500px-Oneppgplace.jpg" alt="PPG Place Pittsburgh" class="w-full max-h-80 object-cover">
+                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-6 py-4">
+                                <p class="text-white text-sm font-medium">PPG Place, Downtown Pittsburgh</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="section-divider"></div>
+
+                    <section id="outbound">
+                        <h2 class="font-headline text-3xl font-bold text-on-surface mb-5">✈️ East Coast Getaways</h2>
+                        <p class="text-lg">Pittsburgh is perfectly positioned for rapid, inexpensive weekend trips to major East Coast destinations. Here are the easiest excursions:</p>
+                        <ul class="mt-6 space-y-6 text-lg">
+                            <li>
+                                <strong class="text-on-surface">Washington D.C.</strong>
+                                <p class="mt-1 text-on-surface/80">An incredibly convenient overnight trip. Catch the MegaBus late Friday night, arrive at D.C.'s Union Station at sunrise. Use the hop-on/hop-off tourist buses to see landmarks before the overnight bus home.</p>
+                            </li>
+                            <li>
+                                <strong class="text-on-surface">New York City</strong>
+                                <p class="mt-1 text-on-surface/80">Overnight bus to Penn Station. New York has a dizzying array of attractions — an aggressive day-trip is achievable and highly affordable.</p>
+                            </li>
+                            <li>
+                                <strong class="text-on-surface">Niagara Falls</strong>
+                                <p class="mt-1 text-on-surface/80">A quintessential visit. Just a 4-hour drive north of Pittsburgh, easily done as a single-day road trip. Book the Maid of the Mist tickets online to bypass lines.</p>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <div class="section-divider"></div>
+
+                    <section id="iskcon">
+                        <h2 class="font-headline text-3xl font-bold text-on-surface mb-5">🪷 ISKCON New Vrindaban</h2>
+                        <p class="text-lg">Located in West Virginia, less than two hours south of Pittsburgh, New Vrindaban is a gorgeous sanctuary and major headquarters for the ISKCON movement. Packed with events year-round, you can witness beautiful temple architecture, ponds teeming with fish, and freely roaming peacocks.</p>
+                        <p class="mt-4 text-lg">A complimentary lunch is served at major events. Just be cautious driving the mountain roads during harsh winters.</p>
+                    </section>
+
+                    <div class="section-divider"></div>
+
+                    <section id="accommodation">
+                        <h2 class="font-headline text-3xl font-bold text-on-surface mb-5">🏡 Where To Stay and Live</h2>
+                        <p class="text-lg">Pittsburgh has specific enclaves where the Indian ecosystem thrives:</p>
+
+                        <div class="mt-6 space-y-6">
+                            <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-editorial border border-outline-variant/10">
+                                <h3 class="font-headline text-xl font-bold text-on-surface mb-2">Green Tree Road</h3>
+                                <p class="text-on-surface/80 text-base leading-7">This corridor is historically the most popular starting point. Incredible proximity to Indian groceries (like Patel Brothers) and restaurants. Apartment complexes such as Carriage Park host one of the largest Indian communities in the region. Easy public transit access to Downtown.</p>
+                            </div>
+
+                            <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-editorial border border-outline-variant/10">
+                                <h3 class="font-headline text-xl font-bold text-on-surface mb-2">The Suburbs</h3>
+                                <p class="text-sm font-bold text-primary/70 uppercase tracking-wider mb-2">Upper St. Clair · South Fayette · Wexford · Cranberry</p>
+                                <p class="text-on-surface/80 text-base leading-7">As families grow, many transition to the northern or southern suburbs for top-rated school districts. Upper St. Clair is frequently cited as housing one of the best school systems in the state. Requires a vehicle but offers unmatched residential quality of life.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                </article>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-surface py-10 border-t border-outline-variant/15 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0 text-center md:text-left">
+                    <p class="font-headline font-bold text-xl text-on-surface mb-2">Indians in Pittsburgh</p>
+                    <p class="text-sm text-on-surface/60">&copy; 2024 Indians in Pittsburgh. The Civic Ledger.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-6 text-sm text-on-surface/80 font-medium">
+                    <a href="#" class="hover:text-primary">About</a>
+                    <a href="#" class="hover:text-primary">Contact</a>
+                    <a href="#" class="hover:text-primary">Add Event</a>
+                    <a href="#" class="hover:text-primary">Add Business</a>
+                    <a href="#" class="hover:text-primary">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

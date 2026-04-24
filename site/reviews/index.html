@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Reviews - Indians in Pittsburgh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        surface: '#F8F9FA',
+                        'surface-container-low': '#F3F4F5',
+                        'surface-container-lowest': '#FFFFFF',
+                        'surface-container-high': '#E7E8E9',
+                        primary: '#9F3D00',
+                        'primary-container': '#C74E00',
+                        secondary: '#006A60',
+                        'secondary-container': '#8CF5E4',
+                        'secondary-dim': '#6FD8C8',
+                        'on-surface': '#191C1D',
+                        'outline-variant': '#E1BFB2',
+                        'primary-fixed-dim': '#FFB596'
+                    },
+                    fontFamily: {
+                        headline: ['Manrope', 'sans-serif'],
+                        body: ['Inter', 'sans-serif']
+                    },
+                    boxShadow: {
+                        editorial: '0px 12px 32px rgba(141, 113, 101, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #F8F9FA; color: #191C1D; }
+        .gradient-primary { background: linear-gradient(135deg, #9F3D00 0%, #C74E00 100%); }
+        .review-shell {
+            background:
+                radial-gradient(circle at top right, rgba(140, 245, 228, 0.16), transparent 28%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(255, 252, 248, 0.98));
+        }
+        .review-panel {
+            background: linear-gradient(180deg, #fffaf4 0%, #f8f3ec 100%);
+            border: 1px solid rgba(159, 61, 0, 0.08);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+        }
+        .review-quote {
+            border-left: 4px solid rgba(159, 61, 0, 0.25);
+            background: rgba(255, 255, 255, 0.72);
+        }
+        .thumb-scroller::-webkit-scrollbar {
+            height: 8px;
+        }
+        .thumb-scroller::-webkit-scrollbar-thumb {
+            background: rgba(159, 61, 0, 0.24);
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="font-body antialiased selection:bg-primary-fixed-dim selection:text-on-surface">
+
+    <nav class="sticky top-0 z-50 bg-surface/85 backdrop-blur-md border-b-[1px] border-outline-variant/15 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-8">
+                    <a href="/index.html" class="text-primary font-headline font-bold text-2xl tracking-tight">Indians in Pittsburgh</a>
+
+                    <div class="hidden md:flex space-x-6 text-sm font-medium text-on-surface/80">
+                        <a href="/events/index.html" class="hover:text-primary transition-colors pb-1">Events</a>
+                        <a href="/businesses/index.html" class="hover:text-primary transition-colors pb-1">Businesses</a>
+                        <a href="/reviews/index.html" class="text-primary border-b-2 border-primary pb-1">Reviews</a>
+                        <a href="/newcomers/index.html" class="hover:text-primary transition-colors pb-1">Newcomers</a>
+                        <a href="/places/index.html" class="hover:text-primary transition-colors pb-1">Places</a>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <!--<button class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post</button>-->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        <section class="grid grid-cols-1 xl:grid-cols-[1.45fr_0.9fr] gap-8 items-end mb-12">
+            <div class="max-w-3xl">
+                <p class="text-primary text-sm font-bold tracking-widest uppercase mb-3">Weekend Watchlist</p>
+                <h1 class="font-headline text-5xl md:text-6xl font-extrabold leading-tight mb-4 text-on-surface">Movie Reviews With Full Desi Commentary</h1>
+                <p class="text-lg text-on-surface/80 leading-relaxed max-w-2xl">
+                    Quick, fun, spoiler-light reviews for Indian movies playing around Pittsburgh. Pick a thumbnail, jump between films, and find the kind of movie you are in the mood for before booking tickets.
+                </p>
+            </div>
+
+            <div class="gradient-primary rounded-2xl p-7 relative overflow-hidden shadow-editorial">
+                <div class="absolute -right-10 -bottom-10 bg-white/10 w-32 h-32 rounded-full blur-2xl"></div>
+                <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-white/75 mb-3">How To Use This Page</p>
+                <h2 class="font-headline text-2xl font-bold text-white mb-3">Tap any review card below</h2>
+                <p class="text-white/90 text-sm leading-relaxed">
+                    The gallery, story breakdown, rating, and one-line verdict all update instantly. It works like a simple carousel, but stays readable like an article page.
+                </p>
+            </div>
+        </section>
+
+        <section class="review-shell rounded-[2rem] shadow-editorial border border-outline-variant/10 overflow-hidden">
+            <div class="px-5 py-6 md:px-10 md:py-10 border-b border-outline-variant/15">
+                <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-primary/70 mb-3" id="review-kicker">Telugu Action Review</p>
+                        <h2 class="font-headline text-3xl md:text-4xl font-extrabold text-on-surface leading-tight" id="review-title">They Call Him OG (2025) — Full Review</h2>
+                        <p class="text-sm text-on-surface/65 mt-3" id="review-meta">Mass action | Hero elevation | Fun Indian English | 2h 30m vibe check</p>
+                    </div>
+                    <div class="review-panel rounded-2xl px-5 py-4 min-w-[220px]">
+                        <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Final Rating</p>
+                        <p class="text-lg font-bold text-on-surface leading-tight" id="review-rating">★★★★☆ 4/5</p>
+                        <p class="text-sm text-on-surface/70 mt-2" id="review-rating-note">One star extra for style and swag.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-5 py-6 md:px-10 md:py-10">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8" id="review-gallery">
+                    <figure class="rounded-2xl overflow-hidden border border-outline-variant/10 shadow-sm">
+                        <img id="gallery-image-1" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80" alt="Movie still 1" class="w-full h-64 object-cover" loading="lazy">
+                    </figure>
+                    <figure class="rounded-2xl overflow-hidden border border-outline-variant/10 shadow-sm">
+                        <img id="gallery-image-2" src="https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=1200&q=80" alt="Movie still 2" class="w-full h-64 object-cover" loading="lazy">
+                    </figure>
+                    <figure class="rounded-2xl overflow-hidden border border-outline-variant/10 shadow-sm">
+                        <img id="gallery-image-3" src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=1200&q=80" alt="Movie still 3" class="w-full h-64 object-cover" loading="lazy">
+                    </figure>
+                </div>
+
+                <div class="mb-10">
+                    <p class="text-xl md:text-2xl leading-relaxed text-on-surface/90" id="review-intro">
+                        Arrey bhai, what a movie this is. This is not trying to be subtle or realistic. It arrives with drums, slow motion, flying dust, and full confidence that the hero can solve most problems by staring harder than everyone else.
+                    </p>
+                </div>
+
+                <div class="space-y-8" id="review-sections">
+                    <article class="border-t border-outline-variant/35 pt-8">
+                        <h3 class="font-headline text-3xl font-bold text-on-surface mb-4">🕴 Story</h3>
+                        <div class="space-y-4 text-lg leading-8 text-on-surface/88">
+                            <p>The movie keeps things very simple: one dangerous man returns, villains start trembling, and the audience sits back waiting for the payoff.</p>
+                            <blockquote class="review-quote rounded-r-2xl px-5 py-4 text-on-surface/85">Enough is enough.</blockquote>
+                            <p>Logic is not the main guest here. Presentation is the star, and the film knows exactly where to spend its energy.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-10">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
+                <div>
+                    <p class="text-primary text-sm font-bold tracking-widest uppercase mb-2">More Reviews</p>
+                    <h2 class="font-headline text-3xl font-bold text-on-surface">Thumbnail Carousel</h2>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button type="button" id="thumb-prev" class="h-11 w-11 rounded-full bg-surface-container-lowest border border-outline-variant/20 text-on-surface hover:border-primary hover:text-primary transition-colors" aria-label="Scroll left">←</button>
+                    <button type="button" id="thumb-next" class="h-11 w-11 rounded-full bg-surface-container-lowest border border-outline-variant/20 text-on-surface hover:border-primary hover:text-primary transition-colors" aria-label="Scroll right">→</button>
+                </div>
+            </div>
+
+            <div class="thumb-scroller flex gap-4 overflow-x-auto pb-3 scroll-smooth" id="thumb-strip" aria-label="Movie reviews list">
+                <button type="button" class="review-thumb min-w-[280px] max-w-[280px] text-left rounded-2xl overflow-hidden border border-primary/30 bg-surface-container-lowest shadow-editorial transition-all" data-index="0">
+                    <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80" alt="They Call Him OG review thumbnail" class="w-full h-36 object-cover">
+                    <div class="p-4">
+                        <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-primary/70 mb-2">Featured Now</p>
+                        <h3 class="font-headline text-xl font-bold text-on-surface">They Call Him OG</h3>
+                        <p class="text-sm text-on-surface/70 mt-2">Mass, mood, and hero-entry madness.</p>
+                    </div>
+                </button>
+
+                <button type="button" class="review-thumb min-w-[280px] max-w-[280px] text-left rounded-2xl overflow-hidden border border-outline-variant/20 bg-surface-container-lowest shadow-editorial transition-all" data-index="1">
+                    <img src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=900&q=80" alt="Hit 3 review thumbnail" class="w-full h-36 object-cover">
+                    <div class="p-4">
+                        <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-primary/70 mb-2">Crime Thriller</p>
+                        <h3 class="font-headline text-xl font-bold text-on-surface">HIT: The Third Case</h3>
+                        <p class="text-sm text-on-surface/70 mt-2">Sharper, darker, more investigation-heavy.</p>
+                    </div>
+                </button>
+
+                <button type="button" class="review-thumb min-w-[280px] max-w-[280px] text-left rounded-2xl overflow-hidden border border-outline-variant/20 bg-surface-container-lowest shadow-editorial transition-all" data-index="2">
+                    <img src="https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=900&q=80" alt="Court review thumbnail" class="w-full h-36 object-cover">
+                    <div class="p-4">
+                        <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-primary/70 mb-2">Drama Pick</p>
+                        <h3 class="font-headline text-xl font-bold text-on-surface">Court</h3>
+                        <p class="text-sm text-on-surface/70 mt-2">Less whistles, more writing and performances.</p>
+                    </div>
+                </button>
+
+                <button type="button" class="review-thumb min-w-[280px] max-w-[280px] text-left rounded-2xl overflow-hidden border border-outline-variant/20 bg-surface-container-lowest shadow-editorial transition-all" data-index="3">
+                    <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=80" alt="Retro review thumbnail" class="w-full h-36 object-cover">
+                    <div class="p-4">
+                        <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-primary/70 mb-2">Stylish Watch</p>
+                        <h3 class="font-headline text-xl font-bold text-on-surface">Retro</h3>
+                        <p class="text-sm text-on-surface/70 mt-2">Mood-driven cinema with color and attitude.</p>
+                    </div>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-surface py-10 border-t border-outline-variant/15 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0 text-center md:text-left">
+                    <p class="font-headline font-bold text-xl text-on-surface mb-2">Indians in Pittsburgh</p>
+                    <p class="text-sm text-on-surface/60">&copy; 2024 Indians in Pittsburgh. The Civic Ledger.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-6 text-sm text-on-surface/80 font-medium">
+                    <a href="#" class="hover:text-primary">About</a>
+                    <a href="#" class="hover:text-primary">Contact</a>
+                    <a href="#" class="hover:text-primary">Add Review</a>
+                    <a href="#" class="hover:text-primary">Add Business</a>
+                    <a href="#" class="hover:text-primary">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (() => {
+            const reviews = [
+                {
+                    kicker: 'Telugu Action Review',
+                    title: 'They Call Him OG (2025) — Full Review',
+                    meta: 'Mass action | Hero elevation | Fun Indian English | 2h 30m vibe check',
+                    rating: '★★★★☆ 4/5',
+                    ratingNote: 'One star extra for style and swag.',
+                    intro: 'Arrey bhai, what a movie this is. This is not trying to be subtle or realistic. It arrives with drums, slow motion, flying dust, and full confidence that the hero can solve most problems by staring harder than everyone else.',
+                    gallery: [
+                        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80',
+                        'https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=1200&q=80',
+                        'https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=1200&q=80'
+                    ],
+                    sections: [
+                        {
+                            heading: '🕴 Story (Very simple only)',
+                            paragraphs: [
+                                'The movie is about one big don-type fellow who vanished somewhere and comes back when villains get too comfortable. Revenge, emotion, past story, style, all are present in proper commercial proportion.',
+                                'From there it is fight, dialogue, swagger walk, dramatic pauses, and more fight. The story path is familiar, but the packaging is loud and entertaining.'
+                            ],
+                            quote: 'Enough is enough.'
+                        },
+                        {
+                            heading: '🔥 Hero Entry & Style',
+                            paragraphs: [
+                                'First of all, hero entry. Theatre will behave less like a cinema hall and more like a festival ground.',
+                                'Half the movie is the hero walking slowly and looking serious, but somehow that is exactly what the audience came for.'
+                            ],
+                            bullets: [
+                                'He knows everything',
+                                'He cares about nothing',
+                                'Even the background music enters with him'
+                            ]
+                        },
+                        {
+                            heading: '💥 Action Scenes',
+                            paragraphs: [
+                                'This is not normal action. This is slow-motion punch, flying villain, and background score doing extra overtime.',
+                                'Sometimes logic goes on vacation, but style stays present for full attendance.'
+                            ],
+                            bullets: [
+                                '20 people come to fight',
+                                'They helpfully attack one by one',
+                                'We still clap because the setup is fun'
+                            ]
+                        },
+                        {
+                            heading: '🎵 Music & Background Score',
+                            paragraphs: [
+                                'Music is full mass plus swagger. Whenever the hero appears, the score behaves like it has a separate fan association.',
+                                'Even quiet scenes feel larger because the soundtrack keeps telling you something huge is happening.'
+                            ],
+                            quote: 'Background music says: respect please.'
+                        },
+                        {
+                            heading: '🌸 Final Thoughts',
+                            paragraphs: [
+                                'If you want realism, deep logic, and delicate writing, this is the wrong train entirely.',
+                                'If you want style, hero elevation, and loud single-screen energy, it absolutely delivers.'
+                            ],
+                            bullets: [
+                                'Best for fans of pure commercial cinema',
+                                'Go with friends, not with analysis mode',
+                                'Expect whistles, not subtlety'
+                            ]
+                        }
+                    ]
+                },
+                {
+                    kicker: 'Crime Thriller Review',
+                    title: 'HIT: The Third Case — Tense, Dark, and Properly Hooking',
+                    meta: 'Investigation thriller | Violent in stretches | More brains than whistles',
+                    rating: '★★★★☆ 4.2/5',
+                    ratingNote: 'Strong pacing and mood carry this one.',
+                    intro: 'This one is for the people who want a movie to pull them in scene by scene. Less fan-service, more tension. You sit down for a thriller and the film actually remembers to be thrilling.',
+                    gallery: [
+                        'https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=1200&q=80',
+                        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80',
+                        'https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=1200&q=80'
+                    ],
+                    sections: [
+                        {
+                            heading: '🧩 Story & Investigation',
+                            paragraphs: [
+                                'The film keeps revealing information carefully, so the mystery remains active instead of being spoon-fed.',
+                                'It trusts the viewer a little more than the average commercial entertainer, which helps the tension land.'
+                            ],
+                            quote: 'Every clue feels like it matters.'
+                        },
+                        {
+                            heading: '🕵 Lead Performance',
+                            paragraphs: [
+                                'The hero here is not doing mass walk for applause every ten minutes. He is focused, intense, and mostly in problem-solving mode.',
+                                'That grounded approach gives the whole movie a sharper identity.'
+                            ]
+                        },
+                        {
+                            heading: '🌑 Mood & Craft',
+                            paragraphs: [
+                                'Lighting, silence, and background texture do a lot of heavy lifting. The film looks like it knows what atmosphere it wants.',
+                                'Some moments are disturbing, but that darkness is part of the design.'
+                            ],
+                            bullets: [
+                                'Good use of suspense',
+                                'Solid scene transitions',
+                                'Keeps curiosity alive'
+                            ]
+                        },
+                        {
+                            heading: '📌 Final Thoughts',
+                            paragraphs: [
+                                'Watch this when you want a thriller, not a celebration video for a star.',
+                                'It still has big-screen appeal, but its strengths come from tension and control.'
+                            ]
+                        }
+                    ]
+                },
+                {
+                    kicker: 'Courtroom Drama Review',
+                    title: 'Court — Writing First, Fireworks Later',
+                    meta: 'Dialogue-driven drama | Strong performances | Patient storytelling',
+                    rating: '★★★★☆ 4/5',
+                    ratingNote: 'More substance than spectacle, and that helps.',
+                    intro: 'This is the kind of movie that earns its impact by writing, acting, and timing instead of shouting for your attention. It asks you to lean in a little, and then rewards that patience.',
+                    gallery: [
+                        'https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=1200&q=80',
+                        'https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=1200&q=80',
+                        'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1200&q=80'
+                    ],
+                    sections: [
+                        {
+                            heading: '⚖ Story & Structure',
+                            paragraphs: [
+                                'The narrative builds through conversations, legal friction, and character motivations rather than punch dialogues and sudden explosions.',
+                                'That slower approach works because the screenplay stays focused.'
+                            ],
+                            quote: 'Drama comes from words here, not from volume.'
+                        },
+                        {
+                            heading: '🎭 Performances',
+                            paragraphs: [
+                                'Actors carry the film with conviction. Even smaller scenes feel lived-in because nobody is playing only to the front row.',
+                                'You end up remembering expressions and pauses, not just plot points.'
+                            ]
+                        },
+                        {
+                            heading: '✍ Writing Quality',
+                            paragraphs: [
+                                'The film is strongest when it lets opposing viewpoints collide naturally.',
+                                'It respects the audience enough to avoid over-explaining every beat.'
+                            ],
+                            bullets: [
+                                'Sharp exchanges',
+                                'Credible emotional turns',
+                                'Minimal unnecessary noise'
+                            ]
+                        },
+                        {
+                            heading: '🌸 Final Thoughts',
+                            paragraphs: [
+                                'Not a first-day-first-show screaming movie, but definitely a satisfying watch if you enjoy strong writing.',
+                                'Go for this when you want something grounded and performance-led.'
+                            ]
+                        }
+                    ]
+                },
+                {
+                    kicker: 'Style-Driven Review',
+                    title: 'Retro — Cool Frames, Confident Mood, and Pure Vibe',
+                    meta: 'Visual flair | Mood-heavy storytelling | Stylish big-screen watch',
+                    rating: '★★★☆☆ 3.7/5',
+                    ratingNote: 'Not perfect, but very easy on the eyes.',
+                    intro: 'Some movies win you over with plot. This one mostly wins by walking into the room looking fantastic. Color, costume, camera movement, and attitude are doing serious work here.',
+                    gallery: [
+                        'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1200&q=80',
+                        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80',
+                        'https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=1200&q=80'
+                    ],
+                    sections: [
+                        {
+                            heading: '🎨 Look & Feel',
+                            paragraphs: [
+                                'The visual design is the main attraction. Frames are composed with care, and the movie knows how to create a mood quickly.',
+                                'Even when the story dips, the presentation keeps pulling you back in.'
+                            ],
+                            quote: 'This movie understands lighting better than some characters understand themselves.'
+                        },
+                        {
+                            heading: '🎬 Story Impact',
+                            paragraphs: [
+                                'The narrative is not always as strong as the surface appeal.',
+                                'There are moments where you admire the film more than you emotionally connect with it.'
+                            ]
+                        },
+                        {
+                            heading: '📻 Music & Atmosphere',
+                            paragraphs: [
+                                'Soundtrack and production design help maintain the cool factor almost throughout.',
+                                'It feels designed for people who enjoy cinema as texture, not only as plot delivery.'
+                            ],
+                            bullets: [
+                                'Great mood',
+                                'Confident visual identity',
+                                'Story could hit harder'
+                            ]
+                        },
+                        {
+                            heading: '🌆 Final Thoughts',
+                            paragraphs: [
+                                'Recommended for viewers who enjoy stylish filmmaking and don’t mind a slightly uneven script.',
+                                'Maybe not an all-timer, but definitely a watchable theatrical experience.'
+                            ]
+                        }
+                    ]
+                }
+            ];
+
+            const titleNode = document.getElementById('review-title');
+            const kickerNode = document.getElementById('review-kicker');
+            const metaNode = document.getElementById('review-meta');
+            const ratingNode = document.getElementById('review-rating');
+            const ratingNoteNode = document.getElementById('review-rating-note');
+            const introNode = document.getElementById('review-intro');
+            const sectionsNode = document.getElementById('review-sections');
+            const galleryNodes = [
+                document.getElementById('gallery-image-1'),
+                document.getElementById('gallery-image-2'),
+                document.getElementById('gallery-image-3')
+            ];
+            const thumbs = Array.from(document.querySelectorAll('.review-thumb'));
+            const strip = document.getElementById('thumb-strip');
+            const prevButton = document.getElementById('thumb-prev');
+            const nextButton = document.getElementById('thumb-next');
+
+            if (!titleNode || thumbs.length === 0 || !strip) {
+                return;
+            }
+
+            const buildSectionsMarkup = (sections) => sections.map((section) => {
+                const paragraphs = (section.paragraphs || []).map((paragraph) => `<p>${paragraph}</p>`).join('');
+                const quote = section.quote
+                    ? `<blockquote class="review-quote rounded-r-2xl px-5 py-4 text-on-surface/85">${section.quote}</blockquote>`
+                    : '';
+                const bullets = Array.isArray(section.bullets) && section.bullets.length > 0
+                    ? `<ul class="list-disc pl-6 space-y-2">${section.bullets.map((item) => `<li>${item}</li>`).join('')}</ul>`
+                    : '';
+
+                return `
+                    <article class="border-t border-outline-variant/35 pt-8">
+                        <h3 class="font-headline text-3xl font-bold text-on-surface mb-4">${section.heading}</h3>
+                        <div class="space-y-4 text-lg leading-8 text-on-surface/88">
+                            ${paragraphs}
+                            ${quote}
+                            ${bullets}
+                        </div>
+                    </article>
+                `;
+            }).join('');
+
+            const setActiveThumb = (activeIndex) => {
+                thumbs.forEach((thumb, index) => {
+                    const isActive = index === activeIndex;
+                    thumb.classList.toggle('border-primary/30', isActive);
+                    thumb.classList.toggle('ring-2', isActive);
+                    thumb.classList.toggle('ring-primary/20', isActive);
+                    thumb.classList.toggle('-translate-y-1', isActive);
+                    thumb.classList.toggle('border-outline-variant/20', !isActive);
+                });
+            };
+
+            const renderReview = (index) => {
+                const review = reviews[index];
+                if (!review) {
+                    return;
+                }
+
+                kickerNode.textContent = review.kicker;
+                titleNode.textContent = review.title;
+                metaNode.textContent = review.meta;
+                ratingNode.textContent = review.rating;
+                ratingNoteNode.textContent = review.ratingNote;
+                introNode.textContent = review.intro;
+                sectionsNode.innerHTML = buildSectionsMarkup(review.sections);
+
+                galleryNodes.forEach((node, imageIndex) => {
+                    if (!node) {
+                        return;
+                    }
+
+                    node.src = review.gallery[imageIndex];
+                    node.alt = `${review.title} still ${imageIndex + 1}`;
+                });
+
+                setActiveThumb(index);
+                thumbs[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            };
+
+            thumbs.forEach((thumb) => {
+                thumb.addEventListener('click', () => {
+                    const index = Number(thumb.dataset.index || 0);
+                    renderReview(index);
+                });
+            });
+
+            prevButton.addEventListener('click', () => {
+                strip.scrollBy({ left: -320, behavior: 'smooth' });
+            });
+
+            nextButton.addEventListener('click', () => {
+                strip.scrollBy({ left: 320, behavior: 'smooth' });
+            });
+
+            renderReview(0);
+        })();
+    </script>
+</body>
+</html>
