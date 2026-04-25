@@ -41,4 +41,35 @@ public static class AuthHelpers
         var emailClaim = req.HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
         return emailClaim?.Trim().ToLowerInvariant() ?? string.Empty;
     }
+
+    public static IReadOnlyList<string> GetAssignedRoles(HttpRequest req)
+    {
+        if (req.Headers.TryGetValue("x-ms-client-principal", out var headerValues))
+        {
+            try
+            {
+                var decoded = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(headerValues.ToString()));
+                using var document = JsonDocument.Parse(decoded);
+                if (document.RootElement.TryGetProperty("userRoles", out var userRoles) &&
+                    userRoles.ValueKind == JsonValueKind.Array)
+                {
+                    return userRoles
+                        .EnumerateArray()
+                        .Select(role => role.GetString()?.Trim())
+                        .Where(role => !string.IsNullOrWhiteSpace(role))
+                        .Select(role => role!)
+                        .ToArray();
+                }
+            }
+            catch
+            {
+                return Array.Empty<string>();
+            }
+        }
+
+        // Example usage later:
+        // var roles = AuthHelpers.GetAssignedRoles(req);
+        // var isAdmin = roles.Contains("admin", StringComparer.OrdinalIgnoreCase);
+        return Array.Empty<string>();
+    }
 }

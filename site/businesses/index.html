@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <!--<button class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post</button>-->
+                    <a href="/submit/index.html" class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post Form</a>
                 </div>
             </div>
         </div>
@@ -110,6 +110,8 @@
                 </div>
             </div>
         </div>
+
+        <div id="business-feed-status" class="hidden mb-6 rounded-2xl border border-outline-variant/20 bg-surface-container-lowest px-5 py-4 text-sm text-on-surface/70 shadow-editorial"></div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" data-business-grid>
             <article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-record data-categories="restaurant" data-entity="business">
@@ -296,14 +298,16 @@
     <script>
         (() => {
             const filterBar = document.querySelector('[data-business-filters]');
-            const businessCards = Array.from(document.querySelectorAll('[data-business-record]'));
+            const businessGrid = document.querySelector('[data-business-grid]');
+            const feedStatus = document.getElementById('business-feed-status');
 
-            if (!filterBar || businessCards.length === 0) {
+            if (!filterBar || !businessGrid) {
                 return;
             }
 
             const buttons = Array.from(filterBar.querySelectorAll('[data-filter]'));
             const allowedFilters = new Set(buttons.map((button) => button.dataset.filter));
+            const getBusinessCards = () => Array.from(businessGrid.querySelectorAll('[data-business-record]'));
 
             const setActiveButton = (activeValue) => {
                 buttons.forEach((button) => {
@@ -319,13 +323,68 @@
             };
 
             const applyFilter = (filterValue) => {
-                businessCards.forEach((card) => {
+                getBusinessCards().forEach((card) => {
                     const categories = (card.dataset.categories || '').split(/\s+/).filter(Boolean);
                     const shouldShow = filterValue === 'all' || categories.includes(filterValue);
                     card.classList.toggle('hidden', !shouldShow);
                 });
 
                 setActiveButton(filterValue);
+            };
+
+            const escapeHtml = (value) => {
+                const span = document.createElement('span');
+                span.textContent = value || '';
+                return span.innerHTML;
+            };
+
+            const normalizeTags = (tags) => String(tags || '')
+                .split(',')
+                .map((tag) => tag.trim())
+                .filter(Boolean);
+
+            const createBusinessCard = (businessItem) => {
+                const article = document.createElement('article');
+                const tags = normalizeTags(businessItem.tags);
+                const categoryTokens = tags.map((tag) => tag.toLowerCase());
+                const primaryTag = tags[0] || 'Business';
+                const imageUrl = String(businessItem.imageUrl || '').trim() || 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80';
+                const phoneValue = String(businessItem.phone || '').trim();
+
+                article.className = 'business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow';
+                article.dataset.businessRecord = '';
+                article.dataset.categories = categoryTokens.join(' ');
+                article.dataset.entity = 'business';
+                article.innerHTML = `
+                    <div class="rounded-2xl overflow-hidden border border-outline-variant/10 mb-4" data-field-group="image">
+                        <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(businessItem.name || 'Business listing')}" class="w-full h-44 object-cover" loading="lazy" data-field="imageUrl">
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
+                        ${tags.map((tag) => `<span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10">${escapeHtml(tag)}</span>`).join('')}
+                    </div>
+                    <div class="flex flex-col gap-4 h-full">
+                        <div>
+                            <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="name">${escapeHtml(businessItem.name || 'Untitled business')}</h2>
+                            <p class="text-sm text-on-surface/78 leading-7" data-field="description">${escapeHtml(businessItem.description || businessItem.summary || '')}</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="category">
+                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Category</p>
+                                <p class="text-sm font-bold text-on-surface leading-tight" data-field="category">${escapeHtml(primaryTag)}</p>
+                            </div>
+                            <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="phone">
+                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Phone</p>
+                                <p class="text-sm font-bold text-on-surface leading-tight" data-field="phone">${escapeHtml(phoneValue || 'Not specified')}</p>
+                            </div>
+                        </div>
+                        <div class="business-contact-card rounded-2xl px-5 py-4" data-field-group="address">
+                            <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Address</p>
+                            <p class="text-sm font-semibold text-on-surface leading-6" data-field="address">${escapeHtml(businessItem.address || 'Address not specified')}</p>
+                        </div>
+                    </div>
+                `;
+
+                return article;
             };
 
             const getInitialFilter = () => {
@@ -347,6 +406,44 @@
                 window.history.replaceState({}, '', url.toString());
             };
 
+            const loadServerBusinesses = async () => {
+                try {
+                    const response = await fetch('/api/businesses', {
+                        headers: {
+                            'Accept': 'application/json'
+                        },
+                        cache: 'no-store'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch businesses.');
+                    }
+
+                    const items = await response.json();
+                    if (!Array.isArray(items) || items.length === 0) {
+                        return;
+                    }
+
+                    const fragment = document.createDocumentFragment();
+                    items.forEach((item) => {
+                        fragment.appendChild(createBusinessCard(item));
+                    });
+                    businessGrid.prepend(fragment);
+
+                    if (feedStatus) {
+                        feedStatus.textContent = `Loaded ${items.length} saved business${items.length === 1 ? '' : 'es'} from the website API.`;
+                        feedStatus.classList.remove('hidden');
+                    }
+
+                    applyFilter(getInitialFilter());
+                } catch (error) {
+                    if (feedStatus) {
+                        feedStatus.textContent = 'Saved businesses could not be loaded right now, so sample listings are being shown.';
+                        feedStatus.classList.remove('hidden');
+                    }
+                }
+            };
+
             filterBar.addEventListener('click', (event) => {
                 const button = event.target.closest('[data-filter]');
                 if (!button) {
@@ -359,6 +456,7 @@
             });
 
             applyFilter(getInitialFilter());
+            loadServerBusinesses();
         })();
     </script>
 

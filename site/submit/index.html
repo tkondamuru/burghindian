@@ -113,7 +113,7 @@
                     </div>
                 </div>
 
-                <a href="/index.html#post-options" class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post Options</a>
+                <a href="/submit/index.html" class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post Form</a>
             </div>
         </div>
     </nav>
@@ -177,15 +177,15 @@
                             </label>
                             <label>
                                 <span class="field-label">Title</span>
-                                <input class="field-control" name="Title" type="text" placeholder="Biryani Mela" required>
+                                <input class="field-control" name="Title" type="text" required>
                             </label>
                             <label>
                                 <span class="field-label">Date</span>
-                                <input class="field-control" name="Date" type="text" placeholder="Every weekend or May 3, 2026" required>
+                                <input class="field-control" name="Date" type="text" required>
                             </label>
                             <label>
                                 <span class="field-label">Time</span>
-                                <input class="field-control" name="Time" type="text" placeholder="7:00 PM">
+                                <input class="field-control" name="Time" type="text" required>
                             </label>
                             <label class="md:col-span-2">
                                 <span class="field-label">Location</span>
@@ -238,15 +238,15 @@
                             </label>
                             <label>
                                 <span class="field-label">Name</span>
-                                <input class="field-control" name="Name" type="text" placeholder="Mintt @ Banksville" required>
+                                <input class="field-control" name="Name" type="text" required>
                             </label>
                             <label>
                                 <span class="field-label">Phone</span>
-                                <input class="field-control" name="Phone" type="text" placeholder="412-306-1831">
+                                <input class="field-control" name="Phone" type="text">
                             </label>
                             <label class="md:col-span-2">
                                 <span class="field-label">Address</span>
-                                <input class="field-control" name="Address" type="text" placeholder="3033 Banksville Road, Pittsburgh PA 15216" required>
+                                <input class="field-control" name="Address" type="text" required>
                             </label>
                             <label class="md:col-span-2">
                                 <span class="field-label">Summary</span>
@@ -288,9 +288,14 @@
                             <code id="edit-code-output" class="rounded-xl bg-secondary-container text-[#005048] px-4 py-3 font-bold tracking-[0.22em]"></code>
                             <button type="button" id="copy-code-button" class="rounded-xl bg-secondary text-white px-4 py-3 text-sm font-bold hover:bg-secondary/90 transition-colors">Copy</button>
                         </div>
-                        <p class="text-sm text-on-surface/70 leading-7">
-                            This is currently a client-side save confirmation only. Once a backend is connected, this same code can be returned by the server after the record is saved.
+                        <p id="success-message" class="text-sm text-on-surface/70 leading-7">
+                            Your submission was saved successfully. Keep this EditCode safe for future changes.
                         </p>
+                    </div>
+
+                    <div id="error-panel" class="hidden mt-6 rounded-2xl border border-primary/15 bg-[#fff7f3] px-6 py-5 shadow-editorial">
+                        <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-primary/75 mb-2">Save Problem</p>
+                        <p id="error-message" class="text-sm text-on-surface/75 leading-7"></p>
                     </div>
                 </div>
             </div>
@@ -322,32 +327,20 @@
             const loginButton = document.getElementById('gmail-login-button');
             const logoutButton = document.getElementById('gmail-logout-button');
             const successPanel = document.getElementById('success-panel');
+            const successMessage = document.getElementById('success-message');
+            const errorPanel = document.getElementById('error-panel');
+            const errorMessage = document.getElementById('error-message');
             const editCodeOutput = document.getElementById('edit-code-output');
             const copyCodeButton = document.getElementById('copy-code-button');
             const verificationEmailFields = Array.from(document.querySelectorAll('.verification-email'));
             const tagPickers = Array.from(document.querySelectorAll('[data-tag-picker]'));
             let signedInEmail = '';
 
-            const getEditCode = () => {
-                const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-                const values = new Uint32Array(5);
-
-                if (window.crypto && window.crypto.getRandomValues) {
-                    window.crypto.getRandomValues(values);
-                } else {
-                    values.forEach((_, index) => {
-                        values[index] = Math.floor(Math.random() * alphabet.length);
-                    });
-                }
-
-                return Array.from(values, (value) => alphabet[value % alphabet.length]).join('');
-            };
-
             const updateAuthUi = () => {
                 const isSignedIn = Boolean(signedInEmail);
 
                 authStatus.textContent = isSignedIn
-                    ? `Signed in as ${signedInEmail}. You can now edit and submit the form, and this Gmail email will be used for ownership verification.`
+                    ? `Signed in as ${signedInEmail}. You can now edit and submit the form.`
                     : 'Sign in to unlock the form fields. Your Gmail email will be used for ownership verification later.';
 
                 loginButton.classList.toggle('hidden', isSignedIn);
@@ -400,11 +393,29 @@
                     payload[key] = String(value).trim();
                 });
 
-                payload.EditCode = getEditCode();
-                form.elements.EditCode.value = payload.EditCode;
-
+                delete payload.EditCode;
+                delete payload.SubmitterEmail;
                 return payload;
             };
+
+            const setSaveError = (message) => {
+                successPanel.classList.add('hidden');
+                editCodeOutput.textContent = '';
+                errorMessage.textContent = message;
+                errorPanel.classList.remove('hidden');
+                errorPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            };
+
+            const clearMessages = () => {
+                successPanel.classList.add('hidden');
+                errorPanel.classList.add('hidden');
+                editCodeOutput.textContent = '';
+                errorMessage.textContent = '';
+            };
+
+            const getSubmitEndpoint = (form) => form.dataset.formType === 'business' ? '/api/businesses' : '/api/events';
+
+            const getSubmitLabel = (form) => form.dataset.formType === 'business' ? 'Business' : 'Event';
 
             const syncTagPicker = (picker) => {
                 const toggles = Array.from(picker.querySelectorAll('.tag-toggle'));
@@ -473,8 +484,7 @@
 
             logoutButton.addEventListener('click', () => {
                 signedInEmail = '';
-                successPanel.classList.add('hidden');
-                editCodeOutput.textContent = '';
+                clearMessages();
                 forms.forEach((form) => form.reset());
                 tagPickers.forEach((picker) => syncTagPicker(picker));
                 updateAuthUi();
@@ -483,8 +493,9 @@
             });
 
             forms.forEach((form) => {
-                form.addEventListener('submit', (event) => {
+                form.addEventListener('submit', async (event) => {
                     event.preventDefault();
+                    clearMessages();
 
                     if (!signedInEmail) {
                         const redirectTarget = encodeURIComponent(buildSubmitRedirectUrl());
@@ -503,7 +514,56 @@
                     }
 
                     const payload = getPayloadFromForm(form);
-                    editCodeOutput.textContent = payload.EditCode;
+                    const submitButton = form.querySelector('.save-button');
+                    const defaultLabel = submitButton?.textContent || `Save ${getSubmitLabel(form)}`;
+
+                    if (submitButton) {
+                        submitButton.disabled = true;
+                        submitButton.textContent = 'Saving...';
+                    }
+
+                    try {
+                        const response = await fetch(getSubmitEndpoint(form), {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const result = await response.json().catch(() => ({}));
+                        if (!response.ok || !result?.success || !result?.editCode) {
+                            const apiError = typeof result?.error === 'string' && result.error.trim()
+                                ? result.error.trim()
+                                : `Unable to save this ${getSubmitLabel(form).toLowerCase()} right now.`;
+                            setSaveError(apiError);
+                            return;
+                        }
+
+                        form.reset();
+                        tagPickers
+                            .filter((picker) => form.contains(picker))
+                            .forEach((picker) => syncTagPicker(picker));
+                        verificationEmailFields.forEach((field) => {
+                            field.value = signedInEmail;
+                        });
+
+                        editCodeOutput.textContent = result.editCode;
+                        successMessage.textContent = `${getSubmitLabel(form)} saved successfully and is ready to appear on the public page. Keep this EditCode safe for future changes.`;
+                        errorPanel.classList.add('hidden');
+                        errorMessage.textContent = '';
+                        successPanel.classList.remove('hidden');
+                    } catch (error) {
+                        setSaveError('Unable to reach the server right now. Please try again in a moment.');
+                        return;
+                    } finally {
+                        if (submitButton) {
+                            submitButton.disabled = false;
+                            submitButton.textContent = defaultLabel;
+                        }
+                    }
+
                     successPanel.classList.remove('hidden');
                     successPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 });

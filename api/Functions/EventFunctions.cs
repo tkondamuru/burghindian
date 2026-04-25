@@ -216,7 +216,7 @@ public sealed class EventFunctions
             ["ImageUrl"] = (body.ImageUrl ?? string.Empty).Trim(),
             ["EditCode"] = editCode,
             ["SubmitterEmail"] = email,
-            ["IsApproved"] = false,
+            ["IsApproved"] = true,
             ["CreatedAtUtc"] = createdAt.ToString("O"),
             ["UpdatedAtUtc"] = createdAt.ToString("O"),
             ["Source"] = "website-form"
@@ -229,7 +229,7 @@ public sealed class EventFunctions
             ["TargetPartitionKey"] = partitionKey,
             ["TargetRowKey"] = rowKey,
             ["SubmitterEmail"] = email,
-            ["IsApproved"] = false,
+            ["IsApproved"] = true,
             ["CreatedAtUtc"] = createdAt.ToString("O")
         });
 

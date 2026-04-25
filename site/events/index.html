@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <!--<button class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post</button>-->
+                    <a href="/submit/index.html" class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post Form</a>
                 </div>
             </div>
         </div>
@@ -110,6 +110,8 @@
                 </div>
             </div>
         </div>
+
+        <div id="event-feed-status" class="hidden mb-6 rounded-2xl border border-outline-variant/20 bg-surface-container-lowest px-5 py-4 text-sm text-on-surface/70 shadow-editorial"></div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" data-event-grid>
                 <article class="event-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-event-record data-categories="food">
@@ -246,15 +248,15 @@
     <script>
         (() => {
             const filterBar = document.querySelector('[data-event-filters]');
-            const eventCards = Array.from(document.querySelectorAll('[data-event-record]'));
+            const eventGrid = document.querySelector('[data-event-grid]');
+            const feedStatus = document.getElementById('event-feed-status');
 
-            if (!filterBar || eventCards.length === 0) {
+            if (!filterBar || !eventGrid) {
                 return;
             }
 
             const buttons = Array.from(filterBar.querySelectorAll('[data-filter]'));
-            const activeClasses = ['bg-secondary', 'text-white'];
-            const inactiveClasses = ['bg-secondary-container', 'text-secondary-dim'];
+            const getEventCards = () => Array.from(eventGrid.querySelectorAll('[data-event-record]'));
 
             const setActiveButton = (activeValue) => {
                 buttons.forEach((button) => {
@@ -270,13 +272,105 @@
             };
 
             const applyFilter = (filterValue) => {
-                eventCards.forEach((card) => {
+                getEventCards().forEach((card) => {
                     const categories = (card.dataset.categories || '').split(/\s+/).filter(Boolean);
                     const shouldShow = filterValue === 'all' || categories.includes(filterValue);
                     card.classList.toggle('hidden', !shouldShow);
                 });
 
                 setActiveButton(filterValue);
+            };
+
+            const escapeHtml = (value) => {
+                const span = document.createElement('span');
+                span.textContent = value || '';
+                return span.innerHTML;
+            };
+
+            const normalizeTags = (tags) => String(tags || '')
+                .split(',')
+                .map((tag) => tag.trim())
+                .filter(Boolean);
+
+            const createEventCard = (eventItem) => {
+                const article = document.createElement('article');
+                const tags = normalizeTags(eventItem.tags);
+                const categoryTokens = tags.map((tag) => tag.toLowerCase());
+                const imageUrl = String(eventItem.imageUrl || '').trim();
+                const hasImage = Boolean(imageUrl);
+                const timeValue = String(eventItem.time || '').trim();
+
+                article.className = 'event-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow';
+                article.dataset.eventRecord = '';
+                article.dataset.categories = categoryTokens.join(' ');
+                article.innerHTML = `
+                    <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
+                        ${tags.map((tag) => `<span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10">${escapeHtml(tag)}</span>`).join('')}
+                    </div>
+                    <div class="flex flex-col gap-4">
+                        <div>
+                            <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="title">${escapeHtml(eventItem.title || 'Untitled event')}</h2>
+                            <p class="text-sm text-on-surface/78 leading-7 mb-4" data-field="description">
+                                ${escapeHtml(eventItem.description || eventItem.summary || '')}
+                                ${hasImage ? `<a href="${escapeHtml(imageUrl)}" data-field="imageUrl" class="text-primary font-semibold hover:underline underline-offset-4">Read more</a>` : ''}
+                            </p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="date">
+                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Date</p>
+                                <p class="text-sm font-bold text-on-surface leading-tight" data-field="date">${escapeHtml(eventItem.date || 'Not specified')}</p>
+                            </div>
+                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="time">
+                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Time</p>
+                                <p class="text-sm font-bold text-on-surface leading-tight" data-field="time">${escapeHtml(timeValue || 'Not specified')}</p>
+                            </div>
+                        </div>
+                        <div class="event-location-card rounded-2xl px-5 py-4" data-field-group="location">
+                            <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Location</p>
+                            <p class="text-sm font-semibold text-on-surface leading-6" data-field="location">${escapeHtml(eventItem.location || 'Location not specified')}</p>
+                        </div>
+                    </div>
+                `;
+
+                return article;
+            };
+
+            const loadServerEvents = async () => {
+                try {
+                    const response = await fetch('/api/events', {
+                        headers: {
+                            'Accept': 'application/json'
+                        },
+                        cache: 'no-store'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch events.');
+                    }
+
+                    const items = await response.json();
+                    if (!Array.isArray(items) || items.length === 0) {
+                        return;
+                    }
+
+                    const fragment = document.createDocumentFragment();
+                    items.forEach((item) => {
+                        fragment.appendChild(createEventCard(item));
+                    });
+                    eventGrid.prepend(fragment);
+
+                    if (feedStatus) {
+                        feedStatus.textContent = `Loaded ${items.length} saved event${items.length === 1 ? '' : 's'} from the website API.`;
+                        feedStatus.classList.remove('hidden');
+                    }
+
+                    applyFilter('all');
+                } catch (error) {
+                    if (feedStatus) {
+                        feedStatus.textContent = 'Saved events could not be loaded right now, so sample listings are being shown.';
+                        feedStatus.classList.remove('hidden');
+                    }
+                }
             };
 
             filterBar.addEventListener('click', (event) => {
@@ -289,6 +383,7 @@
             });
 
             applyFilter('all');
+            loadServerEvents();
         })();
     </script>
 

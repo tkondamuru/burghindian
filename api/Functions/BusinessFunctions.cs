@@ -211,7 +211,7 @@ public sealed class BusinessFunctions
             ["ImageUrl"] = (body.ImageUrl ?? string.Empty).Trim(),
             ["EditCode"] = editCode,
             ["SubmitterEmail"] = email,
-            ["IsApproved"] = false,
+            ["IsApproved"] = true,
             ["CreatedAtUtc"] = createdAt.ToString("O"),
             ["UpdatedAtUtc"] = createdAt.ToString("O"),
             ["Source"] = "website-form"
@@ -224,7 +224,7 @@ public sealed class BusinessFunctions
             ["TargetPartitionKey"] = partitionKey,
             ["TargetRowKey"] = rowKey,
             ["SubmitterEmail"] = email,
-            ["IsApproved"] = false,
+            ["IsApproved"] = true,
             ["CreatedAtUtc"] = createdAt.ToString("O")
         });
 
