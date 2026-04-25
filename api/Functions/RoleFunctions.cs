@@ -1,31 +1,50 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
 namespace WebsiteApi.Functions;
 
 public sealed class RoleFunctions
 {
+    private readonly ILogger<RoleFunctions> _logger;
+
+    public RoleFunctions(ILogger<RoleFunctions> logger)
+    {
+        _logger = logger;
+    }
+
     [Function("GetRoles")]
     public IActionResult GetRoles(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "GetRoles")] HttpRequest req)
     {
-        var email = GetEmailFromRoleRequest(req);
-
-        // Placeholder role mapping. Replace this with a table/database lookup when
-        // you are ready to manage real application roles by email address.
-        var roles = email switch
+        try
         {
-            "admin@burghindian.com" => new[] { "admin", "editor" },
-            "editor@burghindian.com" => new[] { "editor" },
-            _ => Array.Empty<string>()
-        };
+            var email = GetEmailFromRoleRequest(req);
 
-        return new OkObjectResult(new
+            // Placeholder role mapping. Replace this with a table/database lookup when
+            // you are ready to manage real application roles by email address.
+            var roles = email switch
+            {
+                "admin@burghindian.com" => new[] { "admin", "editor" },
+                "editor@burghindian.com" => new[] { "editor" },
+                _ => Array.Empty<string>()
+            };
+
+            return new OkObjectResult(new
+            {
+                roles
+            });
+        }
+        catch (Exception ex)
         {
-            roles
-        });
+            _logger.LogError(ex, "Role assignment lookup failed for request path {Path}.", req.Path.Value);
+            return new ObjectResult(new { error = "Unexpected server error." })
+            {
+                StatusCode = StatusCodes.Status500InternalServerError
+            };
+        }
     }
 
     private static string GetEmailFromRoleRequest(HttpRequest req)

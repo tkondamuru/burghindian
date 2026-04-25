@@ -36,7 +36,7 @@ public sealed class EventFunctions
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Events endpoint failed.");
+            _logger.LogError(ex, "Events endpoint failed for method {Method} at path {Path}.", req.Method, req.Path.Value);
             return new ObjectResult(new { error = "Unexpected server error." }) { StatusCode = StatusCodes.Status500InternalServerError };
         }
     }
@@ -119,11 +119,12 @@ public sealed class EventFunctions
         }
         catch (RequestFailedException ex) when (ex.Status == (int)HttpStatusCode.NotFound)
         {
+            _logger.LogWarning(ex, "Event update target not found for partition {PartitionKey}, row {RowKey}.", partitionKey, rowKey);
             return new NotFoundObjectResult(new { error = "Event or edit code not found." });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Event update failed.");
+            _logger.LogError(ex, "Event update failed for partition {PartitionKey}, row {RowKey}, signed-in user {Email}.", partitionKey, rowKey, AuthHelpers.GetAuthenticatedEmail(req));
             return new ObjectResult(new { error = "Unexpected server error." }) { StatusCode = StatusCodes.Status500InternalServerError };
         }
     }

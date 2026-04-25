@@ -98,11 +98,12 @@ public sealed class PostLookupFunction
         }
         catch (RequestFailedException ex) when (ex.Status == (int)HttpStatusCode.NotFound)
         {
+            _logger.LogWarning(ex, "Post lookup failed because edit code or target entity was not found.");
             return new NotFoundObjectResult(new { error = "Edit code or post not found." });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Post lookup failed.");
+            _logger.LogError(ex, "Post lookup failed for signed-in user {Email}.", AuthHelpers.GetAuthenticatedEmail(req));
             return new ObjectResult(new { error = "Unexpected server error." }) { StatusCode = StatusCodes.Status500InternalServerError };
         }
     }
