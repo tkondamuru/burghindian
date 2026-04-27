@@ -43,13 +43,19 @@ public sealed class EventFunctions
 
     [Function("UpdateEvent")]
     public async Task<IActionResult> UpdateEvent(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "events/{partitionKey}/{rowKey}")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "put", "delete", Route = "events/{partitionKey}/{rowKey}")] HttpRequest req,
         string partitionKey,
         string rowKey)
     {
         try
         {
+            if (HttpMethods.IsDelete(req.Method))
+            {
+                return await DeleteEventAsync(req, partitionKey, rowKey);
+            }
+
             var email = AuthHelpers.GetAuthenticatedEmail(req);
+            var isAdmin = AuthHelpers.IsAdminEmail(email);
             if (string.IsNullOrWhiteSpace(email))
             {
                 return new UnauthorizedObjectResult(new { error = "Login is required." });
@@ -96,7 +102,7 @@ public sealed class EventFunctions
                 return new ObjectResult(new { error = "Edit code does not match this event." }) { StatusCode = StatusCodes.Status403Forbidden };
             }
 
-            if (!string.Equals(lookup.Value.GetString("SubmitterEmail"), email, StringComparison.OrdinalIgnoreCase))
+            if (!isAdmin && !string.Equals(lookup.Value.GetString("SubmitterEmail"), email, StringComparison.OrdinalIgnoreCase))
             {
                 return new ObjectResult(new { error = "This event does not belong to the signed-in Gmail account." }) { StatusCode = StatusCodes.Status403Forbidden };
             }
@@ -142,6 +148,8 @@ public sealed class EventFunctions
                 {
                     PartitionKey = entity.PartitionKey,
                     RowKey = entity.RowKey,
+                    CreatedAtUtc = entity.GetString("CreatedAtUtc"),
+                    UpdatedAtUtc = entity.GetString("UpdatedAtUtc"),
                     Title = entity.GetString("Title"),
                     Date = entity.GetString("Date"),
                     Time = entity.GetString("Time"),
@@ -240,5 +248,43 @@ public sealed class EventFunctions
             EditCode = editCode,
             Id = new { partitionKey, rowKey }
         });
+    }
+
+    private async Task<IActionResult> DeleteEventAsync(HttpRequest req, string partitionKey, string rowKey)
+    {
+        var email = AuthHelpers.GetAuthenticatedEmail(req);
+        var isAdmin = AuthHelpers.IsAdminEmail(email);
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return new UnauthorizedObjectResult(new { error = "Login is required." });
+        }
+
+        var body = await JsonSerializer.DeserializeAsync<DeletePostRequest>(req.Body, JsonOptions.Default);
+        var editCode = body?.EditCode?.Trim().ToUpperInvariant();
+        if (string.IsNullOrWhiteSpace(editCode))
+        {
+            return new BadRequestObjectResult(new { error = "Edit code is required." });
+        }
+
+        var lookupTable = _tableStorageService.GetTableClient("EditCodeLookup");
+        var lookup = await lookupTable.GetEntityAsync<TableEntity>(EditCodeService.LookupPartitionKey, editCode);
+
+        if (!string.Equals(lookup.Value.GetString("EntityType"), "Event", StringComparison.Ordinal) ||
+            !string.Equals(lookup.Value.GetString("TargetPartitionKey"), partitionKey, StringComparison.Ordinal) ||
+            !string.Equals(lookup.Value.GetString("TargetRowKey"), rowKey, StringComparison.Ordinal))
+        {
+            return new ObjectResult(new { error = "Edit code does not match this event." }) { StatusCode = StatusCodes.Status403Forbidden };
+        }
+
+        if (!isAdmin && !string.Equals(lookup.Value.GetString("SubmitterEmail"), email, StringComparison.OrdinalIgnoreCase))
+        {
+            return new ObjectResult(new { error = "This event does not belong to the signed-in Gmail account." }) { StatusCode = StatusCodes.Status403Forbidden };
+        }
+
+        var eventTable = _tableStorageService.GetTableClient("Events");
+        await eventTable.DeleteEntityAsync(partitionKey, rowKey);
+        await lookupTable.DeleteEntityAsync(EditCodeService.LookupPartitionKey, editCode);
+
+        return new OkObjectResult(new { success = true });
     }
 }

@@ -6,6 +6,27 @@ namespace WebsiteApi.Services;
 
 public static class AuthHelpers
 {
+    public static bool IsAdminRequest(HttpRequest req)
+    {
+        var email = GetAuthenticatedEmail(req);
+        return IsAdminEmail(email);
+    }
+
+    public static bool IsAdminEmail(string? email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return false;
+        }
+
+        var configured = Environment.GetEnvironmentVariable("ADMIN_EMAILS") ?? string.Empty;
+        var admins = configured
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(value => value.Trim().ToLowerInvariant());
+
+        return admins.Contains(email.Trim().ToLowerInvariant(), StringComparer.OrdinalIgnoreCase);
+    }
+
     public static string GetAuthenticatedEmail(HttpRequest req)
     {
         if (req.Headers.TryGetValue("x-ms-client-principal", out var headerValues))

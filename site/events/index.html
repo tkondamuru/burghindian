@@ -353,6 +353,14 @@
                         return;
                     }
 
+                    items.sort((left, right) => {
+                        const leftTime = Date.parse(left?.createdAtUtc || left?.CreatedAtUtc || '');
+                        const rightTime = Date.parse(right?.createdAtUtc || right?.CreatedAtUtc || '');
+                        const safeLeft = Number.isNaN(leftTime) ? 0 : leftTime;
+                        const safeRight = Number.isNaN(rightTime) ? 0 : rightTime;
+                        return safeRight - safeLeft;
+                    });
+
                     const fragment = document.createDocumentFragment();
                     items.forEach((item) => {
                         fragment.appendChild(createEventCard(item));
@@ -360,7 +368,7 @@
                     eventGrid.prepend(fragment);
 
                     if (feedStatus) {
-                        feedStatus.textContent = `Loaded ${items.length} saved event${items.length === 1 ? '' : 's'} from the website API.`;
+                        feedStatus.textContent = `${items.length} community event${items.length === 1 ? ' is' : 's are'} now live from recent submissions.`;
                         feedStatus.classList.remove('hidden');
                     }
 

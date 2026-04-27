@@ -29,6 +29,7 @@ public sealed class PostLookupFunction
         try
         {
             var email = AuthHelpers.GetAuthenticatedEmail(req);
+            var isAdmin = AuthHelpers.IsAdminEmail(email);
             if (string.IsNullOrWhiteSpace(email))
             {
                 return new UnauthorizedObjectResult(new { error = "Login is required." });
@@ -45,7 +46,7 @@ public sealed class PostLookupFunction
             var lookupTable = _tableStorageService.GetTableClient("EditCodeLookup");
             var lookup = await lookupTable.GetEntityAsync<TableEntity>(EditCodeService.LookupPartitionKey, editCode);
 
-            if (!string.Equals(lookup.Value.GetString("SubmitterEmail"), email, StringComparison.OrdinalIgnoreCase))
+            if (!isAdmin && !string.Equals(lookup.Value.GetString("SubmitterEmail"), email, StringComparison.OrdinalIgnoreCase))
             {
                 return new ObjectResult(new { error = "This edit code does not belong to the signed-in Gmail account." }) { StatusCode = StatusCodes.Status403Forbidden };
             }

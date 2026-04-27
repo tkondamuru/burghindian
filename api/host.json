@@ -3,5 +3,23 @@
   "extensionBundle": {
     "id": "Microsoft.Azure.Functions.ExtensionBundle",
     "version": "[4.*, 5.0.0)"
+  },
+  "logging": {
+    "logLevel": {
+      "default": "Warning",
+      "Host.Results": "Information",
+      "Host.Aggregator": "Warning",
+      "Function": "Warning",
+      "Microsoft": "Warning",
+      "Worker": "Warning"
+    },
+    "applicationInsights": {
+      "samplingSettings": {
+        "isEnabled": true,
+        "excludedTypes": "Request;Exception",
+        "maxTelemetryItemsPerSecond": 5
+      },
+      "enableLiveMetricsFilters": true
+    }
   }
 }

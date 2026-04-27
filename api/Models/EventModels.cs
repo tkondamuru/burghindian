@@ -16,6 +16,8 @@ public sealed class EventResponse
 {
     public string? PartitionKey { get; set; }
     public string? RowKey { get; set; }
+    public string? CreatedAtUtc { get; set; }
+    public string? UpdatedAtUtc { get; set; }
     public string? Title { get; set; }
     public string? Date { get; set; }
     public string? Time { get; set; }

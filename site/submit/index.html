@@ -151,6 +151,7 @@
                             <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-primary/70">Gmail Login</p>
                             <p id="auth-status" class="text-sm text-on-surface/70">Sign in to unlock the form fields. Your Gmail email will be used for ownership verification later.</p>
                         </div>
+                        <a href="/admin-posts/index.html" id="admin-tools-link" class="hidden rounded-xl bg-surface-container-high px-4 py-2 text-sm font-bold text-on-surface/75 hover:text-primary transition-colors">Admin Tools</a>
                         <button type="button" id="gmail-login-button" class="rounded-xl bg-white border border-outline-variant/30 px-4 py-2 text-sm font-bold text-on-surface hover:border-primary hover:text-primary transition-colors">
                             Continue with Gmail
                         </button>
@@ -163,11 +164,28 @@
 
             <div class="p-5 md:p-10">
                 <div class="max-w-5xl">
+                    <section class="mb-10 rounded-[1.5rem] border border-outline-variant/15 bg-surface-container-lowest p-5 shadow-editorial">
+                        <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                            <div class="max-w-2xl">
+                                <p class="text-primary text-sm font-bold tracking-widest uppercase mb-2">Manage Existing Post</p>
+                                <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2">Load by EditCode</h2>
+                                <p class="text-sm text-on-surface/70 leading-7">Sign in with the same Gmail account used for the post, enter the EditCode, and load the event or business for editing or deletion.</p>
+                            </div>
+                            <div class="w-full lg:max-w-xl">
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <input id="edit-code-lookup-input" class="field-control" type="text" placeholder="Enter your EditCode" autocomplete="off" spellcheck="false">
+                                    <button type="button" id="load-edit-code-button" class="rounded-xl bg-secondary text-white px-5 py-3 text-sm font-bold hover:bg-secondary/90 transition-colors disabled:opacity-45 disabled:cursor-not-allowed">Load</button>
+                                </div>
+                                <p id="lookup-status" class="hidden mt-3 text-sm text-on-surface/65"></p>
+                            </div>
+                        </div>
+                    </section>
+
                     <form id="event-form" class="submission-form space-y-7" data-form-type="event">
                         <div>
                             <p class="text-primary text-sm font-bold tracking-widest uppercase mb-2">Event Table</p>
                             <h2 class="font-headline text-3xl font-extrabold text-on-surface">Add Event</h2>
-                            <p class="text-sm text-on-surface/65 mt-2">Sign in with Google to unlock submission. Your Gmail email will be used as the ownership key for future edits.</p>
+                            <p class="text-sm text-on-surface/65 mt-2" data-form-caption>Create a new event or load an existing one using your Gmail email and EditCode.</p>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -221,14 +239,20 @@
                         </div>
 
                         <input name="EditCode" type="hidden">
-                        <button type="submit" class="save-button gradient-primary text-white px-7 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-45 disabled:cursor-not-allowed">Save Event</button>
+                        <input name="PartitionKey" type="hidden">
+                        <input name="RowKey" type="hidden">
+                        <div class="flex flex-wrap gap-3">
+                            <button type="submit" class="save-button gradient-primary text-white px-7 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-45 disabled:cursor-not-allowed">Save Event</button>
+                            <button type="button" class="delete-button hidden rounded-xl border border-primary/25 bg-white px-6 py-3 text-sm font-bold text-primary hover:bg-[#fff7f3] transition-colors disabled:opacity-45 disabled:cursor-not-allowed">Delete Event</button>
+                            <button type="button" class="cancel-edit-button hidden rounded-xl bg-surface-container-high px-6 py-3 text-sm font-bold text-on-surface/80 hover:text-primary transition-colors">Cancel Edit</button>
+                        </div>
                     </form>
 
                     <form id="business-form" class="submission-form hidden space-y-7" data-form-type="business">
                         <div>
                             <p class="text-primary text-sm font-bold tracking-widest uppercase mb-2">Business Table</p>
                             <h2 class="font-headline text-3xl font-extrabold text-on-surface">Add Business</h2>
-                            <p class="text-sm text-on-surface/65 mt-2">Sign in with Google to unlock submission. Your Gmail email will be used as the ownership key for future edits.</p>
+                            <p class="text-sm text-on-surface/65 mt-2" data-form-caption>Create a new business or load an existing one using your Gmail email and EditCode.</p>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -278,7 +302,13 @@
                         </div>
 
                         <input name="EditCode" type="hidden">
-                        <button type="submit" class="save-button gradient-primary text-white px-7 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-45 disabled:cursor-not-allowed">Save Business</button>
+                        <input name="PartitionKey" type="hidden">
+                        <input name="RowKey" type="hidden">
+                        <div class="flex flex-wrap gap-3">
+                            <button type="submit" class="save-button gradient-primary text-white px-7 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-45 disabled:cursor-not-allowed">Save Business</button>
+                            <button type="button" class="delete-button hidden rounded-xl border border-primary/25 bg-white px-6 py-3 text-sm font-bold text-primary hover:bg-[#fff7f3] transition-colors disabled:opacity-45 disabled:cursor-not-allowed">Delete Business</button>
+                            <button type="button" class="cancel-edit-button hidden rounded-xl bg-surface-container-high px-6 py-3 text-sm font-bold text-on-surface/80 hover:text-primary transition-colors">Cancel Edit</button>
+                        </div>
                     </form>
 
                     <div id="success-panel" class="hidden mt-8 rounded-2xl bg-surface-container-lowest p-6 shadow-editorial border border-secondary/15">
@@ -324,6 +354,7 @@
             const tabButtons = Array.from(document.querySelectorAll('[data-tab-button]'));
             const forms = Array.from(document.querySelectorAll('.submission-form'));
             const authStatus = document.getElementById('auth-status');
+            const adminToolsLink = document.getElementById('admin-tools-link');
             const loginButton = document.getElementById('gmail-login-button');
             const logoutButton = document.getElementById('gmail-logout-button');
             const successPanel = document.getElementById('success-panel');
@@ -332,9 +363,81 @@
             const errorMessage = document.getElementById('error-message');
             const editCodeOutput = document.getElementById('edit-code-output');
             const copyCodeButton = document.getElementById('copy-code-button');
+            const lookupInput = document.getElementById('edit-code-lookup-input');
+            const lookupButton = document.getElementById('load-edit-code-button');
+            const lookupStatus = document.getElementById('lookup-status');
             const verificationEmailFields = Array.from(document.querySelectorAll('.verification-email'));
             const tagPickers = Array.from(document.querySelectorAll('[data-tag-picker]'));
             let signedInEmail = '';
+            let signedInIsAdmin = false;
+            let editSession = null;
+
+            const formConfig = {
+                event: {
+                    type: 'event',
+                    entityType: 'Event',
+                    submitPath: '/api/events',
+                    saveLabel: 'Save Event',
+                    updateLabel: 'Update Event',
+                    deleteLabel: 'Delete Event',
+                    createdMessage: 'Event saved successfully and is ready to appear on the public page. Keep this EditCode safe for future changes.',
+                    updatedMessage: 'Event updated successfully. Your changes are now saved.',
+                    deletedMessage: 'Event deleted successfully.',
+                    fields: ['Title', 'Date', 'Time', 'Location', 'Summary', 'Description', 'Tags', 'ImageUrl']
+                },
+                business: {
+                    type: 'business',
+                    entityType: 'Business',
+                    submitPath: '/api/businesses',
+                    saveLabel: 'Save Business',
+                    updateLabel: 'Update Business',
+                    deleteLabel: 'Delete Business',
+                    createdMessage: 'Business saved successfully and is ready to appear on the public page. Keep this EditCode safe for future changes.',
+                    updatedMessage: 'Business updated successfully. Your changes are now saved.',
+                    deletedMessage: 'Business deleted successfully.',
+                    fields: ['Name', 'Phone', 'Address', 'Summary', 'Description', 'Tags', 'ImageUrl']
+                }
+            };
+
+            const getFormByType = (type) => forms.find((form) => form.dataset.formType === type) || null;
+
+            const toSafeString = (value) => typeof value === 'string' ? value : '';
+
+            const normalizeLookupPost = (entityType, post) => {
+                const source = post || {};
+                const read = (camelKey, pascalKey) => {
+                    const camelValue = source[camelKey];
+                    if (camelValue !== undefined && camelValue !== null) {
+                        return String(camelValue);
+                    }
+
+                    const pascalValue = source[pascalKey];
+                    return pascalValue !== undefined && pascalValue !== null ? String(pascalValue) : '';
+                };
+
+                if (entityType === 'Event') {
+                    return {
+                        Title: read('title', 'Title'),
+                        Date: read('date', 'Date'),
+                        Time: read('time', 'Time'),
+                        Location: read('location', 'Location'),
+                        Summary: read('summary', 'Summary'),
+                        Description: read('description', 'Description'),
+                        Tags: read('tags', 'Tags'),
+                        ImageUrl: read('imageUrl', 'ImageUrl')
+                    };
+                }
+
+                return {
+                    Name: read('name', 'Name'),
+                    Phone: read('phone', 'Phone'),
+                    Address: read('address', 'Address'),
+                    Summary: read('summary', 'Summary'),
+                    Description: read('description', 'Description'),
+                    Tags: read('tags', 'Tags'),
+                    ImageUrl: read('imageUrl', 'ImageUrl')
+                };
+            };
 
             const updateAuthUi = () => {
                 const isSignedIn = Boolean(signedInEmail);
@@ -345,11 +448,19 @@
 
                 loginButton.classList.toggle('hidden', isSignedIn);
                 logoutButton.classList.toggle('hidden', !isSignedIn);
+                adminToolsLink?.classList.toggle('hidden', !(isSignedIn && signedInIsAdmin));
 
                 verificationEmailFields.forEach((field) => {
                     field.value = signedInEmail;
                     field.placeholder = isSignedIn ? signedInEmail : 'Sign in to fill this email';
                 });
+
+                if (lookupInput) {
+                    lookupInput.disabled = !isSignedIn;
+                }
+                if (lookupButton) {
+                    lookupButton.disabled = !isSignedIn;
+                }
 
                 forms.forEach((form) => {
                     Array.from(form.elements).forEach((field) => {
@@ -385,6 +496,28 @@
                 window.history.replaceState({}, '', url.toString());
             };
 
+            const setLookupStatus = (message, tone = 'neutral') => {
+                if (!lookupStatus) {
+                    return;
+                }
+
+                if (!message) {
+                    lookupStatus.textContent = '';
+                    lookupStatus.classList.add('hidden');
+                    lookupStatus.classList.remove('text-primary', 'text-secondary');
+                    return;
+                }
+
+                lookupStatus.textContent = message;
+                lookupStatus.classList.remove('hidden', 'text-primary', 'text-secondary');
+
+                if (tone === 'success') {
+                    lookupStatus.classList.add('text-secondary');
+                } else if (tone === 'error') {
+                    lookupStatus.classList.add('text-primary');
+                }
+            };
+
             const getPayloadFromForm = (form) => {
                 const formData = new FormData(form);
                 const payload = {};
@@ -396,6 +529,113 @@
                 delete payload.EditCode;
                 delete payload.SubmitterEmail;
                 return payload;
+            };
+
+            const syncTagPickerSelectionFromValue = (picker, rawValue) => {
+                const selected = new Set(String(rawValue || '')
+                    .split(',')
+                    .map((tag) => tag.trim())
+                    .filter(Boolean));
+
+                Array.from(picker.querySelectorAll('.tag-toggle')).forEach((toggle) => {
+                    toggle.checked = selected.has(toggle.value.trim());
+                });
+
+                syncTagPicker(picker);
+            };
+
+            const resetFormToCreateMode = (form, options = {}) => {
+                const config = formConfig[form.dataset.formType];
+                const saveButton = form.querySelector('.save-button');
+                const deleteButton = form.querySelector('.delete-button');
+                const cancelButton = form.querySelector('.cancel-edit-button');
+                const caption = form.querySelector('[data-form-caption]');
+
+                form.reset();
+                form.elements.EditCode.value = '';
+                form.elements.PartitionKey.value = '';
+                form.elements.RowKey.value = '';
+
+                tagPickers
+                    .filter((picker) => form.contains(picker))
+                    .forEach((picker) => syncTagPickerSelectionFromValue(picker, ''));
+
+                const emailField = form.querySelector('.verification-email');
+                if (emailField) {
+                    emailField.value = signedInEmail;
+                }
+
+                if (saveButton) {
+                    saveButton.textContent = config.saveLabel;
+                }
+                if (deleteButton) {
+                    deleteButton.classList.add('hidden');
+                }
+                if (cancelButton) {
+                    cancelButton.classList.add('hidden');
+                }
+                if (caption) {
+                    caption.textContent = 'Create a new ' + (config.type === 'event' ? 'event' : 'business') + ' or load an existing one using your Gmail email and EditCode.';
+                }
+
+                if (!options.keepSession && editSession?.type === config.type) {
+                    editSession = null;
+                }
+            };
+
+            const populateFormForEdit = (formType, lookupResult) => {
+                const form = getFormByType(formType);
+                const config = formConfig[formType];
+                if (!form || !config) {
+                    return;
+                }
+
+                const normalized = normalizeLookupPost(lookupResult.entityType, lookupResult.post);
+                config.fields.forEach((fieldName) => {
+                    if (form.elements[fieldName]) {
+                        form.elements[fieldName].value = normalized[fieldName] || '';
+                    }
+                });
+
+                tagPickers
+                    .filter((picker) => form.contains(picker))
+                    .forEach((picker) => syncTagPickerSelectionFromValue(picker, normalized.Tags || ''));
+
+                form.elements.EditCode.value = lookupResult.editCode || '';
+                form.elements.PartitionKey.value = lookupResult.partitionKey || '';
+                form.elements.RowKey.value = lookupResult.rowKey || '';
+
+                const emailField = form.querySelector('.verification-email');
+                if (emailField) {
+                    emailField.value = signedInEmail;
+                }
+
+                const saveButton = form.querySelector('.save-button');
+                const deleteButton = form.querySelector('.delete-button');
+                const cancelButton = form.querySelector('.cancel-edit-button');
+                const caption = form.querySelector('[data-form-caption]');
+
+                if (saveButton) {
+                    saveButton.textContent = config.updateLabel;
+                }
+                if (deleteButton) {
+                    deleteButton.textContent = config.deleteLabel;
+                    deleteButton.classList.remove('hidden');
+                }
+                if (cancelButton) {
+                    cancelButton.classList.remove('hidden');
+                }
+                if (caption) {
+                    caption.textContent = `Editing existing ${config.type}. Use Update to save changes or Delete to remove the post.`;
+                }
+
+                editSession = {
+                    type: formType,
+                    entityType: lookupResult.entityType,
+                    editCode: lookupResult.editCode || '',
+                    partitionKey: lookupResult.partitionKey || '',
+                    rowKey: lookupResult.rowKey || ''
+                };
             };
 
             const setSaveError = (message) => {
@@ -414,8 +654,6 @@
             };
 
             const getSubmitEndpoint = (form) => form.dataset.formType === 'business' ? '/api/businesses' : '/api/events';
-
-            const getSubmitLabel = (form) => form.dataset.formType === 'business' ? 'Business' : 'Event';
 
             const syncTagPicker = (picker) => {
                 const toggles = Array.from(picker.querySelectorAll('.tag-toggle'));
@@ -450,15 +688,18 @@
 
                     if (!response.ok) {
                         signedInEmail = '';
+                        signedInIsAdmin = false;
                         updateAuthUi();
                         return;
                     }
 
                     const session = await response.json();
                     signedInEmail = session?.authenticated ? String(session.email || '').trim().toLowerCase() : '';
+                    signedInIsAdmin = Boolean(session?.isAdmin);
                     updateAuthUi();
                 } catch (error) {
                     signedInEmail = '';
+                    signedInIsAdmin = false;
                     updateAuthUi();
                 }
             };
@@ -486,13 +727,135 @@
                 signedInEmail = '';
                 clearMessages();
                 forms.forEach((form) => form.reset());
+                forms.forEach((form) => resetFormToCreateMode(form));
                 tagPickers.forEach((picker) => syncTagPicker(picker));
+                editSession = null;
+                setLookupStatus('');
                 updateAuthUi();
                 const redirectTarget = encodeURIComponent(buildSubmitRedirectUrl());
                 window.location.href = `/.auth/logout?post_logout_redirect_uri=${redirectTarget}`;
             });
 
+            lookupButton?.addEventListener('click', async () => {
+                clearMessages();
+                if (!signedInEmail) {
+                    const redirectTarget = encodeURIComponent(buildSubmitRedirectUrl());
+                    window.location.href = `/.auth/login/google?post_login_redirect_uri=${redirectTarget}`;
+                    return;
+                }
+
+                const editCode = String(lookupInput?.value || '').trim().toUpperCase();
+                if (!editCode) {
+                    setLookupStatus('Enter an EditCode to load a post.', 'error');
+                    return;
+                }
+
+                lookupButton.disabled = true;
+                const defaultLabel = lookupButton.textContent;
+                lookupButton.textContent = 'Loading...';
+                setLookupStatus('');
+
+                try {
+                    const response = await fetch('/api/posts/lookup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({ editCode })
+                    });
+
+                    const result = await response.json().catch(() => ({}));
+                    if (!response.ok || !result?.success || !result?.entityType || !result?.post) {
+                        const apiError = typeof result?.error === 'string' && result.error.trim()
+                            ? result.error.trim()
+                            : 'Unable to load this EditCode right now.';
+                        setLookupStatus(apiError, 'error');
+                        return;
+                    }
+
+                    const formType = String(result.entityType).toLowerCase() === 'business' ? 'business' : 'event';
+                    forms.forEach((form) => resetFormToCreateMode(form, { keepSession: true }));
+                    populateFormForEdit(formType, result);
+                    setActiveTab(formType);
+                    setLookupStatus(`${result.entityType} loaded successfully. You can now update or delete it.`, 'success');
+                } catch (error) {
+                    setLookupStatus('Unable to reach the server right now. Please try again in a moment.', 'error');
+                } finally {
+                    lookupButton.disabled = !signedInEmail;
+                    lookupButton.textContent = defaultLabel;
+                }
+            });
+
             forms.forEach((form) => {
+                const config = formConfig[form.dataset.formType];
+                const deleteButton = form.querySelector('.delete-button');
+                const cancelButton = form.querySelector('.cancel-edit-button');
+
+                cancelButton?.addEventListener('click', () => {
+                    resetFormToCreateMode(form);
+                    clearMessages();
+                    setLookupStatus('Edit mode cleared. You can create a new post now.');
+                });
+
+                deleteButton?.addEventListener('click', async () => {
+                    clearMessages();
+
+                    if (!signedInEmail) {
+                        const redirectTarget = encodeURIComponent(buildSubmitRedirectUrl());
+                        window.location.href = `/.auth/login/google?post_login_redirect_uri=${redirectTarget}`;
+                        return;
+                    }
+
+                    if (!editSession || editSession.type !== form.dataset.formType) {
+                        setSaveError('Load a post first before trying to delete it.');
+                        return;
+                    }
+
+                    if (!window.confirm(`Delete this ${config.type}? This cannot be undone.`)) {
+                        return;
+                    }
+
+                    deleteButton.disabled = true;
+                    const defaultLabel = deleteButton.textContent;
+                    deleteButton.textContent = 'Deleting...';
+
+                    try {
+                        const response = await fetch(`${config.submitPath}/${encodeURIComponent(editSession.partitionKey)}/${encodeURIComponent(editSession.rowKey)}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({ editCode: editSession.editCode })
+                        });
+
+                        const result = await response.json().catch(() => ({}));
+                        if (!response.ok || !result?.success) {
+                            const apiError = typeof result?.error === 'string' && result.error.trim()
+                                ? result.error.trim()
+                                : `Unable to delete this ${config.type} right now.`;
+                            setSaveError(apiError);
+                            return;
+                        }
+
+                        resetFormToCreateMode(form);
+                        clearMessages();
+                        successMessage.textContent = config.deletedMessage;
+                        successPanel.classList.remove('hidden');
+                        successPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        setLookupStatus(`${config.entityType} deleted successfully.`, 'success');
+                        if (lookupInput) {
+                            lookupInput.value = '';
+                        }
+                    } catch (error) {
+                        setSaveError('Unable to reach the server right now. Please try again in a moment.');
+                    } finally {
+                        deleteButton.disabled = false;
+                        deleteButton.textContent = defaultLabel;
+                    }
+                });
+
                 form.addEventListener('submit', async (event) => {
                     event.preventDefault();
                     clearMessages();
@@ -515,16 +878,25 @@
 
                     const payload = getPayloadFromForm(form);
                     const submitButton = form.querySelector('.save-button');
-                    const defaultLabel = submitButton?.textContent || `Save ${getSubmitLabel(form)}`;
+                    const isEditMode = Boolean(editSession && editSession.type === form.dataset.formType && form.elements.PartitionKey.value && form.elements.RowKey.value && form.elements.EditCode.value);
+                    const endpoint = isEditMode
+                        ? `${config.submitPath}/${encodeURIComponent(form.elements.PartitionKey.value)}/${encodeURIComponent(form.elements.RowKey.value)}`
+                        : config.submitPath;
+                    const method = isEditMode ? 'PUT' : 'POST';
+                    if (isEditMode) {
+                        payload.EditCode = form.elements.EditCode.value.trim();
+                    }
+
+                    const defaultLabel = submitButton?.textContent || (isEditMode ? config.updateLabel : config.saveLabel);
 
                     if (submitButton) {
                         submitButton.disabled = true;
-                        submitButton.textContent = 'Saving...';
+                        submitButton.textContent = isEditMode ? 'Updating...' : 'Saving...';
                     }
 
                     try {
-                        const response = await fetch(getSubmitEndpoint(form), {
-                            method: 'POST',
+                        const response = await fetch(endpoint, {
+                            method,
                             headers: {
                                 'Content-Type': 'application/json',
                                 'Accept': 'application/json'
@@ -533,24 +905,36 @@
                         });
 
                         const result = await response.json().catch(() => ({}));
-                        if (!response.ok || !result?.success || !result?.editCode) {
+                        if (!response.ok || !result?.success || (!isEditMode && !result?.editCode)) {
                             const apiError = typeof result?.error === 'string' && result.error.trim()
                                 ? result.error.trim()
-                                : `Unable to save this ${getSubmitLabel(form).toLowerCase()} right now.`;
+                                : `Unable to save this ${config.type} right now.`;
                             setSaveError(apiError);
                             return;
                         }
 
-                        form.reset();
-                        tagPickers
-                            .filter((picker) => form.contains(picker))
-                            .forEach((picker) => syncTagPicker(picker));
-                        verificationEmailFields.forEach((field) => {
-                            field.value = signedInEmail;
-                        });
+                        if (isEditMode) {
+                            editCodeOutput.textContent = form.elements.EditCode.value.trim();
+                            successMessage.textContent = config.updatedMessage;
+                            setLookupStatus(`${config.entityType} updated successfully.`, 'success');
+                        } else {
+                            form.reset();
+                            tagPickers
+                                .filter((picker) => form.contains(picker))
+                                .forEach((picker) => syncTagPickerSelectionFromValue(picker, ''));
+                            verificationEmailFields.forEach((field) => {
+                                field.value = signedInEmail;
+                            });
 
-                        editCodeOutput.textContent = result.editCode;
-                        successMessage.textContent = `${getSubmitLabel(form)} saved successfully and is ready to appear on the public page. Keep this EditCode safe for future changes.`;
+                            editCodeOutput.textContent = result.editCode;
+                            successMessage.textContent = config.createdMessage;
+                            form.elements.EditCode.value = result.editCode;
+                            if (lookupInput) {
+                                lookupInput.value = result.editCode;
+                            }
+                            setLookupStatus(`${config.entityType} saved successfully. Use the EditCode to load it later.`, 'success');
+                        }
+
                         errorPanel.classList.add('hidden');
                         errorMessage.textContent = '';
                         successPanel.classList.remove('hidden');
@@ -587,8 +971,15 @@
             });
 
             const initialType = new URLSearchParams(window.location.search).get('type');
+            const initialEditCode = new URLSearchParams(window.location.search).get('editCode');
             setActiveTab(initialType);
-            refreshAuthSession();
+            forms.forEach((form) => resetFormToCreateMode(form, { keepSession: true }));
+            refreshAuthSession().then(() => {
+                if (initialEditCode && lookupInput && lookupButton && signedInEmail) {
+                    lookupInput.value = initialEditCode;
+                    lookupButton.click();
+                }
+            });
         })();
     </script>
 </body>

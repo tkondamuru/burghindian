@@ -22,11 +22,13 @@ public sealed class AuthFunctions
         try
         {
             var email = AuthHelpers.GetAuthenticatedEmail(req);
+            var isAdmin = AuthHelpers.IsAdminEmail(email);
 
             return new OkObjectResult(new
             {
                 authenticated = !string.IsNullOrWhiteSpace(email),
-                email
+                email,
+                isAdmin
             });
         }
         catch (Exception ex)

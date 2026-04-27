@@ -15,6 +15,8 @@ public sealed class BusinessResponse
 {
     public string? PartitionKey { get; set; }
     public string? RowKey { get; set; }
+    public string? CreatedAtUtc { get; set; }
+    public string? UpdatedAtUtc { get; set; }
     public string? Name { get; set; }
     public string? Address { get; set; }
     public string? Phone { get; set; }

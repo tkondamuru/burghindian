@@ -424,6 +424,14 @@
                         return;
                     }
 
+                    items.sort((left, right) => {
+                        const leftTime = Date.parse(left?.createdAtUtc || left?.CreatedAtUtc || '');
+                        const rightTime = Date.parse(right?.createdAtUtc || right?.CreatedAtUtc || '');
+                        const safeLeft = Number.isNaN(leftTime) ? 0 : leftTime;
+                        const safeRight = Number.isNaN(rightTime) ? 0 : rightTime;
+                        return safeRight - safeLeft;
+                    });
+
                     const fragment = document.createDocumentFragment();
                     items.forEach((item) => {
                         fragment.appendChild(createBusinessCard(item));
@@ -431,7 +439,7 @@
                     businessGrid.prepend(fragment);
 
                     if (feedStatus) {
-                        feedStatus.textContent = `Loaded ${items.length} saved business${items.length === 1 ? '' : 'es'} from the website API.`;
+                        feedStatus.textContent = `${items.length} local business${items.length === 1 ? ' is' : 'es are'} now showing from recent community submissions.`;
                         feedStatus.classList.remove('hidden');
                     }
 

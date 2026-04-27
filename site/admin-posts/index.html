@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Posts - Indians in Pittsburgh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        surface: '#F8F9FA',
+                        'surface-container-low': '#F3F4F5',
+                        'surface-container-lowest': '#FFFFFF',
+                        'surface-container-high': '#E7E8E9',
+                        primary: '#9F3D00',
+                        'primary-container': '#C74E00',
+                        secondary: '#006A60',
+                        'secondary-container': '#8CF5E4',
+                        'secondary-dim': '#6FD8C8',
+                        'on-surface': '#191C1D',
+                        'outline-variant': '#E1BFB2',
+                        'primary-fixed-dim': '#FFB596'
+                    },
+                    fontFamily: {
+                        headline: ['Manrope', 'sans-serif'],
+                        body: ['Inter', 'sans-serif']
+                    },
+                    boxShadow: {
+                        editorial: '0px 12px 32px rgba(141, 113, 101, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #F8F9FA; color: #191C1D; }
+        .gradient-primary { background: linear-gradient(135deg, #9F3D00 0%, #C74E00 100%); }
+        .admin-shell {
+            background:
+                radial-gradient(circle at top right, rgba(140, 245, 228, 0.16), transparent 30%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(255, 252, 248, 0.98));
+        }
+    </style>
+</head>
+<body class="font-body antialiased selection:bg-primary-fixed-dim selection:text-on-surface">
+
+    <nav class="sticky top-0 z-50 bg-surface/85 backdrop-blur-md border-b-[1px] border-outline-variant/15 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-8">
+                    <a href="/index.html" class="text-primary font-headline font-bold text-2xl tracking-tight">Indians in Pittsburgh</a>
+                    <div class="hidden md:flex space-x-6 text-sm font-medium text-on-surface/80">
+                        <a href="/submit/index.html" class="hover:text-primary transition-colors pb-1">Submit</a>
+                        <a href="/admin-posts/index.html" class="text-primary border-b-2 border-primary pb-1">Admin</a>
+                    </div>
+                </div>
+                <a href="/submit/index.html" class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post Form</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        <section class="grid grid-cols-1 xl:grid-cols-[1.4fr_0.9fr] gap-8 items-end mb-12">
+            <div class="max-w-3xl">
+                <p class="text-primary text-sm font-bold tracking-widest uppercase mb-3">Admin Dashboard</p>
+                <h1 class="font-headline text-5xl md:text-6xl font-extrabold leading-tight mb-4 text-on-surface">Manage Events and Businesses</h1>
+                <p class="text-lg text-on-surface/80 leading-relaxed max-w-2xl">
+                    Review all posts, copy EditCodes, jump into the submit form for editing, or remove entries directly from one place.
+                </p>
+            </div>
+
+            <aside class="gradient-primary rounded-2xl p-7 relative overflow-hidden shadow-editorial">
+                <div class="absolute -right-10 -bottom-10 bg-white/10 w-32 h-32 rounded-full blur-2xl"></div>
+                <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-white/75 mb-3">Access Rule</p>
+                <h2 class="font-headline text-2xl font-bold text-white mb-3">Admin Gmail Only</h2>
+                <p class="text-white/90 text-sm leading-relaxed">
+                    This page is only useful for Gmail accounts listed in the managed API `ADMIN_EMAILS` environment variable.
+                </p>
+            </aside>
+        </section>
+
+        <section class="admin-shell rounded-[2rem] shadow-editorial border border-outline-variant/10 overflow-hidden">
+            <div class="p-5 md:p-6 border-b border-outline-variant/15">
+                <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+                    <div>
+                        <p class="text-primary text-sm font-bold tracking-widest uppercase mb-2">Filters</p>
+                        <h2 class="font-headline text-3xl font-extrabold text-on-surface">All Managed Posts</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full lg:max-w-3xl">
+                        <input id="admin-search" class="w-full rounded-xl border border-outline-variant/20 bg-white px-4 py-3 text-sm text-on-surface outline-none focus:border-primary focus:ring-4 focus:ring-primary-fixed-dim/40" type="text" placeholder="Search title, email, EditCode">
+                        <select id="admin-type-filter" class="w-full rounded-xl border border-outline-variant/20 bg-white px-4 py-3 text-sm text-on-surface outline-none focus:border-primary focus:ring-4 focus:ring-primary-fixed-dim/40">
+                            <option value="all">All Types</option>
+                            <option value="event">Events</option>
+                            <option value="business">Businesses</option>
+                        </select>
+                        <select id="admin-status-filter" class="w-full rounded-xl border border-outline-variant/20 bg-white px-4 py-3 text-sm text-on-surface outline-none focus:border-primary focus:ring-4 focus:ring-primary-fixed-dim/40">
+                            <option value="all">All Status</option>
+                            <option value="approved">Approved</option>
+                            <option value="unapproved">Unapproved</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-5 md:p-10">
+                <div id="admin-status" class="hidden mb-6 rounded-2xl border border-outline-variant/20 bg-surface-container-lowest px-5 py-4 text-sm text-on-surface/75 shadow-editorial"></div>
+                <div id="admin-grid" class="grid grid-cols-1 xl:grid-cols-2 gap-6"></div>
+                <div id="admin-empty" class="hidden rounded-2xl border border-outline-variant/20 bg-surface-container-lowest px-6 py-8 text-center text-sm text-on-surface/65 shadow-editorial">
+                    No posts matched the current filters.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        (() => {
+            const statusBox = document.getElementById('admin-status');
+            const grid = document.getElementById('admin-grid');
+            const emptyState = document.getElementById('admin-empty');
+            const searchInput = document.getElementById('admin-search');
+            const typeFilter = document.getElementById('admin-type-filter');
+            const statusFilter = document.getElementById('admin-status-filter');
+
+            let session = { authenticated: false, email: '', isAdmin: false };
+            let allPosts = [];
+
+            const escapeHtml = (value) => {
+                const span = document.createElement('span');
+                span.textContent = value || '';
+                return span.innerHTML;
+            };
+
+            const setStatus = (message, tone = 'neutral') => {
+                if (!message) {
+                    statusBox.classList.add('hidden');
+                    statusBox.textContent = '';
+                    statusBox.classList.remove('text-primary', 'text-secondary');
+                    return;
+                }
+
+                statusBox.textContent = message;
+                statusBox.classList.remove('hidden', 'text-primary', 'text-secondary');
+                if (tone === 'success') {
+                    statusBox.classList.add('text-secondary');
+                } else if (tone === 'error') {
+                    statusBox.classList.add('text-primary');
+                }
+            };
+
+            const normalizeString = (value) => String(value || '').trim();
+
+            const renderPosts = () => {
+                const query = normalizeString(searchInput.value).toLowerCase();
+                const typeValue = typeFilter.value;
+                const statusValue = statusFilter.value;
+
+                const filtered = allPosts.filter((post) => {
+                    const typeMatch = typeValue === 'all' || normalizeString(post.entityType).toLowerCase() === typeValue;
+                    const approvalMatch = statusValue === 'all'
+                        || (statusValue === 'approved' && post.isApproved)
+                        || (statusValue === 'unapproved' && !post.isApproved);
+                    const haystack = [
+                        post.title,
+                        post.summary,
+                        post.submitterEmail,
+                        post.editCode,
+                        post.tags
+                    ].join(' ').toLowerCase();
+
+                    return typeMatch && approvalMatch && (!query || haystack.includes(query));
+                });
+
+                grid.innerHTML = filtered.map((post) => `
+                    <article class="rounded-[1.5rem] border border-outline-variant/15 bg-surface-container-lowest p-6 shadow-editorial" data-post-card data-entity-type="${escapeHtml(post.entityType || '')}" data-partition-key="${escapeHtml(post.partitionKey || '')}" data-row-key="${escapeHtml(post.rowKey || '')}" data-edit-code="${escapeHtml(post.editCode || '')}">
+                        <div class="flex flex-wrap items-center gap-2 mb-4">
+                            <span class="rounded-full bg-secondary-container px-3 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#005048]">${escapeHtml(post.entityType || 'Post')}</span>
+                            <span class="rounded-full ${post.isApproved ? 'bg-[#e8faf4] text-secondary' : 'bg-[#fff3ec] text-primary'} px-3 py-1 text-[11px] font-bold uppercase tracking-[0.22em]">${post.isApproved ? 'Approved' : 'Unapproved'}</span>
+                        </div>
+                        <h3 class="font-headline text-2xl font-extrabold text-on-surface mb-3">${escapeHtml(post.title || 'Untitled')}</h3>
+                        <div class="space-y-2 text-sm text-on-surface/75 leading-7 mb-5">
+                            <p><span class="font-bold text-on-surface">EditCode:</span> <code class="rounded bg-surface-container-low px-2 py-1 text-[13px]">${escapeHtml(post.editCode || '')}</code></p>
+                            <p><span class="font-bold text-on-surface">Submitter:</span> ${escapeHtml(post.submitterEmail || '')}</p>
+                            <p><span class="font-bold text-on-surface">Partition / Row:</span> ${escapeHtml(post.partitionKey || '')} / ${escapeHtml(post.rowKey || '')}</p>
+                            <p><span class="font-bold text-on-surface">Tags:</span> ${escapeHtml(post.tags || 'None')}</p>
+                            <p><span class="font-bold text-on-surface">Summary:</span> ${escapeHtml(post.summary || '')}</p>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="/submit/index.html?type=${normalizeString(post.entityType).toLowerCase() === 'business' ? 'business' : 'event'}&editCode=${encodeURIComponent(post.editCode || '')}" class="rounded-xl bg-secondary px-5 py-3 text-sm font-bold text-white hover:bg-secondary/90 transition-colors">Open in Form</a>
+                            <button type="button" class="admin-copy rounded-xl bg-surface-container-high px-5 py-3 text-sm font-bold text-on-surface/80 hover:text-primary transition-colors">Copy EditCode</button>
+                            <button type="button" class="admin-delete rounded-xl border border-primary/25 bg-white px-5 py-3 text-sm font-bold text-primary hover:bg-[#fff7f3] transition-colors">Delete</button>
+                        </div>
+                    </article>
+                `).join('');
+
+                emptyState.classList.toggle('hidden', filtered.length > 0);
+            };
+
+            const refreshPosts = async () => {
+                setStatus('Loading posts...');
+                try {
+                    const response = await fetch('/api/admin/posts', {
+                        headers: {
+                            'Accept': 'application/json'
+                        },
+                        cache: 'no-store'
+                    });
+
+                    const result = await response.json().catch(() => ([]));
+                    if (!response.ok || !Array.isArray(result)) {
+                        const message = typeof result?.error === 'string' && result.error.trim()
+                            ? result.error.trim()
+                            : 'Unable to load admin posts right now.';
+                        setStatus(message, 'error');
+                        return;
+                    }
+
+                    allPosts = result;
+                    renderPosts();
+                    setStatus(`Loaded ${allPosts.length} posts for admin review.`, 'success');
+                } catch (error) {
+                    setStatus('Unable to reach the admin posts API right now.', 'error');
+                }
+            };
+
+            const refreshSession = async () => {
+                try {
+                    const response = await fetch('/api/auth/session', {
+                        headers: {
+                            'Accept': 'application/json'
+                        },
+                        cache: 'no-store'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Session lookup failed.');
+                    }
+
+                    session = await response.json();
+                    if (!session?.authenticated) {
+                        window.location.href = '/.auth/login/google?post_login_redirect_uri=/admin-posts/index.html';
+                        return false;
+                    }
+
+                    if (!session?.isAdmin) {
+                        setStatus('This Gmail account is signed in, but it is not listed in ADMIN_EMAILS for admin access.', 'error');
+                        emptyState.classList.add('hidden');
+                        return false;
+                    }
+
+                    return true;
+                } catch (error) {
+                    setStatus('Unable to verify admin session right now.', 'error');
+                    return false;
+                }
+            };
+
+            grid.addEventListener('click', async (event) => {
+                const card = event.target.closest('[data-post-card]');
+                if (!card) {
+                    return;
+                }
+
+                if (event.target.closest('.admin-copy')) {
+                    const code = card.dataset.editCode || '';
+                    try {
+                        await navigator.clipboard.writeText(code);
+                        setStatus(`Copied EditCode ${code}.`, 'success');
+                    } catch (error) {
+                        setStatus('Unable to copy the EditCode right now.', 'error');
+                    }
+                    return;
+                }
+
+                if (event.target.closest('.admin-delete')) {
+                    const entityType = (card.dataset.entityType || '').toLowerCase();
+                    const partitionKey = card.dataset.partitionKey || '';
+                    const rowKey = card.dataset.rowKey || '';
+                    const editCode = card.dataset.editCode || '';
+                    const submitPath = entityType === 'business' ? '/api/businesses' : '/api/events';
+
+                    if (!window.confirm(`Delete this ${entityType || 'post'}? This cannot be undone.`)) {
+                        return;
+                    }
+
+                    const deleteButton = event.target.closest('.admin-delete');
+                    const defaultLabel = deleteButton.textContent;
+                    deleteButton.disabled = true;
+                    deleteButton.textContent = 'Deleting...';
+
+                    try {
+                        const response = await fetch(`${submitPath}/${encodeURIComponent(partitionKey)}/${encodeURIComponent(rowKey)}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({ editCode })
+                        });
+
+                        const result = await response.json().catch(() => ({}));
+                        if (!response.ok || !result?.success) {
+                            const message = typeof result?.error === 'string' && result.error.trim()
+                                ? result.error.trim()
+                                : 'Unable to delete this post right now.';
+                            setStatus(message, 'error');
+                            return;
+                        }
+
+                        allPosts = allPosts.filter((post) => !(post.partitionKey === partitionKey && post.rowKey === rowKey && post.entityType?.toLowerCase() === entityType));
+                        renderPosts();
+                        setStatus('Post deleted successfully.', 'success');
+                    } catch (error) {
+                        setStatus('Unable to reach the delete API right now.', 'error');
+                    } finally {
+                        deleteButton.disabled = false;
+                        deleteButton.textContent = defaultLabel;
+                    }
+                }
+            });
+
+            [searchInput, typeFilter, statusFilter].forEach((element) => {
+                element.addEventListener('input', renderPosts);
+                element.addEventListener('change', renderPosts);
+            });
+
+            refreshSession().then((ok) => {
+                if (ok) {
+                    refreshPosts();
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

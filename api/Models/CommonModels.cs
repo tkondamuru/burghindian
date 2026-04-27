@@ -5,6 +5,11 @@ public sealed class LookupRequest
     public string? EditCode { get; set; }
 }
 
+public sealed class DeletePostRequest
+{
+    public string? EditCode { get; set; }
+}
+
 public sealed class UpdateEventRequest : EventSubmissionRequest
 {
     public string? EditCode { get; set; }
@@ -31,4 +36,20 @@ public sealed class LookupResponse
     public string? RowKey { get; set; }
     public string? EditCode { get; set; }
     public object? Post { get; set; }
+}
+
+public sealed class AdminPostSummary
+{
+    public string? EntityType { get; set; }
+    public string? PartitionKey { get; set; }
+    public string? RowKey { get; set; }
+    public string? EditCode { get; set; }
+    public string? SubmitterEmail { get; set; }
+    public string? Title { get; set; }
+    public string? Summary { get; set; }
+    public string? Tags { get; set; }
+    public string? ImageUrl { get; set; }
+    public string? CreatedAtUtc { get; set; }
+    public string? UpdatedAtUtc { get; set; }
+    public bool IsApproved { get; set; }
 }

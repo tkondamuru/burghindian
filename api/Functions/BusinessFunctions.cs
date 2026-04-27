@@ -43,13 +43,19 @@ public sealed class BusinessFunctions
 
     [Function("UpdateBusiness")]
     public async Task<IActionResult> UpdateBusiness(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "businesses/{partitionKey}/{rowKey}")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "put", "delete", Route = "businesses/{partitionKey}/{rowKey}")] HttpRequest req,
         string partitionKey,
         string rowKey)
     {
         try
         {
+            if (HttpMethods.IsDelete(req.Method))
+            {
+                return await DeleteBusinessAsync(req, partitionKey, rowKey);
+            }
+
             var email = AuthHelpers.GetAuthenticatedEmail(req);
+            var isAdmin = AuthHelpers.IsAdminEmail(email);
             if (string.IsNullOrWhiteSpace(email))
             {
                 return new UnauthorizedObjectResult(new { error = "Login is required." });
@@ -95,7 +101,7 @@ public sealed class BusinessFunctions
                 return new ObjectResult(new { error = "Edit code does not match this business." }) { StatusCode = StatusCodes.Status403Forbidden };
             }
 
-            if (!string.Equals(lookup.Value.GetString("SubmitterEmail"), email, StringComparison.OrdinalIgnoreCase))
+            if (!isAdmin && !string.Equals(lookup.Value.GetString("SubmitterEmail"), email, StringComparison.OrdinalIgnoreCase))
             {
                 return new ObjectResult(new { error = "This business does not belong to the signed-in Gmail account." }) { StatusCode = StatusCodes.Status403Forbidden };
             }
@@ -140,6 +146,8 @@ public sealed class BusinessFunctions
                 {
                     PartitionKey = entity.PartitionKey,
                     RowKey = entity.RowKey,
+                    CreatedAtUtc = entity.GetString("CreatedAtUtc"),
+                    UpdatedAtUtc = entity.GetString("UpdatedAtUtc"),
                     Name = entity.GetString("Name"),
                     Address = entity.GetString("Address"),
                     Phone = entity.GetString("Phone"),
@@ -235,5 +243,43 @@ public sealed class BusinessFunctions
             EditCode = editCode,
             Id = new { partitionKey, rowKey }
         });
+    }
+
+    private async Task<IActionResult> DeleteBusinessAsync(HttpRequest req, string partitionKey, string rowKey)
+    {
+        var email = AuthHelpers.GetAuthenticatedEmail(req);
+        var isAdmin = AuthHelpers.IsAdminEmail(email);
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return new UnauthorizedObjectResult(new { error = "Login is required." });
+        }
+
+        var body = await JsonSerializer.DeserializeAsync<DeletePostRequest>(req.Body, JsonOptions.Default);
+        var editCode = body?.EditCode?.Trim().ToUpperInvariant();
+        if (string.IsNullOrWhiteSpace(editCode))
+        {
+            return new BadRequestObjectResult(new { error = "Edit code is required." });
+        }
+
+        var lookupTable = _tableStorageService.GetTableClient("EditCodeLookup");
+        var lookup = await lookupTable.GetEntityAsync<TableEntity>(EditCodeService.LookupPartitionKey, editCode);
+
+        if (!string.Equals(lookup.Value.GetString("EntityType"), "Business", StringComparison.Ordinal) ||
+            !string.Equals(lookup.Value.GetString("TargetPartitionKey"), partitionKey, StringComparison.Ordinal) ||
+            !string.Equals(lookup.Value.GetString("TargetRowKey"), rowKey, StringComparison.Ordinal))
+        {
+            return new ObjectResult(new { error = "Edit code does not match this business." }) { StatusCode = StatusCodes.Status403Forbidden };
+        }
+
+        if (!isAdmin && !string.Equals(lookup.Value.GetString("SubmitterEmail"), email, StringComparison.OrdinalIgnoreCase))
+        {
+            return new ObjectResult(new { error = "This business does not belong to the signed-in Gmail account." }) { StatusCode = StatusCodes.Status403Forbidden };
+        }
+
+        var businessTable = _tableStorageService.GetTableClient("Businesses");
+        await businessTable.DeleteEntityAsync(partitionKey, rowKey);
+        await lookupTable.DeleteEntityAsync(EditCodeService.LookupPartitionKey, editCode);
+
+        return new OkObjectResult(new { success = true });
     }
 }
