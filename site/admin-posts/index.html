@@ -84,6 +84,13 @@
 
         <section class="admin-shell rounded-[2rem] shadow-editorial border border-outline-variant/10 overflow-hidden">
             <div class="p-5 md:p-6 border-b border-outline-variant/15 bg-white/70">
+                <div class="flex flex-wrap gap-3 mb-6">
+                    <button id="admin-tab-posts" type="button" class="admin-tab rounded-full bg-primary px-5 py-3 text-sm font-bold text-white shadow-editorial transition-colors" data-admin-tab="posts" aria-pressed="true">Posts</button>
+                    <button id="admin-tab-telegram" type="button" class="admin-tab rounded-full border border-outline-variant/20 bg-white px-5 py-3 text-sm font-bold text-on-surface/75 transition-colors" data-admin-tab="telegram" aria-pressed="false">Telegram Links</button>
+                </div>
+            </div>
+
+            <div id="admin-panel-telegram" class="hidden p-5 md:p-6 border-b border-outline-variant/15 bg-white/70">
                 <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
                     <div>
                         <p class="text-primary text-sm font-bold tracking-widest uppercase mb-2">Telegram Links</p>
@@ -145,7 +152,7 @@
                 </div>
             </div>
 
-            <div class="p-5 md:p-6 border-b border-outline-variant/15">
+            <div id="admin-panel-posts" class="p-5 md:p-6 border-b border-outline-variant/15">
                 <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
                     <div>
                         <p class="text-primary text-sm font-bold tracking-widest uppercase mb-2">Filters</p>
@@ -197,10 +204,14 @@
             const telegramReset = document.getElementById('telegram-mapping-reset');
             const telegramRefresh = document.getElementById('telegram-mapping-refresh');
             const telegramCopyJson = document.getElementById('telegram-mapping-copy-json');
+            const adminTabButtons = Array.from(document.querySelectorAll('.admin-tab'));
+            const adminPanelPosts = document.getElementById('admin-panel-posts');
+            const adminPanelTelegram = document.getElementById('admin-panel-telegram');
 
             let session = { authenticated: false, email: '', isAdmin: false };
             let allPosts = [];
             let telegramMappings = {};
+            let activeAdminTab = 'posts';
 
             const escapeHtml = (value) => {
                 const span = document.createElement('span');
@@ -226,6 +237,26 @@
             };
 
             const normalizeString = (value) => String(value || '').trim();
+
+            const setAdminTab = (tabName) => {
+                activeAdminTab = tabName === 'telegram' ? 'telegram' : 'posts';
+                const showingTelegram = activeAdminTab === 'telegram';
+
+                adminPanelPosts.classList.toggle('hidden', showingTelegram);
+                adminPanelTelegram.classList.toggle('hidden', !showingTelegram);
+
+                adminTabButtons.forEach((button) => {
+                    const isActive = button.dataset.adminTab === activeAdminTab;
+                    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+                    button.classList.toggle('bg-primary', isActive);
+                    button.classList.toggle('text-white', isActive);
+                    button.classList.toggle('shadow-editorial', isActive);
+                    button.classList.toggle('border', !isActive);
+                    button.classList.toggle('border-outline-variant/20', !isActive);
+                    button.classList.toggle('bg-white', !isActive);
+                    button.classList.toggle('text-on-surface/75', !isActive);
+                });
+            };
 
             const setTelegramStatus = (message, tone = 'neutral') => {
                 if (!message) {
@@ -587,6 +618,12 @@
                 }
             });
 
+            adminTabButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    setAdminTab(button.dataset.adminTab);
+                });
+            });
+
             [searchInput, typeFilter, statusFilter].forEach((element) => {
                 element.addEventListener('input', renderPosts);
                 element.addEventListener('change', renderPosts);
@@ -594,6 +631,7 @@
 
             refreshSession().then((ok) => {
                 if (ok) {
+                    setAdminTab(activeAdminTab);
                     refreshTelegramMappings();
                     refreshPosts();
                 }
