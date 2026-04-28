@@ -202,7 +202,7 @@
             const refreshPosts = async () => {
                 setStatus('Loading posts...');
                 try {
-                    const response = await fetch('/api/admin/posts', {
+                    const response = await fetch('/api/admin-posts', {
                         headers: {
                             'Accept': 'application/json'
                         },

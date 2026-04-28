@@ -22,7 +22,7 @@ public sealed class AdminPostsFunctions
 
     [Function("GetAdminPosts")]
     public async Task<IActionResult> GetAdminPosts(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "admin/posts")] HttpRequest req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "admin-posts")] HttpRequest req)
     {
         try
         {

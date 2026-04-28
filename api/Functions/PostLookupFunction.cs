@@ -44,46 +44,58 @@ public sealed class PostLookupFunction
             }
 
             var lookupTable = _tableStorageService.GetTableClient("EditCodeLookup");
-            var lookup = await lookupTable.GetEntityAsync<TableEntity>(EditCodeService.LookupPartitionKey, editCode);
+            var lookup = await lookupTable.GetEntityIfExistsAsync<TableEntity>(EditCodeService.LookupPartitionKey, editCode);
+            if (!lookup.HasValue)
+            {
+                return new NotFoundObjectResult(new { error = "Edit code or post not found." });
+            }
 
-            if (!isAdmin && !string.Equals(lookup.Value.GetString("SubmitterEmail"), email, StringComparison.OrdinalIgnoreCase))
+            var lookupEntity = lookup.Value;
+
+            if (!isAdmin && !string.Equals(lookupEntity.GetString("SubmitterEmail"), email, StringComparison.OrdinalIgnoreCase))
             {
                 return new ObjectResult(new { error = "This edit code does not belong to the signed-in Gmail account." }) { StatusCode = StatusCodes.Status403Forbidden };
             }
 
-            var targetTable = lookup.Value.GetString("TargetTable") ?? string.Empty;
-            var targetPartitionKey = lookup.Value.GetString("TargetPartitionKey") ?? string.Empty;
-            var targetRowKey = lookup.Value.GetString("TargetRowKey") ?? string.Empty;
-            var entityType = lookup.Value.GetString("EntityType") ?? string.Empty;
+            var targetTable = lookupEntity.GetString("TargetTable") ?? string.Empty;
+            var targetPartitionKey = lookupEntity.GetString("TargetPartitionKey") ?? string.Empty;
+            var targetRowKey = lookupEntity.GetString("TargetRowKey") ?? string.Empty;
+            var entityType = lookupEntity.GetString("EntityType") ?? string.Empty;
 
             var contentTable = _tableStorageService.GetTableClient(targetTable);
-            var entity = await contentTable.GetEntityAsync<TableEntity>(targetPartitionKey, targetRowKey);
+            var entity = await contentTable.GetEntityIfExistsAsync<TableEntity>(targetPartitionKey, targetRowKey);
+            if (!entity.HasValue)
+            {
+                return new NotFoundObjectResult(new { error = "Edit code or post not found." });
+            }
+
+            var contentEntity = entity.Value;
 
             object post = entityType == "Event"
                 ? new EventResponse
                 {
-                    PartitionKey = entity.Value.PartitionKey,
-                    RowKey = entity.Value.RowKey,
-                    Title = entity.Value.GetString("Title"),
-                    Date = entity.Value.GetString("Date"),
-                    Time = entity.Value.GetString("Time"),
-                    Location = entity.Value.GetString("Location"),
-                    Summary = entity.Value.GetString("Summary"),
-                    Description = entity.Value.GetString("Description"),
-                    Tags = entity.Value.GetString("Tags"),
-                    ImageUrl = entity.Value.GetString("ImageUrl")
+                    PartitionKey = contentEntity.PartitionKey,
+                    RowKey = contentEntity.RowKey,
+                    Title = contentEntity.GetString("Title"),
+                    Date = contentEntity.GetString("Date"),
+                    Time = contentEntity.GetString("Time"),
+                    Location = contentEntity.GetString("Location"),
+                    Summary = contentEntity.GetString("Summary"),
+                    Description = contentEntity.GetString("Description"),
+                    Tags = contentEntity.GetString("Tags"),
+                    ImageUrl = contentEntity.GetString("ImageUrl")
                 }
                 : new BusinessResponse
                 {
-                    PartitionKey = entity.Value.PartitionKey,
-                    RowKey = entity.Value.RowKey,
-                    Name = entity.Value.GetString("Name"),
-                    Address = entity.Value.GetString("Address"),
-                    Phone = entity.Value.GetString("Phone"),
-                    Summary = entity.Value.GetString("Summary"),
-                    Description = entity.Value.GetString("Description"),
-                    Tags = entity.Value.GetString("Tags"),
-                    ImageUrl = entity.Value.GetString("ImageUrl")
+                    PartitionKey = contentEntity.PartitionKey,
+                    RowKey = contentEntity.RowKey,
+                    Name = contentEntity.GetString("Name"),
+                    Address = contentEntity.GetString("Address"),
+                    Phone = contentEntity.GetString("Phone"),
+                    Summary = contentEntity.GetString("Summary"),
+                    Description = contentEntity.GetString("Description"),
+                    Tags = contentEntity.GetString("Tags"),
+                    ImageUrl = contentEntity.GetString("ImageUrl")
                 };
 
             return new OkObjectResult(new LookupResponse

@@ -16,12 +16,12 @@ public sealed class RoleFunctions
     }
 
     [Function("GetRoles")]
-    public IActionResult GetRoles(
+    public async Task<IActionResult> GetRoles(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "GetRoles")] HttpRequest req)
     {
         try
         {
-            var email = GetEmailFromRoleRequest(req);
+            var email = await GetEmailFromRoleRequestAsync(req);
 
             // Placeholder role mapping. Replace this with a table/database lookup when
             // you are ready to manage real application roles by email address.
@@ -47,9 +47,9 @@ public sealed class RoleFunctions
         }
     }
 
-    private static string GetEmailFromRoleRequest(HttpRequest req)
+    private static async Task<string> GetEmailFromRoleRequestAsync(HttpRequest req)
     {
-        using var document = JsonDocument.Parse(req.Body);
+        using var document = await JsonDocument.ParseAsync(req.Body);
         var root = document.RootElement;
 
         if (TryGetEmail(root, out var directEmail))
