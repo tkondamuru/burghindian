@@ -53,3 +53,15 @@ public sealed class AdminPostSummary
     public string? UpdatedAtUtc { get; set; }
     public bool IsApproved { get; set; }
 }
+
+public sealed class TelegramMappingUpsertRequest
+{
+    public string? TelegramId { get; set; }
+    public string? Email { get; set; }
+}
+
+public sealed class TelegramMappingResponse
+{
+    public bool Success { get; set; }
+    public Dictionary<string, string> Mappings { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+}

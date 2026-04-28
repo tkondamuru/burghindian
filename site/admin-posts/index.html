@@ -83,6 +83,68 @@
         </section>
 
         <section class="admin-shell rounded-[2rem] shadow-editorial border border-outline-variant/10 overflow-hidden">
+            <div class="p-5 md:p-6 border-b border-outline-variant/15 bg-white/70">
+                <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+                    <div>
+                        <p class="text-primary text-sm font-bold tracking-widest uppercase mb-2">Telegram Links</p>
+                        <h2 class="font-headline text-3xl font-extrabold text-on-surface">Telegram ID to Gmail Map</h2>
+                        <p class="mt-2 text-sm text-on-surface/70 max-w-3xl">
+                            Keep a single shared mapping object here for your Telegram workflow. Each entry is stored like
+                            <code class="rounded bg-surface-container-low px-2 py-1 text-[12px]">{"telegramid":"email@example.com"}</code>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 xl:grid-cols-[0.95fr_1.05fr] gap-6">
+                    <form id="telegram-mapping-form" class="rounded-[1.5rem] border border-outline-variant/15 bg-surface-container-lowest p-6 shadow-editorial">
+                        <div class="flex items-center justify-between gap-3 mb-5">
+                            <h3 class="font-headline text-2xl font-bold text-on-surface">Add or Update Mapping</h3>
+                            <button id="telegram-mapping-reset" type="button" class="rounded-xl border border-outline-variant/25 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-on-surface/70 hover:text-primary transition-colors">Clear</button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label for="telegram-id-input" class="block text-sm font-semibold text-on-surface mb-2">Telegram ID</label>
+                                <input id="telegram-id-input" class="w-full rounded-xl border border-outline-variant/20 bg-white px-4 py-3 text-sm text-on-surface outline-none focus:border-primary focus:ring-4 focus:ring-primary-fixed-dim/40" type="text" placeholder="123456789 or username">
+                            </div>
+                            <div>
+                                <label for="telegram-email-input" class="block text-sm font-semibold text-on-surface mb-2">Gmail</label>
+                                <input id="telegram-email-input" class="w-full rounded-xl border border-outline-variant/20 bg-white px-4 py-3 text-sm text-on-surface outline-none focus:border-primary focus:ring-4 focus:ring-primary-fixed-dim/40" type="email" placeholder="person@gmail.com">
+                            </div>
+                        </div>
+
+                        <div class="mt-5 flex flex-wrap gap-3">
+                            <button id="telegram-mapping-save" type="submit" class="rounded-xl bg-secondary px-5 py-3 text-sm font-bold text-white hover:bg-secondary/90 transition-colors">Save Mapping</button>
+                            <button id="telegram-mapping-copy-json" type="button" class="rounded-xl bg-surface-container-high px-5 py-3 text-sm font-bold text-on-surface/80 hover:text-primary transition-colors">Copy JSON</button>
+                        </div>
+                    </form>
+
+                    <div class="rounded-[1.5rem] border border-outline-variant/15 bg-surface-container-lowest p-6 shadow-editorial">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+                            <div>
+                                <h3 class="font-headline text-2xl font-bold text-on-surface">Current Object</h3>
+                                <p class="text-sm text-on-surface/65 mt-1">The table keeps a single JSON object with every Telegram-to-email pair.</p>
+                            </div>
+                            <button id="telegram-mapping-refresh" type="button" class="rounded-xl border border-outline-variant/20 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-on-surface/70 hover:text-primary transition-colors">Refresh</button>
+                        </div>
+
+                        <pre id="telegram-mapping-json" class="overflow-x-auto rounded-2xl bg-[#1b1d1f] px-4 py-4 text-xs leading-6 text-[#d9f9f2] shadow-editorial">{}</pre>
+                        <div id="telegram-mapping-status" class="hidden mt-4 rounded-2xl border border-outline-variant/20 bg-surface px-4 py-3 text-sm text-on-surface/75"></div>
+
+                        <div class="mt-5">
+                            <div class="flex items-center justify-between gap-3 mb-3">
+                                <h4 class="font-headline text-xl font-bold text-on-surface">Entries</h4>
+                                <span id="telegram-mapping-count" class="text-xs font-bold uppercase tracking-[0.18em] text-on-surface/55">0 entries</span>
+                            </div>
+                            <div id="telegram-mapping-list" class="space-y-3"></div>
+                            <div id="telegram-mapping-empty" class="hidden rounded-2xl border border-outline-variant/20 bg-surface px-4 py-5 text-sm text-on-surface/65 text-center">
+                                No Telegram mappings have been saved yet.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="p-5 md:p-6 border-b border-outline-variant/15">
                 <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
                     <div>
@@ -124,9 +186,21 @@
             const searchInput = document.getElementById('admin-search');
             const typeFilter = document.getElementById('admin-type-filter');
             const statusFilter = document.getElementById('admin-status-filter');
+            const telegramForm = document.getElementById('telegram-mapping-form');
+            const telegramIdInput = document.getElementById('telegram-id-input');
+            const telegramEmailInput = document.getElementById('telegram-email-input');
+            const telegramStatus = document.getElementById('telegram-mapping-status');
+            const telegramJson = document.getElementById('telegram-mapping-json');
+            const telegramList = document.getElementById('telegram-mapping-list');
+            const telegramEmpty = document.getElementById('telegram-mapping-empty');
+            const telegramCount = document.getElementById('telegram-mapping-count');
+            const telegramReset = document.getElementById('telegram-mapping-reset');
+            const telegramRefresh = document.getElementById('telegram-mapping-refresh');
+            const telegramCopyJson = document.getElementById('telegram-mapping-copy-json');
 
             let session = { authenticated: false, email: '', isAdmin: false };
             let allPosts = [];
+            let telegramMappings = {};
 
             const escapeHtml = (value) => {
                 const span = document.createElement('span');
@@ -152,6 +226,77 @@
             };
 
             const normalizeString = (value) => String(value || '').trim();
+
+            const setTelegramStatus = (message, tone = 'neutral') => {
+                if (!message) {
+                    telegramStatus.classList.add('hidden');
+                    telegramStatus.textContent = '';
+                    telegramStatus.classList.remove('text-primary', 'text-secondary');
+                    return;
+                }
+
+                telegramStatus.textContent = message;
+                telegramStatus.classList.remove('hidden', 'text-primary', 'text-secondary');
+                if (tone === 'success') {
+                    telegramStatus.classList.add('text-secondary');
+                } else if (tone === 'error') {
+                    telegramStatus.classList.add('text-primary');
+                }
+            };
+
+            const resetTelegramForm = () => {
+                telegramIdInput.value = '';
+                telegramEmailInput.value = '';
+            };
+
+            const renderTelegramMappings = () => {
+                const entries = Object.entries(telegramMappings).sort((a, b) => a[0].localeCompare(b[0], undefined, { sensitivity: 'base' }));
+                telegramJson.textContent = JSON.stringify(telegramMappings, null, 2);
+                telegramCount.textContent = `${entries.length} ${entries.length === 1 ? 'entry' : 'entries'}`;
+                telegramEmpty.classList.toggle('hidden', entries.length > 0);
+
+                telegramList.innerHTML = entries.map(([telegramId, email]) => `
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 rounded-2xl border border-outline-variant/15 bg-white px-4 py-4">
+                        <div class="min-w-0">
+                            <p class="text-xs font-bold uppercase tracking-[0.18em] text-on-surface/50 mb-1">Telegram ID</p>
+                            <p class="font-semibold text-on-surface break-all">${escapeHtml(telegramId)}</p>
+                            <p class="mt-2 text-xs font-bold uppercase tracking-[0.18em] text-on-surface/50 mb-1">Email</p>
+                            <p class="text-sm text-on-surface/75 break-all">${escapeHtml(email)}</p>
+                        </div>
+                        <div class="flex flex-wrap gap-3 shrink-0">
+                            <button type="button" class="telegram-edit rounded-xl bg-surface-container-high px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-on-surface/80 hover:text-primary transition-colors" data-telegram-id="${escapeHtml(telegramId)}" data-email="${escapeHtml(email)}">Edit</button>
+                            <button type="button" class="telegram-delete rounded-xl border border-primary/20 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-primary hover:bg-[#fff7f3] transition-colors" data-telegram-id="${escapeHtml(telegramId)}">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            };
+
+            const refreshTelegramMappings = async () => {
+                setTelegramStatus('Loading Telegram mappings...');
+                try {
+                    const response = await fetch('/api/manage-telegram-links', {
+                        headers: {
+                            'Accept': 'application/json'
+                        },
+                        cache: 'no-store'
+                    });
+
+                    const result = await response.json().catch(() => ({}));
+                    if (!response.ok || typeof result !== 'object' || result === null || typeof result.mappings !== 'object' || Array.isArray(result.mappings)) {
+                        const message = typeof result?.error === 'string' && result.error.trim()
+                            ? result.error.trim()
+                            : 'Unable to load Telegram mappings right now.';
+                        setTelegramStatus(message, 'error');
+                        return;
+                    }
+
+                    telegramMappings = result.mappings || {};
+                    renderTelegramMappings();
+                    setTelegramStatus(`Loaded ${Object.keys(telegramMappings).length} Telegram mapping${Object.keys(telegramMappings).length === 1 ? '' : 's'}.`, 'success');
+                } catch (error) {
+                    setTelegramStatus('Unable to reach the Telegram mappings API right now.', 'error');
+                }
+            };
 
             const renderPosts = () => {
                 const query = normalizeString(searchInput.value).toLowerCase();
@@ -322,6 +467,126 @@
                 }
             });
 
+            telegramForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const telegramId = normalizeString(telegramIdInput.value);
+                const email = normalizeString(telegramEmailInput.value);
+                if (!telegramId || !email) {
+                    setTelegramStatus('Telegram ID and Gmail are both required.', 'error');
+                    return;
+                }
+
+                const saveButton = document.getElementById('telegram-mapping-save');
+                const defaultLabel = saveButton.textContent;
+                saveButton.disabled = true;
+                saveButton.textContent = 'Saving...';
+
+                try {
+                    const response = await fetch('/api/manage-telegram-links', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({ telegramId, email })
+                    });
+
+                    const result = await response.json().catch(() => ({}));
+                    if (!response.ok || !result?.success || typeof result.mappings !== 'object' || Array.isArray(result.mappings)) {
+                        const message = typeof result?.error === 'string' && result.error.trim()
+                            ? result.error.trim()
+                            : 'Unable to save the Telegram mapping right now.';
+                        setTelegramStatus(message, 'error');
+                        return;
+                    }
+
+                    telegramMappings = result.mappings || {};
+                    renderTelegramMappings();
+                    setTelegramStatus(`Saved mapping for ${telegramId}.`, 'success');
+                    resetTelegramForm();
+                } catch (error) {
+                    setTelegramStatus('Unable to reach the Telegram mappings API right now.', 'error');
+                } finally {
+                    saveButton.disabled = false;
+                    saveButton.textContent = defaultLabel;
+                }
+            });
+
+            telegramList.addEventListener('click', async (event) => {
+                const editButton = event.target.closest('.telegram-edit');
+                if (editButton) {
+                    telegramIdInput.value = editButton.dataset.telegramId || '';
+                    telegramEmailInput.value = editButton.dataset.email || '';
+                    telegramIdInput.focus();
+                    setTelegramStatus('Loaded mapping into the form for editing.', 'success');
+                    return;
+                }
+
+                const deleteButton = event.target.closest('.telegram-delete');
+                if (!deleteButton) {
+                    return;
+                }
+
+                const telegramId = deleteButton.dataset.telegramId || '';
+                if (!telegramId || !window.confirm(`Delete Telegram mapping for ${telegramId}?`)) {
+                    return;
+                }
+
+                const defaultLabel = deleteButton.textContent;
+                deleteButton.disabled = true;
+                deleteButton.textContent = 'Deleting...';
+
+                try {
+                    const response = await fetch(`/api/manage-telegram-links/${encodeURIComponent(telegramId)}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    const result = await response.json().catch(() => ({}));
+                    if (!response.ok || !result?.success || typeof result.mappings !== 'object' || Array.isArray(result.mappings)) {
+                        const message = typeof result?.error === 'string' && result.error.trim()
+                            ? result.error.trim()
+                            : 'Unable to delete the Telegram mapping right now.';
+                        setTelegramStatus(message, 'error');
+                        return;
+                    }
+
+                    telegramMappings = result.mappings || {};
+                    renderTelegramMappings();
+                    setTelegramStatus(`Deleted mapping for ${telegramId}.`, 'success');
+
+                    if (normalizeString(telegramIdInput.value).toLowerCase() === telegramId.toLowerCase()) {
+                        resetTelegramForm();
+                    }
+                } catch (error) {
+                    setTelegramStatus('Unable to reach the Telegram mappings API right now.', 'error');
+                } finally {
+                    deleteButton.disabled = false;
+                    deleteButton.textContent = defaultLabel;
+                }
+            });
+
+            telegramReset.addEventListener('click', () => {
+                resetTelegramForm();
+                setTelegramStatus('', 'neutral');
+            });
+
+            telegramRefresh.addEventListener('click', () => {
+                refreshTelegramMappings();
+            });
+
+            telegramCopyJson.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(JSON.stringify(telegramMappings, null, 2));
+                    setTelegramStatus('Copied the Telegram mapping JSON.', 'success');
+                } catch (error) {
+                    setTelegramStatus('Unable to copy the Telegram mapping JSON right now.', 'error');
+                }
+            });
+
             [searchInput, typeFilter, statusFilter].forEach((element) => {
                 element.addEventListener('input', renderPosts);
                 element.addEventListener('change', renderPosts);
@@ -329,6 +594,7 @@
 
             refreshSession().then((ok) => {
                 if (ok) {
+                    refreshTelegramMappings();
                     refreshPosts();
                 }
             });
