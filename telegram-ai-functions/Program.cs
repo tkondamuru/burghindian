@@ -14,6 +14,24 @@ builder.Services
 
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient("Gemini");
+
+// Register GooglePlacesService
+builder.Services.AddSingleton<GooglePlacesService>();
+
+// Register GeminiService explicitly so it can be used for storage logic
 builder.Services.AddSingleton<GeminiService>();
+
+// Toggle AI Service based on environment variable
+var useAzureAi = Environment.GetEnvironmentVariable("USE_AZURE_AI")?.ToLower() == "true";
+if (useAzureAi)
+{
+    builder.Services.AddSingleton<IAiService, AzureAiService>();
+}
+else
+{
+    builder.Services.AddSingleton<IAiService, GeminiService>();
+}
+
+builder.Services.AddSingleton<TelegramMappingService>();
 
 builder.Build().Run();

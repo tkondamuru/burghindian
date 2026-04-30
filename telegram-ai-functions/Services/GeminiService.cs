@@ -10,15 +10,17 @@ using Microsoft.Extensions.Logging;
 
 namespace api.Services
 {
-    public class GeminiService
+    public class GeminiService : IAiService
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<GeminiService> _logger;
+        private readonly GooglePlacesService _placesService;
 
-        public GeminiService(IHttpClientFactory httpClientFactory, ILogger<GeminiService> logger)
+        public GeminiService(IHttpClientFactory httpClientFactory, ILogger<GeminiService> logger, GooglePlacesService placesService)
         {
             _httpClient = httpClientFactory.CreateClient("Gemini");
             _logger = logger;
+            _placesService = placesService;
         }
 
         public async Task<AgentResponseDto> ProcessIntentAsync(string text, string? base64Image, string targetIntent)
@@ -31,29 +33,62 @@ namespace api.Services
 
             var requestUri = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={apiKey}";
 
-            string allowedTagsList = "'Indian Food', 'Restaurants', 'Temples', 'Grocery', 'Attraction', 'Children', 'Adventure', 'Professional Services', 'Community', 'Arts & Culture'";
+            string eventTagsList = "'community', 'culture', 'family', 'food', 'temple', 'professional', 'kids', 'other'";
+            string businessTagsList = "'restaurant', 'grocery', 'temple', 'service', 'shopping', 'education', 'health', 'other'";
 
             string intentInstruction = "";
             if (targetIntent == "VALIDATE_EVENT")
             {
-                intentInstruction = $@"You must extract an EVENT. Required fields: Title, Date, Location.
-For 'Category' and 'Tags', you MUST ONLY pick exact strings from this list (or leave blank if none fit): {allowedTagsList}.
-Ensure 'Description' contains ONLY the original marketing text or rules, while 'Summary' contains a concise 1-sentence overview you write.
+                intentInstruction = $@"You must extract an EVENT. Required fields: Title, Date, Location, Description.
+1. You MUST generate a 1-sentence 'Summary' yourself from the description. Do NOT leave it empty or [MISSING].
+2. For 'Category' and 'Tags', you MUST ONLY pick comma-separated exact strings from this list (if none fit, select 'other'): {eventTagsList}.
 If complete, set IsComplete to true. Set Intent to 'VALIDATE_EVENT'.
-If incomplete, set IsComplete to false and write nicely in UserMessage exactly what details are missing (e.g., 'Please provide the Date and Location').";
+If incomplete:
+- Set IsComplete to false.
+- Fill 'EventDetails' with EVERYTHING you found.
+- In 'UserMessage', provide this template:
+Confirm Event Info:
+Title: [Value or [MISSING]]
+Date: [Value or [MISSING]]
+Time: [Value or [MISSING]]
+Location: [Value or [MISSING]]
+Description: [Value or [MISSING]]
+Category: [Value]
+Tags: [Value]
+
+Please COPY the text above, fill in any [MISSING] blanks, and resubmit.
+<<Event>>";
             }
             else if (targetIntent == "VALIDATE_BUSINESS")
             {
-                intentInstruction = $@"You must extract a BUSINESS. Required fields: Name, Address.
-For 'Category' and 'Tags', you MUST ONLY pick exact strings from this list (or leave blank if none fit): {allowedTagsList}.
-Ensure 'Description' contains ONLY the original marketing text, while 'Summary' contains a concise 1-sentence overview you write.
+                intentInstruction = $@"You must extract a BUSINESS. Required fields: Name, Address, Description.
+1. You MUST generate a 1-sentence 'Summary' yourself from the description. Do NOT leave it empty or [MISSING].
+2. For 'Category' and 'Tags', you MUST ONLY pick comma-separated exact strings from this list (if none fit, select 'other'): {businessTagsList}.
 If complete, set IsComplete to true. Set Intent to 'VALIDATE_BUSINESS'.
-If incomplete, set IsComplete to false and write nicely in UserMessage exactly what details are missing.";
+If incomplete:
+- Set IsComplete to false.
+- Fill 'BusinessDetails' with EVERYTHING you found.
+- In 'UserMessage', provide this template:
+Confirm Business Info:
+Name: [Value or [MISSING]]
+Address: [Value or [MISSING]]
+Phone: [Value or [MISSING]]
+Description: [Value or [MISSING]]
+Category: [Value]
+Tags: [Value]
+
+Please COPY the text above, fill in any [MISSING] blanks, and resubmit.
+<<Business>>";
             }
             else
             {
-                intentInstruction = @"If it's conversational like 'Hi', set Intent to 'INSTRUCTIONS' and UserMessage to a helpful greeting. 
-If it contains data, set Intent to 'ASK_TYPE', leave details empty, summarize the content in Summary, and set UserMessage to 'Is this an Event, Business, or Home page?'";
+                intentInstruction = $@"If it's conversational like 'Hi', set Intent to 'INSTRUCTIONS' and UserMessage to a helpful greeting. 
+If it contains data:
+1. Set Intent to 'ASK_TYPE'.
+2. EXTRACT EVERYTHING you can into BOTH 'EventDetails' and 'BusinessDetails' simultaneously.
+3. For 'Tags', use these: Event({eventTagsList}), Business({businessTagsList}).
+4. In 'Summary', write a clear reconstruction of all data found (e.g., 'Name: X, Date: Y...').
+5. Set 'UserMessage' to 'I found some details! Is this an Event or a Business?'";
             }
 
             var systemInstruction = $@"You are a data extraction assistant for the Pittsburgh Indian Community portal.
@@ -126,7 +161,19 @@ If you find usable media/data, provide a short 1-3 word SuggestedFileName (e.g. 
                 if (!response.IsSuccessStatusCode)
                 {
                     _logger.LogError($"Gemini API Error: {responseJson}");
-                    throw new Exception("Failed to process with Gemini.");
+                    string errorMessage = "Failed to process with Gemini.";
+                    try
+                    {
+                        using var errorDoc = JsonDocument.Parse(responseJson);
+                        if (errorDoc.RootElement.TryGetProperty("error", out var errorElement) &&
+                            errorElement.TryGetProperty("message", out var messageProp))
+                        {
+                            errorMessage = messageProp.GetString() ?? errorMessage;
+                        }
+                    }
+                    catch { /* Fallback to default */ }
+
+                    return new AgentResponseDto { ErrorMessage = errorMessage };
                 }
 
                 using var document = JsonDocument.Parse(responseJson);
@@ -149,27 +196,35 @@ If you find usable media/data, provide a short 1-3 word SuggestedFileName (e.g. 
             }
         }
 
-        public async Task<string> SaveEventAsync(EventDto eventData, long telegramUserId)
+        public async Task<string> SaveEventAsync(EventDto eventData, long telegramUserId, string submitterEmail)
         {
             if (eventData == null) throw new ArgumentNullException(nameof(eventData));
             string editCode = Guid.NewGuid().ToString("N").Substring(0, 5).ToUpper();
             eventData.EditCode = editCode;
             eventData.TelegramUserId = telegramUserId;
             
-            await SaveToTableStorageAsync(eventData);
+            await SaveToTableStorageAsync(eventData, submitterEmail);
             return editCode;
         }
 
-        private async Task SaveToTableStorageAsync(EventDto eventData)
+        private async Task SaveToTableStorageAsync(EventDto eventData, string submitterEmail)
         {
             try
             {
                 string connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage") ?? "UseDevelopmentStorage=true";
                 var serviceClient = new TableServiceClient(connectionString);
                 var tableClient = serviceClient.GetTableClient("Events");
+                var lookupTable = serviceClient.GetTableClient("EditCodeLookup");
                 await tableClient.CreateIfNotExistsAsync();
+                await lookupTable.CreateIfNotExistsAsync();
 
-                var tableEntity = new TableEntity(eventData.Category ?? "General", Guid.NewGuid().ToString())
+                var createdAt = DateTimeOffset.UtcNow;
+                var partitionKey = createdAt.ToString("yyyy-MM");
+                var suffix = Guid.NewGuid().ToString("N").Substring(0, 5).ToUpperInvariant();
+                var rowKey = $"{createdAt:yyyyMMddHHmmssfff}-{suffix}";
+                var editCode = eventData.EditCode;
+
+                var tableEntity = new TableEntity(partitionKey, rowKey)
                 {
                     { "Title", eventData.Title },
                     { "Date", eventData.Date },
@@ -180,12 +235,29 @@ If you find usable media/data, provide a short 1-3 word SuggestedFileName (e.g. 
                     { "Category", eventData.Category },
                     { "Tags", eventData.Tags },
                     { "ImageUrl", eventData.ImageUrl },
-                    { "EditCode", eventData.EditCode },
-                    { "IsApproved", true }, // Automatically posted
-                    { "SubmittedByUserId", eventData.TelegramUserId }
+                    { "EditCode", editCode },
+                    { "IsApproved", true },
+                    { "SubmittedByUserId", eventData.TelegramUserId },
+                    { "SubmitterEmail", submitterEmail },
+                    { "Source", "telegram-bot" },
+                    { "CreatedAtUtc", createdAt.ToString("O") },
+                    { "UpdatedAtUtc", createdAt.ToString("O") }
                 };
 
                 await tableClient.AddEntityAsync(tableEntity);
+
+                var lookupEntity = new TableEntity("edit", editCode)
+                {
+                    { "EntityType", "Event" },
+                    { "TargetTable", "Events" },
+                    { "TargetPartitionKey", partitionKey },
+                    { "TargetRowKey", rowKey },
+                    { "SubmitterEmail", submitterEmail },
+                    { "IsApproved", true },
+                    { "CreatedAtUtc", createdAt.ToString("O") }
+                };
+                await lookupTable.AddEntityAsync(lookupEntity);
+
                 _logger.LogInformation($"Successfully saved event to Azure Table: {eventData.Title}");
             }
             catch (Exception ex)
@@ -195,10 +267,10 @@ If you find usable media/data, provide a short 1-3 word SuggestedFileName (e.g. 
             }
         }
 
-        public async Task<string> SaveBusinessAsync(BusinessDto businessData, long telegramUserId)
+        public async Task<string> SaveBusinessAsync(BusinessDto businessData, long telegramUserId, string submitterEmail)
         {
             if (businessData == null) throw new ArgumentNullException(nameof(businessData));
-            string editCode = Guid.NewGuid().ToString("N").Substring(0, 5).ToUpper();
+            string editCode = Guid.NewGuid().ToString("N").Substring(0, 5).ToUpperInvariant();
             businessData.EditCode = editCode;
             businessData.TelegramUserId = telegramUserId;
             
@@ -207,9 +279,16 @@ If you find usable media/data, provide a short 1-3 word SuggestedFileName (e.g. 
                 string connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage") ?? "UseDevelopmentStorage=true";
                 var serviceClient = new TableServiceClient(connectionString);
                 var tableClient = serviceClient.GetTableClient("Businesses");
+                var lookupTable = serviceClient.GetTableClient("EditCodeLookup");
                 await tableClient.CreateIfNotExistsAsync();
+                await lookupTable.CreateIfNotExistsAsync();
 
-                var tableEntity = new TableEntity(businessData.Category ?? "General", Guid.NewGuid().ToString())
+                var createdAt = DateTimeOffset.UtcNow;
+                var partitionKey = createdAt.ToString("yyyy-MM");
+                var suffix = Guid.NewGuid().ToString("N").Substring(0, 5).ToUpperInvariant();
+                var rowKey = $"{createdAt:yyyyMMddHHmmssfff}-{suffix}";
+
+                var tableEntity = new TableEntity(partitionKey, rowKey)
                 {
                     { "Name", businessData.Name },
                     { "Address", businessData.Address },
@@ -219,12 +298,29 @@ If you find usable media/data, provide a short 1-3 word SuggestedFileName (e.g. 
                     { "Category", businessData.Category },
                     { "Tags", businessData.Tags },
                     { "ImageUrl", businessData.ImageUrl },
-                    { "EditCode", businessData.EditCode },
+                    { "EditCode", editCode },
                     { "IsApproved", true },
-                    { "SubmittedByUserId", businessData.TelegramUserId }
+                    { "SubmittedByUserId", businessData.TelegramUserId },
+                    { "SubmitterEmail", submitterEmail },
+                    { "Source", "telegram-bot" },
+                    { "CreatedAtUtc", createdAt.ToString("O") },
+                    { "UpdatedAtUtc", createdAt.ToString("O") }
                 };
 
                 await tableClient.AddEntityAsync(tableEntity);
+
+                var lookupEntity = new TableEntity("edit", editCode)
+                {
+                    { "EntityType", "Business" },
+                    { "TargetTable", "Businesses" },
+                    { "TargetPartitionKey", partitionKey },
+                    { "TargetRowKey", rowKey },
+                    { "SubmitterEmail", submitterEmail },
+                    { "IsApproved", true },
+                    { "CreatedAtUtc", createdAt.ToString("O") }
+                };
+                await lookupTable.AddEntityAsync(lookupEntity);
+
                 return editCode;
             }
             catch (Exception ex)
@@ -249,6 +345,19 @@ If you find usable media/data, provide a short 1-3 word SuggestedFileName (e.g. 
             await blobClient.UploadAsync(stream, overwrite: true);
 
             return blobClient.Uri.ToString();
+        }
+
+        public async Task EnrichBusinessAsync(BusinessDto businessData)
+        {
+            if (businessData == null) return;
+            string businessId = businessData.Name.Replace(" ", "-").ToLower() + "-" + DateTime.Now.ToString("yyyyMMdd");
+            var photoUrls = await _placesService.EnrichBusinessPhotosAsync(businessData.Name, businessData.Address, businessId);
+            if (photoUrls != null && photoUrls.Count > 0)
+            {
+                // We'll store them as a semicolon separated list in the ImageUrl field for now
+                // Or you can create a new 'Gallery' field in your table later
+                businessData.ImageUrl = string.Join(";", photoUrls);
+            }
         }
     }
 

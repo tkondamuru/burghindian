@@ -21,13 +21,15 @@ namespace api.Functions
 
         private readonly ILogger _logger;
         private readonly HttpClient _httpClient;
-        private readonly GeminiService _geminiService;
+        private readonly IAiService _aiService;
+        private readonly TelegramMappingService _mappingService;
 
-        public TelegramWebhook(ILoggerFactory loggerFactory, IHttpClientFactory httpClientFactory, GeminiService geminiService)
+        public TelegramWebhook(ILoggerFactory loggerFactory, IHttpClientFactory httpClientFactory, IAiService aiService, TelegramMappingService mappingService)
         {
             _logger = loggerFactory.CreateLogger<TelegramWebhook>();
             _httpClient = httpClientFactory.CreateClient();
-            _geminiService = geminiService;
+            _aiService = aiService;
+            _mappingService = mappingService;
         }
 
         [Function("TelegramWebhook")]
@@ -94,7 +96,6 @@ namespace api.Functions
 
                     if (callbackData == "type_event") targetIntent = "VALIDATE_EVENT";
                     if (callbackData == "type_business") targetIntent = "VALIDATE_BUSINESS";
-                    if (callbackData == "type_home") targetIntent = "HOME";
                 }
                 else
                 {
@@ -104,59 +105,52 @@ namespace api.Functions
                 // 2. DETERMINE INTENT OVERRIDES (Tags in Text)
                 if (incomingText.Contains("<<Event>>", StringComparison.OrdinalIgnoreCase)) targetIntent = "VALIDATE_EVENT";
                 if (incomingText.Contains("<<Business>>", StringComparison.OrdinalIgnoreCase)) targetIntent = "VALIDATE_BUSINESS";
-                if (incomingText.Contains("<<Home>>", StringComparison.OrdinalIgnoreCase)) targetIntent = "HOME";
 
                 // Extract any existing ImageLink carried in the text template
                 var imageLinkMatch = Regex.Match(incomingText, @"ImageLink:\s*(https?://[^\s]+)");
                 if (imageLinkMatch.Success) incomingImageUrl = imageLinkMatch.Groups[1].Value;
 
+                // 2.5 AUTHENTICATION CHECK
+                string? authenticatedEmail = await _mappingService.GetUserEmailAsync(userId);
+                bool isAuthenticated = !string.IsNullOrWhiteSpace(authenticatedEmail);
+
                 // 3. EXECUTE INTENT
                 object? telegramResponseObj = null;
 
-                if (targetIntent == "HOME")
+                if (!isAuthenticated)
                 {
-                    if (downloadedImageBytes != null && string.IsNullOrEmpty(incomingImageUrl))
-                    {
-                        incomingImageUrl = await _geminiService.UploadImageAsync(downloadedImageBytes, $"image-{DateTime.Now:HHmmss}.jpg", "event-images");
-                    }
-
-                    if (!string.IsNullOrEmpty(incomingImageUrl))
-                    {
-                        // Save Landing image (Temporary logic, can enhance later)
-                        telegramResponseObj = new { chat_id = chatId, text = "✅ Home Image Saved." };
-                    }
-                    else
-                    {
-                        telegramResponseObj = new { chat_id = chatId, text = "We ideally need an image uploaded to set the Home landing page!" };
-                    }
+                    telegramResponseObj = new { chat_id = chatId, text = $"This account is not authenticated. Your Telegram ID is: {userId}" };
                 }
                 else
                 {
+                    // 2.7 IMMEDIATE FEEDBACK: Send "typing" action
+                    await SendChatActionAsync(telegramBotToken, chatId, "typing");
+
                     string? base64Image = downloadedImageBytes != null ? Convert.ToBase64String(downloadedImageBytes) : null;
-                    var geminiResponse = await _geminiService.ProcessIntentAsync(incomingText, base64Image, targetIntent);
+                    var geminiResponse = await _aiService.ProcessIntentAsync(incomingText, base64Image, targetIntent);
 
                     if (downloadedImageBytes != null && string.IsNullOrEmpty(incomingImageUrl))
                     {
                         string safeName = string.IsNullOrWhiteSpace(geminiResponse.SuggestedFileName) ? "image" : geminiResponse.SuggestedFileName.Replace(" ", "-").Replace("_", "-");
                         string fileName = $"{safeName}-{DateTime.Now:HHmmss}.jpg";
-                        incomingImageUrl = await _geminiService.UploadImageAsync(downloadedImageBytes, fileName, "event-images");
+                        incomingImageUrl = await _aiService.UploadImageAsync(downloadedImageBytes, fileName, "event-images");
                     }
 
                     if (geminiResponse.Intent == "ASK_TYPE")
                     {
                         string safeImageLink = string.IsNullOrEmpty(incomingImageUrl) ? "" : $"\nImageLink: {incomingImageUrl}";
+                        string reconstruction = geminiResponse.Summary ?? "";
                         telegramResponseObj = new
                         {
                             chat_id = chatId,
-                            text = $"<b>Summary:</b>\n{geminiResponse.Summary}\n\n<b>Original Data for reference:</b> {incomingText}{safeImageLink}\n\nWhat kind of post is this?",
+                            text = $"<b>Extracted Details:</b>\n{reconstruction}\n\n<b>Original Data for reference:</b> {incomingText}{safeImageLink}\n\nWhat kind of post is this?",
                             parse_mode = "HTML",
                             reply_markup = new
                             {
                                 inline_keyboard = new[]
                                 {
                                     new[] { new { text = "🎈 Event", callback_data = "type_event" } },
-                                    new[] { new { text = "🏢 Business", callback_data = "type_business" } },
-                                    new[] { new { text = "🏠 Home Image", callback_data = "type_home" } }
+                                    new[] { new { text = "🏢 Business", callback_data = "type_business" } }
                                 }
                             }
                         };
@@ -170,7 +164,7 @@ namespace api.Functions
                         if (geminiResponse.IsComplete && geminiResponse.EventDetails != null)
                         {
                             geminiResponse.EventDetails.ImageUrl = incomingImageUrl ?? "";
-                            string editCode = await _geminiService.SaveEventAsync(geminiResponse.EventDetails, userId);
+                            string editCode = await _aiService.SaveEventAsync(geminiResponse.EventDetails, userId, authenticatedEmail!);
                             telegramResponseObj = new { chat_id = chatId, text = $"✅ <b>Event Saved!</b>\nEdit Code: {editCode}\n\nTitle: {geminiResponse.EventDetails.Title}\nDate: {geminiResponse.EventDetails.Date}", parse_mode = "HTML" };
                         }
                         else
@@ -184,7 +178,11 @@ namespace api.Functions
                         if (geminiResponse.IsComplete && geminiResponse.BusinessDetails != null)
                         {
                             geminiResponse.BusinessDetails.ImageUrl = incomingImageUrl ?? "";
-                            string editCode = await _geminiService.SaveBusinessAsync(geminiResponse.BusinessDetails, userId);
+                            
+                            // Try to enrich with Google Places photos if it's a business
+                            await _aiService.EnrichBusinessAsync(geminiResponse.BusinessDetails);
+
+                            string editCode = await _aiService.SaveBusinessAsync(geminiResponse.BusinessDetails, userId, authenticatedEmail!);
                             telegramResponseObj = new { chat_id = chatId, text = $"✅ <b>Business Saved!</b>\nEdit Code: {editCode}\n\nName: {geminiResponse.BusinessDetails.Name}", parse_mode = "HTML" };
                         }
                         else
@@ -195,7 +193,12 @@ namespace api.Functions
                     }
                     else
                     {
-                        telegramResponseObj = new { chat_id = chatId, text = "I couldn't process your request safely. Please try again." };
+                        string fallbackText = "I couldn't process your request safely. Please try again.";
+                        if (!string.IsNullOrEmpty(geminiResponse.ErrorMessage))
+                        {
+                            fallbackText = $"<b>AI Processing Error:</b>\n{geminiResponse.ErrorMessage}";
+                        }
+                        telegramResponseObj = new { chat_id = chatId, text = fallbackText, parse_mode = "HTML" };
                     }
                 }
 
@@ -261,7 +264,15 @@ namespace api.Functions
             }
 
             var eventData = ParseDraftMessage(previewText);
-            string editCode = await _geminiService.SaveEventAsync(eventData, userId);
+            // Quick workaround: fetching email here as well or falling back. But ideally Draft Message flow should also be authenticated.
+            string? authenticatedEmail = await _mappingService.GetUserEmailAsync(userId);
+            if (string.IsNullOrWhiteSpace(authenticatedEmail))
+            {
+                await EditTelegramMessageAsync(telegramBotToken, chatId, messageId, "You are not authenticated to save items.");
+                return;
+            }
+
+            string editCode = await _aiService.SaveEventAsync(eventData, userId, authenticatedEmail!);
 
             await EditTelegramMessageAsync(
                 telegramBotToken,
@@ -283,6 +294,17 @@ namespace api.Functions
                 {
                     callback_query_id = callbackId
                 });
+        }
+
+        private async Task SendChatActionAsync(string telegramBotToken, long chatId, string action)
+        {
+            try
+            {
+                await _httpClient.PostAsJsonAsync(
+                    $"https://api.telegram.org/bot{telegramBotToken}/sendChatAction",
+                    new { chat_id = chatId, action = action });
+            }
+            catch { /* Best effort */ }
         }
 
         private async Task EditTelegramMessageAsync(string telegramBotToken, long chatId, int messageId, string text)
