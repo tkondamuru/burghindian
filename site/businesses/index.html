@@ -201,7 +201,7 @@
                     <button type="button" class="rounded-full bg-surface-container-high px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-on-surface/75 hover:text-primary transition-colors" @click="closeDescriptionModal()">Close</button>
                 </div>
                 <div class="px-6 py-6">
-                    <p class="text-base leading-8 text-on-surface/80 whitespace-pre-line" x-text="descriptionModal.body"></p>
+                    <div class="text-base leading-8 text-on-surface/80 whitespace-pre-line [&_a]:font-semibold [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 [&_a]:break-all" x-html="linkifyText(descriptionModal.body)"></div>
                 </div>
             </div>
         </div>
@@ -354,6 +354,19 @@
                         primaryImage: imageUrls[0] || 'https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-0.jpg',
                         cardCopy: item.summary || item.Summary || item.description || item.Description || ''
                     };
+                },
+
+                escapeHtml(value) {
+                    const span = document.createElement('span');
+                    span.textContent = value || '';
+                    return span.innerHTML;
+                },
+
+                linkifyText(value) {
+                    const escaped = this.escapeHtml(String(value || ''));
+                    return escaped
+                        .replace(/(https?:\/\/[^\s<]+)/gi, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>')
+                        .replace(/\n/g, '<br>');
                 },
 
                 showReadMore(business) {

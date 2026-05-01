@@ -131,7 +131,7 @@
                         <button type="button" class="rounded-full bg-surface-container-high px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-on-surface/75 hover:text-primary transition-colors" data-event-modal-close>Close</button>
                     </div>
                     <div class="px-6 py-6">
-                        <p id="event-description-modal-body" class="text-base leading-8 text-on-surface/80 whitespace-pre-line"></p>
+                        <div id="event-description-modal-body" class="text-base leading-8 text-on-surface/80 whitespace-pre-line [&_a]:font-semibold [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 [&_a]:break-all"></div>
                     </div>
                 </div>
             </div>
@@ -233,6 +233,13 @@
                 return span.innerHTML;
             };
 
+            const linkifyText = (value) => {
+                const escaped = escapeHtml(String(value || ''));
+                return escaped
+                    .replace(/(https?:\/\/[^\s<]+)/gi, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>')
+                    .replace(/\n/g, '<br>');
+            };
+
             const normalizeTags = (tags) => String(tags || '')
                 .split(',')
                 .map((tag) => tag.trim())
@@ -266,7 +273,7 @@
                 }
 
                 descriptionModalTitle.textContent = title || 'Event Description';
-                descriptionModalBody.textContent = description || 'No additional description is available.';
+                descriptionModalBody.innerHTML = linkifyText(description || 'No additional description is available.');
                 descriptionModal.classList.remove('hidden');
                 document.body.classList.add('overflow-hidden');
             };
