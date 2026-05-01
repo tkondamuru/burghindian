@@ -1,0 +1,58 @@
+[
+    {
+        "entityType": "Business",
+        "partitionKey": "2026-04",
+        "rowKey": "20260430044102558-BD9AE",
+        "editCode": "647F5",
+        "submitterEmail": "tejasvi.kondamuru@gmail.com",
+        "title": "Mintt Indian Cuisine",
+        "summary": "Mintt Indian Cuisine is a casual Indian and Indo-Chinese restaurant offering vegan options and a lunch buffet, located in Pittsburgh, PA.",
+        "tags": "Restaurant",
+        "imageUrl": "https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-0.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-1.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-2.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-3.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-4.jpg",
+        "createdAtUtc": "2026-04-30T04:41:02.5585813+00:00",
+        "updatedAtUtc": "2026-04-30T05:16:55.7326729+00:00",
+        "isApproved": true
+    },
+    {
+        "entityType": "Event",
+        "partitionKey": "2026-04",
+        "rowKey": "20260429053234192-C0357",
+        "editCode": "12AC2",
+        "submitterEmail": "tejasvi.kondamuru@gmail.com",
+        "title": "North America Telugu Society Kid's Competition",
+        "summary": "Kid's Competition event with award ceremony organized by North America Telugu Society (Pittsburgh Chapter).",
+        "tags": "kids",
+        "imageUrl": "https://stburghindian8808.blob.core.windows.net/event-images/image-053223.jpg",
+        "createdAtUtc": "2026-04-29T05:32:34.1922426+00:00",
+        "updatedAtUtc": "2026-04-29T05:32:34.1922426+00:00",
+        "isApproved": true
+    },
+    {
+        "entityType": "Event",
+        "partitionKey": "2026-04",
+        "rowKey": "20260429052650312-2A3CB",
+        "editCode": "48635",
+        "submitterEmail": "tejasvi.kondamuru@gmail.com",
+        "title": "Tuesday Biryani Mela at RedChilly's",
+        "summary": "Promotion by RedChilly's for Tuesday Biryani Mela offering biryanis at a special price.",
+        "tags": "food",
+        "imageUrl": "https://stburghindian8808.blob.core.windows.net/event-images/image-052343.jpg",
+        "createdAtUtc": "2026-04-29T05:26:50.3128611+00:00",
+        "updatedAtUtc": "2026-04-29T05:26:50.3128611+00:00",
+        "isApproved": true
+    },
+    {
+        "entityType": "Event",
+        "partitionKey": "2026-04",
+        "rowKey": "20260429041308135-01704",
+        "editCode": "64D70",
+        "submitterEmail": "tejasvi.kondamuru@gmail.com",
+        "title": "Weekday Specials at Hastina Royal Indian Cuisine & Biryani Mini",
+        "summary": "Enjoy special dine-in and take-out offers every Tuesday and Wednesday evening at Hastina Royal Indian Cuisine and Biryani Mini.",
+        "tags": "food",
+        "imageUrl": "https://stburghindian8808.blob.core.windows.net/event-images/BiryaniMini-041014.jpg",
+        "createdAtUtc": "2026-04-29T04:13:08.1359779+00:00",
+        "updatedAtUtc": "2026-04-29T04:13:08.1359779+00:00",
+        "isApproved": true
+    }
+]

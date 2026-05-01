@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Posts - Indians in Pittsburgh</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
-    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -54,38 +53,7 @@
             border-radius: 9999px;
             transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
         }
-        .dt-layout-row {
-            margin-top: 1rem;
-        }
-        .dt-layout-cell {
-            color: #191C1D;
-        }
-        .dt-info {
-            font-size: 0.875rem;
-            color: rgba(25, 28, 29, 0.65);
-        }
-        .dt-paging {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-            justify-content: flex-end;
-        }
-        .dt-paging-button {
-            border: 1px solid rgba(225, 191, 178, 0.35) !important;
-            border-radius: 0.75rem !important;
-            background: #ffffff !important;
-            color: rgba(25, 28, 29, 0.75) !important;
-            padding: 0.5rem 0.9rem !important;
-            box-shadow: none !important;
-        }
-        .dt-paging-button.current {
-            background: #9F3D00 !important;
-            border-color: #9F3D00 !important;
-            color: #ffffff !important;
-        }
-        .dt-paging-button.disabled {
-            opacity: 0.5;
-        }
+
     </style>
 </head>
 <body class="font-body antialiased selection:bg-primary-fixed-dim selection:text-on-surface">
@@ -204,21 +172,20 @@
                 </div>
 
                 <div class="mt-6 md:mt-10">
-                        <div id="admin-status" class="hidden mb-6 rounded-2xl border border-outline-variant/20 bg-surface-container-lowest px-5 py-4 text-sm text-on-surface/75 shadow-editorial"></div>
+                    <div id="admin-status" class="hidden mb-6 rounded-2xl border border-outline-variant/20 bg-surface-container-lowest px-5 py-4 text-sm text-on-surface/75 shadow-editorial"></div>
+                    <input id="posts-search" type="search" placeholder="Search by title, email, tag, or EditCode…" class="w-full mb-5 rounded-xl border border-outline-variant/20 bg-white px-4 py-3 text-sm text-on-surface outline-none focus:border-primary focus:ring-4 focus:ring-primary-fixed-dim/40">
                     <div class="overflow-hidden rounded-[1.5rem] border border-outline-variant/15 bg-surface-container-lowest shadow-editorial">
                         <div class="overflow-x-auto">
                             <table id="admin-posts-table" class="min-w-full text-sm">
                                 <thead class="bg-surface-container-low text-on-surface/75">
                                     <tr>
                                         <th class="px-5 py-4 text-left font-bold uppercase tracking-[0.18em] text-[11px]">Title</th>
-                                        <th class="px-5 py-4 text-left font-bold uppercase tracking-[0.18em] text-[11px]">Type</th>
                                         <th class="px-5 py-4 text-left font-bold uppercase tracking-[0.18em] text-[11px]">EditCode</th>
-                                        <th class="px-5 py-4 text-left font-bold uppercase tracking-[0.18em] text-[11px]">Submitter Email</th>
+                                        <th class="px-5 py-4 text-left font-bold uppercase tracking-[0.18em] text-[11px]">Summary</th>
                                         <th class="px-5 py-4 text-center font-bold uppercase tracking-[0.18em] text-[11px]">Actions</th>
-                                        <th class="hidden">Search</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-outline-variant/10"></tbody>
+                                <tbody id="admin-posts-tbody" class="divide-y divide-outline-variant/10"></tbody>
                             </table>
                         </div>
                     </div>
@@ -271,7 +238,8 @@
             let allPosts = [];
             let telegramMappings = {};
             let activeAdminTab = 'posts';
-            let postsDataTable = null;
+
+            const DEBUG = false; // set to false to use real API + session auth
 
             const escapeHtml = (value) => {
                 const span = document.createElement('span');
@@ -308,10 +276,49 @@
                 summary: normalizeString(post.summary || post.Summary),
                 tags: normalizeString(post.tags || post.Tags),
                 imageUrl: normalizeString(post.imageUrl || post.ImageUrl),
-                createdAtUtc: normalizeString(post.createdAtUtc || post.CreatedAtUtc),
-                updatedAtUtc: normalizeString(post.updatedAtUtc || post.UpdatedAtUtc),
                 isApproved: Boolean(post.isApproved ?? post.IsApproved)
             });
+
+            const renderPosts = (filter = '') => {
+                const tbody = document.getElementById('admin-posts-tbody');
+                if (!tbody) return;
+                const query = filter.toLowerCase();
+                const rows = allPosts.filter((post) =>
+                    !query || [post.title, post.submitterEmail, post.editCode, post.tags, post.summary].join(' ').toLowerCase().includes(query)
+                );
+
+                if (!rows.length) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="px-5 py-8 text-center text-sm text-on-surface/60">${filter ? 'No posts matched your search.' : 'No posts available yet.'}</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = rows.map((row) => {
+                    const entityType = normalizeString(row.entityType).toLowerCase() === 'business' ? 'business' : 'event';
+                    const formHref = `/submit/index.html?type=${entityType}&editCode=${encodeURIComponent(row.editCode || '')}`;
+                    const summaryFull = row.summary || '';
+                    const summaryShort = summaryFull.length > 75 ? summaryFull.slice(0, 75) + '\u2026' : summaryFull;
+                    return `
+                    <tr class="border-b border-outline-variant/10">
+                        <td class="px-5 py-4 align-top w-[28%] min-w-[220px]">
+                            <p class="font-semibold text-on-surface leading-6">${escapeHtml(row.title || 'Untitled')}</p>
+                            <p class="mt-1 text-xs uppercase tracking-[0.18em] ${row.isApproved ? 'text-secondary' : 'text-primary'}">${escapeHtml(row.submitterEmail || '')}</p>
+                        </td>
+                        <td class="px-5 py-4 align-top">
+                            <code class="rounded bg-surface-container-low px-2 py-1 text-[13px] font-semibold text-on-surface/80">${escapeHtml(row.editCode || '')}</code>
+                        </td>
+                        <td class="px-5 py-4 align-top w-[48%] min-w-[320px]">
+                            <span class="text-sm text-on-surface/75 cursor-default" title="${escapeHtml(summaryFull)}">${escapeHtml(summaryShort)}</span>
+                        </td>
+                        <td class="px-5 py-4 align-top text-center">
+                            <div class="flex items-center justify-center gap-2">
+                                <a href="${formHref}" class="icon-button border border-outline-variant/20 bg-white text-on-surface/75 hover:text-primary hover:border-primary/30" title="Open in form" target="_blank" rel="noopener noreferrer">↗</a>
+                                <button type="button" class="icon-button border border-outline-variant/20 bg-white text-primary hover:bg-[#fff7f3]" data-admin-delete data-partition="${escapeHtml(row.partitionKey)}" data-rowkey="${escapeHtml(row.rowKey)}" data-editcode="${escapeHtml(row.editCode)}" data-entitytype="${escapeHtml(row.entityType)}" title="Delete post">🗑</button>
+                                <button type="button" class="icon-button border border-outline-variant/20 bg-white text-secondary hover:bg-[#f1fcfa]" data-admin-notes data-title="${escapeHtml(row.title)}" data-summary="${escapeHtml(summaryFull)}" title="View notes">📝</button>
+                            </div>
+                        </td>
+                    </tr>`;
+                }).join('');
+            };
 
             const setAdminTab = (tabName) => {
                 activeAdminTab = tabName === 'telegram' ? 'telegram' : 'posts';
@@ -424,94 +431,15 @@
                 document.body.classList.remove('overflow-hidden');
             };
 
-            const buildPostsTable = () => {
-                if (!postsTable || postsDataTable) {
-                    return;
-                }
-
-                postsDataTable = new DataTable(postsTable, {
-                    data: [],
-                    pageLength: 10,
-                    order: [],
-                    autoWidth: false,
-                    language: {
-                        emptyTable: 'No posts available yet.',
-                        zeroRecords: 'No posts matched the current filters.'
-                    },
-                    layout: {
-                        topStart: null,
-                        topEnd: null,
-                        bottomStart: 'info',
-                        bottomEnd: 'paging'
-                    },
-                    columns: [
-                        {
-                            data: null,
-                            render: (_data, _type, row) => `
-                                <div class="max-w-md">
-                                    <p class="font-semibold text-on-surface leading-6">${escapeHtml(row.title || 'Untitled')}</p>
-                                    <p class="mt-1 text-xs uppercase tracking-[0.18em] ${row.isApproved ? 'text-secondary' : 'text-primary'}">${row.isApproved ? 'Approved' : 'Unapproved'}</p>
-                                </div>
-                            `
-                        },
-                        {
-                            data: 'entityType',
-                            render: (data) => `<span class="inline-flex rounded-full bg-secondary-container px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[#005048]">${escapeHtml(data || 'Post')}</span>`
-                        },
-                        {
-                            data: 'editCode',
-                            render: (data) => `<code class="rounded bg-surface-container-low px-2 py-1 text-[13px] font-semibold text-on-surface/80">${escapeHtml(data || '')}</code>`
-                        },
-                        { data: 'submitterEmail' },
-                        {
-                            data: null,
-                            orderable: false,
-                            searchable: false,
-                            className: 'text-center',
-                            render: (_data, _type, row) => `
-                                <div class="flex items-center justify-center gap-2">
-                                    <a href="/submit/index.html?type=${normalizeString(row.entityType).toLowerCase() === 'business' ? 'business' : 'event'}&editCode=${encodeURIComponent(row.editCode || '')}" class="icon-button border border-outline-variant/20 bg-white text-on-surface/75 hover:text-primary hover:border-primary/30" title="Open in form" aria-label="Open in form" target="_blank" rel="noopener noreferrer">↗</a>
-                                    <button type="button" class="icon-button border border-outline-variant/20 bg-white text-primary hover:bg-[#fff7f3]" title="Delete post" aria-label="Delete post" data-admin-delete>🗑</button>
-                                    <button type="button" class="icon-button border border-outline-variant/20 bg-white text-secondary hover:bg-[#f1fcfa]" title="View notes" aria-label="View notes" data-admin-notes>📝</button>
-                                </div>
-                            `
-                        },
-                        {
-                            data: 'searchIndex',
-                            visible: false,
-                            searchable: true
-                        }
-                    ]
-                });
-
-            };
-
-            const renderPosts = () => {
-                buildPostsTable();
-
-                const rows = allPosts.map((post) => ({
-                    ...post,
-                    searchIndex: [
-                        post.title,
-                        post.summary,
-                        post.submitterEmail,
-                        post.editCode,
-                        post.tags
-                    ].join(' ')
-                }));
-
-                postsDataTable.clear();
-                postsDataTable.rows.add(rows);
-                postsDataTable.draw();
-            };
+            document.getElementById('posts-search')?.addEventListener('input', (e) => {
+                renderPosts(e.target.value);
+            });
 
             const refreshPosts = async () => {
                 setStatus('Loading posts...');
                 try {
-                    const response = await fetch('/api/manage-posts', {
-                        headers: {
-                            'Accept': 'application/json'
-                        },
+                    const response = await fetch(DEBUG ? '/admin-posts/admintest.json' : '/api/manage-posts', {
+                        headers: { 'Accept': 'application/json' },
                         cache: 'no-store'
                     });
 
@@ -564,49 +492,31 @@
             };
 
             postsTable?.addEventListener('click', async (event) => {
-                if (!postsDataTable) {
-                    return;
-                }
-
                 const actionButton = event.target.closest('[data-admin-notes], [data-admin-delete]');
-                if (!actionButton) {
+                if (!actionButton) return;
+
+                if (actionButton.hasAttribute('data-admin-notes')) {
+                    openSummaryModal(actionButton.dataset.title || 'Summary', actionButton.dataset.summary || '');
                     return;
                 }
 
-                const rowElement = actionButton.closest('tr');
-                const row = postsDataTable.row(rowElement).data();
-                if (!row) {
-                    return;
-                }
-
-                if (actionButton.closest('[data-admin-notes]')) {
-                    openSummaryModal(row.title || 'Summary', row.summary || '');
-                    return;
-                }
-
-                if (actionButton.closest('[data-admin-delete]')) {
-                    const entityType = normalizeString(row.entityType).toLowerCase();
-                    const partitionKey = row.partitionKey || '';
-                    const rowKey = row.rowKey || '';
-                    const editCode = row.editCode || '';
+                if (actionButton.hasAttribute('data-admin-delete')) {
+                    const entityType = normalizeString(actionButton.dataset.entitytype).toLowerCase();
+                    const partitionKey = actionButton.dataset.partition || '';
+                    const rowKey = actionButton.dataset.rowkey || '';
+                    const editCode = actionButton.dataset.editcode || '';
                     const submitPath = entityType === 'business' ? '/api/businesses' : '/api/events';
 
-                    if (!window.confirm(`Delete this ${entityType || 'post'}? This cannot be undone.`)) {
-                        return;
-                    }
+                    if (!window.confirm(`Delete this ${entityType || 'post'}? This cannot be undone.`)) return;
 
-                    const deleteButton = actionButton.closest('[data-admin-delete]');
-                    const defaultLabel = deleteButton.textContent;
-                    deleteButton.disabled = true;
-                    deleteButton.textContent = '...';
+                    const defaultLabel = actionButton.textContent;
+                    actionButton.disabled = true;
+                    actionButton.textContent = '...';
 
                     try {
                         const response = await fetch(`${submitPath}/${encodeURIComponent(partitionKey)}/${encodeURIComponent(rowKey)}`, {
                             method: 'DELETE',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json'
-                            },
+                            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                             body: JSON.stringify({ editCode })
                         });
 
@@ -619,14 +529,14 @@
                             return;
                         }
 
-                        allPosts = allPosts.filter((post) => !(post.partitionKey === partitionKey && post.rowKey === rowKey && normalizeString(post.entityType).toLowerCase() === entityType));
-                        renderPosts();
+                        allPosts = allPosts.filter((post) => !(post.partitionKey === partitionKey && post.rowKey === rowKey));
+                        renderPosts(document.getElementById('posts-search')?.value || '');
                         setStatus('Post deleted successfully.', 'success');
                     } catch (error) {
                         setStatus('Unable to reach the delete API right now.', 'error');
                     } finally {
-                        deleteButton.disabled = false;
-                        deleteButton.textContent = defaultLabel;
+                        actionButton.disabled = false;
+                        actionButton.textContent = defaultLabel;
                     }
                 }
             });
@@ -770,6 +680,11 @@
             });
 
             refreshSession().then((ok) => {
+                if (DEBUG) {
+                    setAdminTab(activeAdminTab);
+                    refreshPosts();
+                    return;
+                }
                 if (ok) {
                     setAdminTab(activeAdminTab);
                     refreshTelegramMappings();
