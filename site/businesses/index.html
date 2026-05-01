@@ -125,6 +125,16 @@
             </div>
         </div>
 
+        <div x-cloak x-show="isLoading" class="mb-6 rounded-[1.75rem] border border-outline-variant/15 bg-surface-container-lowest px-5 py-5 shadow-editorial">
+            <div class="flex items-center gap-4">
+                <div class="h-11 w-11 shrink-0 rounded-full border-4 border-primary/15 border-t-primary animate-spin"></div>
+                <div>
+                    <p class="font-headline text-xl font-bold text-on-surface">Loading community businesses</p>
+                    <p class="text-sm text-on-surface/65">Azure is warming up the directory. Listings should appear in a moment.</p>
+                </div>
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             <template x-for="business in filteredBusinesses" :key="business.key">
                 <article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow">
@@ -277,6 +287,7 @@
                 ],
                 activeFilter: 'all',
                 businesses: [],
+                isLoading: false,
                 feedStatus: {
                     open: false,
                     message: '',
@@ -313,6 +324,7 @@
 
                 async init() {
                     this.activeFilter = this.getInitialFilter();
+                    this.isLoading = true;
                     this.businesses = [this.normalizeBusiness({
                         key: 'demo-mintt',
                         name: 'Mintt @ Banksville',
@@ -496,6 +508,8 @@
                             'Saved businesses could not be loaded right now, so sample listings are being shown.',
                             'error'
                         );
+                    } finally {
+                        this.isLoading = false;
                     }
                 }
             };

@@ -117,6 +117,16 @@
             </div>
         </div>
 
+        <div id="event-loading-panel" class="mb-6 rounded-[1.75rem] border border-outline-variant/15 bg-surface-container-lowest px-5 py-5 shadow-editorial">
+            <div class="flex items-center gap-4">
+                <div class="h-11 w-11 shrink-0 rounded-full border-4 border-primary/15 border-t-primary animate-spin"></div>
+                <div>
+                    <p class="font-headline text-xl font-bold text-on-surface">Loading community events</p>
+                    <p class="text-sm text-on-surface/65">Azure is warming up the events feed. Posters and details should appear in a moment.</p>
+                </div>
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" data-event-grid></div>
 
         <div id="event-description-modal" class="hidden fixed inset-0 z-[70]">
@@ -187,6 +197,7 @@
         (() => {
             const filterBar = document.querySelector('[data-event-filters]');
             const eventGrid = document.querySelector('[data-event-grid]');
+            const loadingPanel = document.getElementById('event-loading-panel');
             const feedStatusSnackbar = document.getElementById('event-feed-status-snackbar');
             const feedStatusText = document.getElementById('event-feed-status-text');
             const feedStatusClose = document.querySelector('[data-event-status-close]');
@@ -331,7 +342,7 @@
                     ? `<button type="button" class="text-sm font-bold text-secondary hover:text-secondary/80 transition-colors" data-event-poster data-event-title="${escapeHtml(title)}" data-image-url="${escapeHtml(imageUrl)}">View poster</button>`
                     : '';
                 const actionMarkup = readMoreMarkup || posterMarkup
-                    ? `<div class="flex flex-wrap gap-3 mb-4">${readMoreMarkup}${posterMarkup}</div>`
+                    ? `<div class="flex flex-wrap gap-3">${readMoreMarkup}${posterMarkup}</div>`
                     : '';
 
                 article.className = 'event-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow';
@@ -404,6 +415,8 @@
                     applyFilter('all');
                 } catch (error) {
                     setFeedStatus('Saved events could not be loaded right now, so sample listings are being shown.', 'error');
+                } finally {
+                    loadingPanel?.classList.add('hidden');
                 }
             };
 
