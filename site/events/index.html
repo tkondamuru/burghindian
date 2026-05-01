@@ -53,6 +53,12 @@
             background: linear-gradient(135deg, rgba(159, 61, 0, 0.06), rgba(0, 106, 96, 0.08));
             border: 1px solid rgba(0, 106, 96, 0.10);
         }
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="font-body antialiased selection:bg-primary-fixed-dim selection:text-on-surface">
@@ -111,120 +117,52 @@
             </div>
         </div>
 
-        <div id="event-feed-status" class="hidden mb-6 rounded-2xl border border-outline-variant/20 bg-surface-container-lowest px-5 py-4 text-sm text-on-surface/70 shadow-editorial"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" data-event-grid></div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" data-event-grid>
-                <article class="event-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-event-record data-categories="food">
-                    <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
-                        <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10" data-tag="Food">Food</span>
-                    </div>
-
-                    <div class="flex flex-col gap-4">
+        <div id="event-description-modal" class="hidden fixed inset-0 z-[70]">
+            <div class="absolute inset-0 bg-on-surface/55 backdrop-blur-sm" data-event-modal-close></div>
+            <div class="relative z-[71] min-h-full flex items-center justify-center px-4 py-8">
+                <div class="w-full max-w-2xl rounded-[2rem] bg-surface-container-lowest shadow-editorial border border-outline-variant/15 overflow-hidden">
+                    <div class="flex items-start justify-between gap-4 px-6 py-5 border-b border-outline-variant/15">
                         <div>
-                            <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="title">Biryani Mela</h2>
-                            <p class="text-sm text-on-surface/78 leading-7 mb-4" data-field="description">
-                                    Experience the Biryani Mela featuring exquisite Indian cuisine from Hastina Royal Indian Cuisine. Our detailed menu includes a variety of non-veg and veg biryanis, appetizers, and curries, all available for take-out.
-                                    <a href="https://stburghindian8808.blob.core.windows.net/event-images/BiryaniMela-054653.jpg" data-field="imageUrl" class="text-primary font-semibold hover:underline underline-offset-4">Read more</a>
-                            </p>
+                            <p class="text-primary text-xs font-bold uppercase tracking-[0.22em] mb-2">Event Details</p>
+                            <h2 id="event-description-modal-title" class="font-headline text-3xl font-extrabold text-on-surface">Event Description</h2>
                         </div>
-
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="date">
-                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Date</p>
-                                <p class="text-sm font-bold text-on-surface leading-tight" data-field="date">Every weekend</p>
-                            </div>
-                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="time">
-                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Time</p>
-                                <p class="text-sm font-bold text-on-surface leading-tight" data-field="time">Not specified</p>
-                            </div>
-                        </div>
-
-                        <div class="event-location-card rounded-2xl px-5 py-4" data-field-group="location">
-                            <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Location</p>
-                            <p class="text-sm font-semibold text-on-surface leading-6" data-field="location">Hastina Royal Indian Cuisine, 1120 Park Manor Blvd, Pittsburgh PA15205</p>
-                        </div>
+                        <button type="button" class="rounded-full bg-surface-container-high px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-on-surface/75 hover:text-primary transition-colors" data-event-modal-close>Close</button>
                     </div>
-                </article>
-
-                    <article class="event-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-event-record data-categories="culture family">
-                        <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
-                            <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10" data-tag="Culture">Culture</span>
-                            <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10" data-tag="Family">Family</span>
-                        </div>
-                        <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="title">Bollywood Dance Night</h2>
-                        <p class="text-sm text-on-surface/78 leading-7 mb-4" data-field="description">
-                            An upbeat community dance night with Bollywood hits, open floor sessions, and light snacks for families and friends.
-                            <a href="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80" data-field="imageUrl" class="text-primary font-semibold hover:underline underline-offset-4">Read more</a>
-                        </p>
-                        <div class="grid grid-cols-2 gap-3 mb-3">
-                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="date">
-                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Date</p>
-                                <p class="text-sm font-bold text-on-surface" data-field="date">May 3, 2026</p>
-                            </div>
-                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="time">
-                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Time</p>
-                                <p class="text-sm font-bold text-on-surface" data-field="time">7:00 PM</p>
-                            </div>
-                        </div>
-                        <div class="event-location-card rounded-2xl px-5 py-4" data-field-group="location">
-                            <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Location</p>
-                            <p class="text-sm font-semibold text-on-surface leading-6" data-field="location">Carnegie Library Lecture Hall, Oakland, Pittsburgh</p>
-                        </div>
-                    </article>
-
-                    <article class="event-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-event-record data-categories="temple family">
-                        <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
-                            <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10" data-tag="Temple">Temple</span>
-                            <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10" data-tag="Family">Family</span>
-                        </div>
-                        <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="title">Saturday Temple Lunch Seva</h2>
-                        <p class="text-sm text-on-surface/78 leading-7 mb-4" data-field="description">
-                            Join the weekly seva and shared lunch gathering after morning prayers. Families and volunteers are welcome to participate.
-                            <a href="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=80" data-field="imageUrl" class="text-primary font-semibold hover:underline underline-offset-4">Read more</a>
-                        </p>
-                        <div class="grid grid-cols-2 gap-3 mb-3">
-                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="date">
-                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Date</p>
-                                <p class="text-sm font-bold text-on-surface" data-field="date">Every Saturday</p>
-                            </div>
-                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="time">
-                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Time</p>
-                                <p class="text-sm font-bold text-on-surface" data-field="time">11:30 AM</p>
-                            </div>
-                        </div>
-                        <div class="event-location-card rounded-2xl px-5 py-4" data-field-group="location">
-                            <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Location</p>
-                            <p class="text-sm font-semibold text-on-surface leading-6" data-field="location">Sri Venkateswara Temple, Penn Hills, PA</p>
-                        </div>
-                    </article>
-
-                    <article class="event-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-event-record data-categories="professional">
-                        <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
-                            <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10" data-tag="Professional">Professional</span>
-                            <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10" data-tag="Culture">Culture</span>
-                        </div>
-                        <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="title">Startup Chai & Networking</h2>
-                        <p class="text-sm text-on-surface/78 leading-7 mb-4" data-field="description">
-                            Casual networking for founders, students, and working professionals with chai, intros, and short lightning conversations.
-                            <a href="https://images.unsplash.com/photo-1515169067868-5387ec356754?auto=format&fit=crop&w=1200&q=80" data-field="imageUrl" class="text-primary font-semibold hover:underline underline-offset-4">Read more</a>
-                        </p>
-                        <div class="grid grid-cols-2 gap-3 mb-3">
-                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="date">
-                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Date</p>
-                                <p class="text-sm font-bold text-on-surface" data-field="date">May 10, 2026</p>
-                            </div>
-                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="time">
-                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Time</p>
-                                <p class="text-sm font-bold text-on-surface" data-field="time">6:30 PM</p>
-                            </div>
-                        </div>
-                        <div class="event-location-card rounded-2xl px-5 py-4" data-field-group="location">
-                            <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Location</p>
-                            <p class="text-sm font-semibold text-on-surface leading-6" data-field="location">Ascender at Bakery Square, East Liberty</p>
-                        </div>
-                    </article>
+                    <div class="px-6 py-6">
+                        <p id="event-description-modal-body" class="text-base leading-8 text-on-surface/80 whitespace-pre-line"></p>
+                    </div>
+                </div>
+            </div>
         </div>
 
+        <div id="event-poster-modal" class="hidden fixed inset-0 z-[72]">
+            <div class="absolute inset-0 bg-on-surface/70 backdrop-blur-sm" data-event-poster-close></div>
+            <div class="relative z-[73] min-h-full flex items-center justify-center px-4 py-8">
+                <div class="w-full max-w-3xl rounded-[2rem] bg-surface-container-lowest shadow-editorial border border-outline-variant/15 overflow-hidden">
+                    <div class="flex items-start justify-between gap-4 px-6 py-5 border-b border-outline-variant/15">
+                        <div>
+                            <p class="text-primary text-xs font-bold uppercase tracking-[0.22em] mb-2">Event Poster</p>
+                            <h2 id="event-poster-modal-title" class="font-headline text-3xl font-extrabold text-on-surface">Poster Preview</h2>
+                        </div>
+                        <button type="button" class="rounded-full bg-surface-container-high px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-on-surface/75 hover:text-primary transition-colors" data-event-poster-close>Close</button>
+                    </div>
+                    <div class="px-6 py-6">
+                        <div class="overflow-hidden rounded-[1.5rem] border border-outline-variant/15 bg-surface">
+                            <img id="event-poster-modal-image" src="" alt="" class="w-full max-h-[72vh] object-contain bg-surface-container-low">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="event-feed-status-snackbar" class="hidden fixed bottom-5 right-5 z-[68] w-[min(26rem,calc(100vw-2rem))] rounded-2xl border px-4 py-4 shadow-editorial">
+            <div class="flex items-start justify-between gap-4">
+                <p id="event-feed-status-text" class="text-sm leading-6"></p>
+                <button type="button" class="shrink-0 rounded-full bg-surface-container-high px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-on-surface/70 hover:text-primary transition-colors" data-event-status-close>Close</button>
+            </div>
+        </div>
     </main>
 
     <footer class="bg-surface py-10 border-t border-outline-variant/15 mt-10">
@@ -249,7 +187,15 @@
         (() => {
             const filterBar = document.querySelector('[data-event-filters]');
             const eventGrid = document.querySelector('[data-event-grid]');
-            const feedStatus = document.getElementById('event-feed-status');
+            const feedStatusSnackbar = document.getElementById('event-feed-status-snackbar');
+            const feedStatusText = document.getElementById('event-feed-status-text');
+            const feedStatusClose = document.querySelector('[data-event-status-close]');
+            const descriptionModal = document.getElementById('event-description-modal');
+            const descriptionModalTitle = document.getElementById('event-description-modal-title');
+            const descriptionModalBody = document.getElementById('event-description-modal-body');
+            const posterModal = document.getElementById('event-poster-modal');
+            const posterModalTitle = document.getElementById('event-poster-modal-title');
+            const posterModalImage = document.getElementById('event-poster-modal-image');
 
             if (!filterBar || !eventGrid) {
                 return;
@@ -292,13 +238,94 @@
                 .map((tag) => tag.trim())
                 .filter(Boolean);
 
+            const showReadMore = (description) => String(description || '').trim().length > 160;
+
+            const setFeedStatus = (message, tone = 'neutral') => {
+                if (!feedStatusSnackbar || !feedStatusText) {
+                    return;
+                }
+
+                if (!message) {
+                    feedStatusSnackbar.classList.add('hidden');
+                    feedStatusText.textContent = '';
+                    return;
+                }
+
+                feedStatusText.textContent = message;
+                feedStatusSnackbar.classList.remove('hidden', 'border-primary/20', 'bg-[#fff7f3]', 'text-primary', 'border-outline-variant/20', 'bg-surface-container-lowest', 'text-on-surface/75');
+                if (tone === 'error') {
+                    feedStatusSnackbar.classList.add('border-primary/20', 'bg-[#fff7f3]', 'text-primary');
+                } else {
+                    feedStatusSnackbar.classList.add('border-outline-variant/20', 'bg-surface-container-lowest', 'text-on-surface/75');
+                }
+            };
+
+            const openDescriptionModal = (title, description) => {
+                if (!descriptionModal || !descriptionModalTitle || !descriptionModalBody) {
+                    return;
+                }
+
+                descriptionModalTitle.textContent = title || 'Event Description';
+                descriptionModalBody.textContent = description || 'No additional description is available.';
+                descriptionModal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            };
+
+            const closeDescriptionModal = () => {
+                if (!descriptionModal) {
+                    return;
+                }
+
+                descriptionModal.classList.add('hidden');
+                if (posterModal?.classList.contains('hidden')) {
+                    document.body.classList.remove('overflow-hidden');
+                }
+            };
+
+            const openPosterModal = (title, imageUrl) => {
+                if (!posterModal || !posterModalTitle || !posterModalImage || !imageUrl) {
+                    return;
+                }
+
+                posterModalTitle.textContent = title || 'Poster Preview';
+                posterModalImage.src = imageUrl;
+                posterModalImage.alt = title || 'Event poster';
+                posterModal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            };
+
+            const closePosterModal = () => {
+                if (!posterModal) {
+                    return;
+                }
+
+                posterModal.classList.add('hidden');
+                posterModalImage.src = '';
+                if (descriptionModal?.classList.contains('hidden')) {
+                    document.body.classList.remove('overflow-hidden');
+                }
+            };
+
             const createEventCard = (eventItem) => {
                 const article = document.createElement('article');
-                const tags = normalizeTags(eventItem.tags);
+                const tags = normalizeTags(eventItem.tags || eventItem.Tags);
                 const categoryTokens = tags.map((tag) => tag.toLowerCase());
-                const imageUrl = String(eventItem.imageUrl || '').trim();
+                const imageUrl = String(eventItem.imageUrl || eventItem.ImageUrl || '').trim();
                 const hasImage = Boolean(imageUrl);
-                const timeValue = String(eventItem.time || '').trim();
+                const timeValue = String(eventItem.time || eventItem.Time || '').trim();
+                const fullDescription = eventItem.description || eventItem.Description || eventItem.summary || eventItem.Summary || '';
+                const title = eventItem.title || eventItem.Title || 'Untitled event';
+                const date = eventItem.date || eventItem.Date || 'Not specified';
+                const location = eventItem.location || eventItem.Location || 'Location not specified';
+                const readMoreMarkup = showReadMore(fullDescription)
+                    ? `<button type="button" class="text-sm font-bold text-primary hover:text-primary-container transition-colors" data-event-read-more data-event-title="${escapeHtml(title)}" data-event-description="${escapeHtml(fullDescription)}">Read more</button>`
+                    : '';
+                const posterMarkup = hasImage
+                    ? `<button type="button" class="text-sm font-bold text-secondary hover:text-secondary/80 transition-colors" data-event-poster data-event-title="${escapeHtml(title)}" data-image-url="${escapeHtml(imageUrl)}">View poster</button>`
+                    : '';
+                const actionMarkup = readMoreMarkup || posterMarkup
+                    ? `<div class="flex flex-wrap gap-3 mb-4">${readMoreMarkup}${posterMarkup}</div>`
+                    : '';
 
                 article.className = 'event-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow';
                 article.dataset.eventRecord = '';
@@ -309,16 +336,14 @@
                     </div>
                     <div class="flex flex-col gap-4">
                         <div>
-                            <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="title">${escapeHtml(eventItem.title || 'Untitled event')}</h2>
-                            <p class="text-sm text-on-surface/78 leading-7 mb-4" data-field="description">
-                                ${escapeHtml(eventItem.description || eventItem.summary || '')}
-                                ${hasImage ? `<a href="${escapeHtml(imageUrl)}" data-field="imageUrl" class="text-primary font-semibold hover:underline underline-offset-4">Read more</a>` : ''}
-                            </p>
+                            <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="title">${escapeHtml(title)}</h2>
+                            <p class="text-sm text-on-surface/78 leading-7 line-clamp-3 mb-3" data-field="description">${escapeHtml(fullDescription)}</p>
+                            ${actionMarkup}
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="date">
                                 <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Date</p>
-                                <p class="text-sm font-bold text-on-surface leading-tight" data-field="date">${escapeHtml(eventItem.date || 'Not specified')}</p>
+                                <p class="text-sm font-bold text-on-surface leading-tight" data-field="date">${escapeHtml(date)}</p>
                             </div>
                             <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="time">
                                 <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Time</p>
@@ -327,7 +352,7 @@
                         </div>
                         <div class="event-location-card rounded-2xl px-5 py-4" data-field-group="location">
                             <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Location</p>
-                            <p class="text-sm font-semibold text-on-surface leading-6" data-field="location">${escapeHtml(eventItem.location || 'Location not specified')}</p>
+                            <p class="text-sm font-semibold text-on-surface leading-6" data-field="location">${escapeHtml(location)}</p>
                         </div>
                     </div>
                 `;
@@ -367,17 +392,11 @@
                     });
                     eventGrid.prepend(fragment);
 
-                    if (feedStatus) {
-                        feedStatus.textContent = `${items.length} community event${items.length === 1 ? ' is' : 's are'} now live from recent submissions.`;
-                        feedStatus.classList.remove('hidden');
-                    }
+                    setFeedStatus(`${items.length} community event${items.length === 1 ? ' is' : 's are'} now live from recent submissions.`, 'success');
 
                     applyFilter('all');
                 } catch (error) {
-                    if (feedStatus) {
-                        feedStatus.textContent = 'Saved events could not be loaded right now, so sample listings are being shown.';
-                        feedStatus.classList.remove('hidden');
-                    }
+                    setFeedStatus('Saved events could not be loaded right now, so sample listings are being shown.', 'error');
                 }
             };
 
@@ -388,6 +407,46 @@
                 }
 
                 applyFilter(button.dataset.filter);
+            });
+
+            eventGrid.addEventListener('click', (event) => {
+                const readMoreButton = event.target.closest('[data-event-read-more]');
+                if (readMoreButton) {
+                    openDescriptionModal(
+                        readMoreButton.dataset.eventTitle || 'Event Description',
+                        readMoreButton.dataset.eventDescription || ''
+                    );
+                    return;
+                }
+
+                const posterButton = event.target.closest('[data-event-poster]');
+                if (posterButton) {
+                    openPosterModal(
+                        posterButton.dataset.eventTitle || 'Poster Preview',
+                        posterButton.dataset.imageUrl || ''
+                    );
+                }
+            });
+
+            descriptionModal?.addEventListener('click', (event) => {
+                if (event.target.closest('[data-event-modal-close]')) {
+                    closeDescriptionModal();
+                }
+            });
+
+            posterModal?.addEventListener('click', (event) => {
+                if (event.target.closest('[data-event-poster-close]')) {
+                    closePosterModal();
+                }
+            });
+
+            feedStatusClose?.addEventListener('click', () => setFeedStatus(''));
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closeDescriptionModal();
+                    closePosterModal();
+                }
             });
 
             applyFilter('all');

@@ -53,6 +53,19 @@
             background: linear-gradient(135deg, rgba(159, 61, 0, 0.06), rgba(0, 106, 96, 0.08));
             border: 1px solid rgba(0, 106, 96, 0.10);
         }
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .line-clamp-3.is-expanded {
+            display: block;
+            -webkit-line-clamp: unset;
+            -webkit-box-orient: unset;
+            overflow: visible;
+        }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 <body class="font-body antialiased selection:bg-primary-fixed-dim selection:text-on-surface">
@@ -79,7 +92,7 @@
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+    <main x-data="businessDirectory()" x-init="init()" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
         <div class="grid grid-cols-1 xl:grid-cols-[1.4fr_1.1fr] gap-8 items-end mb-16">
             <div class="max-w-2xl">
                 <p class="text-primary text-sm font-bold tracking-widest uppercase mb-3">Community Directory</p>
@@ -90,16 +103,17 @@
             </div>
 
             <div class="space-y-5">
-                <div class="flex flex-wrap gap-2 xl:justify-end" data-business-filters>
-                    <button type="button" data-filter="all" class="bg-secondary text-white px-4 py-2 rounded-full text-sm font-bold tracking-wide hover:bg-secondary/90 transition-colors">All</button>
-                    <button type="button" data-filter="restaurant" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Restaurant</button>
-                    <button type="button" data-filter="grocery" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Grocery</button>
-                    <button type="button" data-filter="temple" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Temple</button>
-                    <button type="button" data-filter="service" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Service</button>
-                    <button type="button" data-filter="shopping" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Shopping</button>
-                    <button type="button" data-filter="education" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Education</button>
-                    <button type="button" data-filter="health" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Health</button>
-                    <button type="button" data-filter="other" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Other</button>
+                <div class="flex flex-wrap gap-2 xl:justify-end">
+                    <template x-for="filter in filters" :key="filter.value">
+                        <button
+                            type="button"
+                            @click="setFilter(filter.value)"
+                            :class="activeFilter === filter.value
+                                ? 'bg-secondary !text-white hover:bg-secondary/90'
+                                : 'bg-secondary-container text-secondary-dim !text-[#005048] hover:bg-secondary/20'"
+                            class="px-4 py-2 rounded-full text-sm font-bold tracking-wide transition-colors"
+                            x-text="filter.label"></button>
+                    </template>
                 </div>
 
                 <div class="gradient-primary rounded-2xl p-7 relative overflow-hidden text-center xl:text-left shadow-editorial">
@@ -111,169 +125,121 @@
             </div>
         </div>
 
-        <div id="business-feed-status" class="hidden mb-6 rounded-2xl border border-outline-variant/20 bg-surface-container-lowest px-5 py-4 text-sm text-on-surface/70 shadow-editorial"></div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" data-business-grid>
-            <article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-record data-categories="restaurant" data-entity="business">
-                <div class="rounded-2xl overflow-hidden border border-outline-variant/10 mb-4" data-field-group="image">
-                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80" alt="Mintt storefront" class="w-full h-44 object-cover" loading="lazy" data-field="imageUrl">
-                </div>
-                <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
-                    <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10">Restaurant</span>
-                </div>
-
-                <div class="flex flex-col gap-4 h-full">
-                    <div>
-                        <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="name">Mintt @ Banksville</h2>
-                        <p class="text-sm text-on-surface/78 leading-7" data-field="description">Savor the rich flavors, indulge in chef-crafted specials, and make every bite count. From sizzling starters to comforting classics, your perfect weekend feast is waiting! Gather your friends and family and treat yourself.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <template x-for="business in filteredBusinesses" :key="business.key">
+                <article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow">
+                    <div class="relative rounded-2xl overflow-hidden border border-outline-variant/10 mb-4">
+                        <img :src="business.primaryImage" :alt="business.name || 'Business listing'" class="w-full h-44 object-cover" loading="lazy">
+                        <button
+                            x-show="business.imageUrls.length > 1"
+                            type="button"
+                            class="absolute right-3 top-3 rounded-full bg-on-surface/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-white hover:bg-on-surface/85 transition-colors"
+                            @click="openPhotoGallery(business, 0)"
+                            x-text="`${business.imageUrls.length} Photos`"></button>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="category">
-                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Category</p>
-                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="category">Restaurant</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <template x-for="tag in business.tags" :key="`${business.key}-${tag}`">
+                            <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10" x-text="tag"></span>
+                        </template>
+                    </div>
+
+                    <div class="flex flex-col gap-4 h-full">
+                        <div>
+                            <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" x-text="business.name || 'Untitled business'"></h2>
+                            <p class="text-sm text-on-surface/78 leading-7 line-clamp-3" x-text="business.cardCopy"></p>
+                            <button
+                                x-cloak
+                                x-show="showReadMore(business)"
+                                type="button"
+                                class="mt-2 text-sm font-bold text-primary hover:text-primary-container transition-colors"
+                                @click="openDescriptionModal(business)"
+                            >Read more</button>
                         </div>
-                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="phone">
-                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Phone</p>
-                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="phone">412-306-1831</p>
-                        </div>
-                    </div>
 
-                    <div class="business-contact-card rounded-2xl px-5 py-4" data-field-group="address">
-                        <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Address</p>
-                        <p class="text-sm font-semibold text-on-surface leading-6" data-field="address">3033 BANKSVILLE ROAD PITTSBURGH PA 15216</p>
-                    </div>
-                </div>
-            </article>
-
-            <article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-record data-categories="restaurant" data-entity="business">
-                <div class="rounded-2xl overflow-hidden border border-outline-variant/10 mb-4" data-field-group="image">
-                    <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&w=1200&q=80" alt="Spice Route Kitchen" class="w-full h-44 object-cover" loading="lazy" data-field="imageUrl">
-                </div>
-                <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
-                    <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10">Restaurant</span>
-                </div>
-
-                <div class="flex flex-col gap-4 h-full">
-                    <div>
-                        <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="name">Spice Route Kitchen</h2>
-                        <p class="text-sm text-on-surface/78 leading-7" data-field="description">Contemporary Indian plates with rotating regional specials and a cozy dine-in setup for families and small groups.</p>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="category">
-                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Category</p>
-                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="category">Restaurant</p>
-                        </div>
-                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="phone">
-                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Phone</p>
-                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="phone">412-555-0123</p>
+                        <div class="business-contact-card rounded-2xl px-5 py-4">
+                            <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+                                <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em]">Address</p>
+                                <p class="text-xs font-bold text-primary/80 uppercase tracking-[0.18em]" x-text="business.phone || 'Phone not specified'"></p>
+                            </div>
+                            <p class="text-sm font-semibold text-on-surface leading-6" x-text="business.address || 'Address not specified'"></p>
                         </div>
                     </div>
-
-                    <div class="business-contact-card rounded-2xl px-5 py-4" data-field-group="address">
-                        <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Address</p>
-                        <p class="text-sm font-semibold text-on-surface leading-6" data-field="address">1245 Forbes Ave, Pittsburgh, PA 15213</p>
-                    </div>
-                </div>
-            </article>
-
-            <article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-record data-categories="grocery" data-entity="business">
-                <div class="rounded-2xl overflow-hidden border border-outline-variant/10 mb-4" data-field-group="image">
-                    <img src="https://images.unsplash.com/photo-1596700547631-c49b0773d4d4?auto=format&fit=crop&w=1200&q=80" alt="Patel Brothers" class="w-full h-44 object-cover" loading="lazy" data-field="imageUrl">
-                </div>
-                <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
-                    <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10">Grocery</span>
-                </div>
-
-                <div class="flex flex-col gap-4 h-full">
-                    <div>
-                        <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="name">Patel Brothers Penn Hills</h2>
-                        <p class="text-sm text-on-surface/78 leading-7" data-field="description">Indian grocery essentials, fresh produce, frozen snacks, and festive supplies for weekly and seasonal shopping.</p>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="category">
-                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Category</p>
-                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="category">Grocery</p>
-                        </div>
-                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="phone">
-                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Phone</p>
-                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="phone">412-555-8899</p>
-                        </div>
-                    </div>
-
-                    <div class="business-contact-card rounded-2xl px-5 py-4" data-field-group="address">
-                        <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Address</p>
-                        <p class="text-sm font-semibold text-on-surface leading-6" data-field="address">10700 Frankstown Rd, Penn Hills, PA 15235</p>
-                    </div>
-                </div>
-            </article>
-
-            <article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-record data-categories="service" data-entity="business">
-                <div class="rounded-2xl overflow-hidden border border-outline-variant/10 mb-4" data-field-group="image">
-                    <img src="https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1200&q=80" alt="Mehta Legal" class="w-full h-44 object-cover" loading="lazy" data-field="imageUrl">
-                </div>
-                <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
-                    <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10">Service</span>
-                </div>
-
-                <div class="flex flex-col gap-4 h-full">
-                    <div>
-                        <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="name">Mehta Legal & Immigration</h2>
-                        <p class="text-sm text-on-surface/78 leading-7" data-field="description">Professional legal support for immigration, family documentation, and business filings with appointment-based consultation.</p>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="category">
-                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Category</p>
-                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="category">Service</p>
-                        </div>
-                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="phone">
-                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Phone</p>
-                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="phone">412-555-0987</p>
-                        </div>
-                    </div>
-
-                    <div class="business-contact-card rounded-2xl px-5 py-4" data-field-group="address">
-                        <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Address</p>
-                        <p class="text-sm font-semibold text-on-surface leading-6" data-field="address">600 Grant St, Pittsburgh, PA 15219</p>
-                    </div>
-                </div>
-            </article>
-
-            <article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-record data-categories="temple" data-entity="business">
-                <div class="rounded-2xl overflow-hidden border border-outline-variant/10 mb-4" data-field-group="image">
-                    <img src="https://images.unsplash.com/photo-1574529929569-a8c2f131f928?auto=format&fit=crop&w=1200&q=80" alt="Temple exterior" class="w-full h-44 object-cover" loading="lazy" data-field="imageUrl">
-                </div>
-                <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
-                    <span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10">Temple</span>
-                </div>
-
-                <div class="flex flex-col gap-4 h-full">
-                    <div>
-                        <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="name">Sri Venkateswara Temple</h2>
-                        <p class="text-sm text-on-surface/78 leading-7" data-field="description">A major spiritual and cultural center serving the Indian community with daily darshan, weekend prasad, and volunteer-led events.</p>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="category">
-                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Category</p>
-                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="category">Temple</p>
-                        </div>
-                        <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="phone">
-                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Phone</p>
-                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="phone">412-373-3380</p>
-                        </div>
-                    </div>
-
-                    <div class="business-contact-card rounded-2xl px-5 py-4" data-field-group="address">
-                        <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Address</p>
-                        <p class="text-sm font-semibold text-on-surface leading-6" data-field="address">1230 McCully Dr, Monroeville, PA 15146</p>
-                    </div>
-                </div>
-            </article>
+                </article>
+            </template>
         </div>
+
+        <div
+            x-cloak
+            x-show="feedStatus.open && feedStatus.message"
+            x-transition.opacity.duration.200ms
+            class="fixed bottom-5 right-5 z-[68] w-[min(26rem,calc(100vw-2rem))] rounded-2xl border px-4 py-4 shadow-editorial"
+            :class="feedStatus.tone === 'error'
+                ? 'border-primary/20 bg-[#fff7f3] text-primary'
+                : 'border-outline-variant/20 bg-surface-container-lowest text-on-surface/75'"
+            role="status"
+            aria-live="polite">
+            <div class="flex items-start justify-between gap-4">
+                <p class="text-sm leading-6" x-text="feedStatus.message"></p>
+                <button
+                    type="button"
+                    class="shrink-0 rounded-full bg-surface-container-high px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-on-surface/70 hover:text-primary transition-colors"
+                    @click="dismissFeedStatus()"
+                >Close</button>
+            </div>
+        </div>
+
+        <div x-cloak x-show="descriptionModal.open" class="fixed inset-0 z-[70]" @keydown.escape.window="closeDescriptionModal()">
+        <div class="absolute inset-0 bg-on-surface/55 backdrop-blur-sm" @click="closeDescriptionModal()"></div>
+        <div class="relative z-[71] min-h-full flex items-center justify-center px-4 py-8">
+            <div class="w-full max-w-2xl rounded-[2rem] bg-surface-container-lowest shadow-editorial border border-outline-variant/15 overflow-hidden">
+                <div class="flex items-start justify-between gap-4 px-6 py-5 border-b border-outline-variant/15">
+                    <div>
+                        <p class="text-primary text-xs font-bold uppercase tracking-[0.22em] mb-2">Business Details</p>
+                        <h2 class="font-headline text-3xl font-extrabold text-on-surface" x-text="descriptionModal.title || 'Business Description'"></h2>
+                    </div>
+                    <button type="button" class="rounded-full bg-surface-container-high px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-on-surface/75 hover:text-primary transition-colors" @click="closeDescriptionModal()">Close</button>
+                </div>
+                <div class="px-6 py-6">
+                    <p class="text-base leading-8 text-on-surface/80 whitespace-pre-line" x-text="descriptionModal.body"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div x-cloak x-show="photoModal.open" class="fixed inset-0 z-[72]" @keydown.escape.window="closePhotoGallery()" @keydown.arrow-left.window="stepPhotoGallery(-1)" @keydown.arrow-right.window="stepPhotoGallery(1)">
+        <div class="absolute inset-0 bg-on-surface/70 backdrop-blur-sm" @click="closePhotoGallery()"></div>
+        <div class="relative z-[73] min-h-full flex items-center justify-center px-4 py-8">
+            <div class="w-full max-w-4xl rounded-[2rem] bg-surface-container-lowest shadow-editorial border border-outline-variant/15 overflow-hidden">
+                <div class="flex items-start justify-between gap-4 px-6 py-5 border-b border-outline-variant/15">
+                    <div>
+                        <p class="text-primary text-xs font-bold uppercase tracking-[0.22em] mb-2">Business Photos</p>
+                        <h2 class="font-headline text-3xl font-extrabold text-on-surface" x-text="photoModal.title || 'Photo Gallery'"></h2>
+                        <p class="mt-2 text-sm text-on-surface/65" x-text="photoCounterText"></p>
+                    </div>
+                    <button type="button" class="rounded-full bg-surface-container-high px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-on-surface/75 hover:text-primary transition-colors" @click="closePhotoGallery()">Close</button>
+                </div>
+                <div class="px-6 py-6">
+                    <div class="relative overflow-hidden rounded-[1.5rem] border border-outline-variant/15 bg-surface">
+                        <img :src="currentPhotoImage" :alt="photoModal.title || 'Business photo'" class="w-full max-h-[68vh] object-contain bg-surface-container-low">
+                    </div>
+                    <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex gap-3">
+                            <button type="button" class="rounded-xl border border-outline-variant/20 px-4 py-2 text-sm font-bold text-on-surface/75 hover:text-primary transition-colors disabled:opacity-50" :disabled="photoModal.images.length <= 1" @click="stepPhotoGallery(-1)">Prev</button>
+                            <button type="button" class="rounded-xl border border-outline-variant/20 px-4 py-2 text-sm font-bold text-on-surface/75 hover:text-primary transition-colors disabled:opacity-50" :disabled="photoModal.images.length <= 1" @click="stepPhotoGallery(1)">Next</button>
+                        </div>
+                        <div class="flex flex-wrap justify-end gap-2">
+                            <template x-for="(image, index) in photoModal.images" :key="`${photoModal.title}-${index}`">
+                                <button type="button" class="rounded-xl overflow-hidden border transition-colors" :class="index === photoModal.index ? 'border-primary shadow-editorial' : 'border-outline-variant/20'" @click="photoModal.index = index">
+                                    <img :src="image" :alt="`Photo ${index + 1}`" class="h-14 w-14 object-cover bg-surface-container-low">
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </main>
 
     <!-- Footer -->
@@ -296,176 +262,231 @@
     </footer>
 
     <script>
-        (() => {
-            const filterBar = document.querySelector('[data-business-filters]');
-            const businessGrid = document.querySelector('[data-business-grid]');
-            const feedStatus = document.getElementById('business-feed-status');
+        function businessDirectory() {
+            return {
+                filters: [
+                    { value: 'all', label: 'All' },
+                    { value: 'restaurant', label: 'Restaurant' },
+                    { value: 'grocery', label: 'Grocery' },
+                    { value: 'temple', label: 'Temple' },
+                    { value: 'service', label: 'Service' },
+                    { value: 'shopping', label: 'Shopping' },
+                    { value: 'education', label: 'Education' },
+                    { value: 'health', label: 'Health' },
+                    { value: 'other', label: 'Other' }
+                ],
+                activeFilter: 'all',
+                businesses: [],
+                feedStatus: {
+                    open: false,
+                    message: '',
+                    tone: 'neutral'
+                },
+                descriptionModal: {
+                    open: false,
+                    title: '',
+                    body: ''
+                },
+                photoModal: {
+                    open: false,
+                    title: '',
+                    images: [],
+                    index: 0
+                },
 
-            if (!filterBar || !businessGrid) {
-                return;
-            }
-
-            const buttons = Array.from(filterBar.querySelectorAll('[data-filter]'));
-            const allowedFilters = new Set(buttons.map((button) => button.dataset.filter));
-            const getBusinessCards = () => Array.from(businessGrid.querySelectorAll('[data-business-record]'));
-
-            const setActiveButton = (activeValue) => {
-                buttons.forEach((button) => {
-                    const isActive = button.dataset.filter === activeValue;
-                    button.classList.toggle('bg-secondary', isActive);
-                    button.classList.toggle('!text-white', isActive);
-                    button.classList.toggle('hover:bg-secondary/90', isActive);
-                    button.classList.toggle('bg-secondary-container', !isActive);
-                    button.classList.toggle('text-secondary-dim', !isActive);
-                    button.classList.toggle('!text-[#005048]', !isActive);
-                    button.classList.toggle('hover:bg-secondary/20', !isActive);
-                });
-            };
-
-            const applyFilter = (filterValue) => {
-                getBusinessCards().forEach((card) => {
-                    const categories = (card.dataset.categories || '').split(/\s+/).filter(Boolean);
-                    const shouldShow = filterValue === 'all' || categories.includes(filterValue);
-                    card.classList.toggle('hidden', !shouldShow);
-                });
-
-                setActiveButton(filterValue);
-            };
-
-            const escapeHtml = (value) => {
-                const span = document.createElement('span');
-                span.textContent = value || '';
-                return span.innerHTML;
-            };
-
-            const normalizeTags = (tags) => String(tags || '')
-                .split(',')
-                .map((tag) => tag.trim())
-                .filter(Boolean);
-
-            const createBusinessCard = (businessItem) => {
-                const article = document.createElement('article');
-                const tags = normalizeTags(businessItem.tags);
-                const categoryTokens = tags.map((tag) => tag.toLowerCase());
-                const primaryTag = tags[0] || 'Business';
-                const imageUrl = String(businessItem.imageUrl || '').trim() || 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80';
-                const phoneValue = String(businessItem.phone || '').trim();
-
-                article.className = 'business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow';
-                article.dataset.businessRecord = '';
-                article.dataset.categories = categoryTokens.join(' ');
-                article.dataset.entity = 'business';
-                article.innerHTML = `
-                    <div class="rounded-2xl overflow-hidden border border-outline-variant/10 mb-4" data-field-group="image">
-                        <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(businessItem.name || 'Business listing')}" class="w-full h-44 object-cover" loading="lazy" data-field="imageUrl">
-                    </div>
-                    <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
-                        ${tags.map((tag) => `<span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10">${escapeHtml(tag)}</span>`).join('')}
-                    </div>
-                    <div class="flex flex-col gap-4 h-full">
-                        <div>
-                            <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="name">${escapeHtml(businessItem.name || 'Untitled business')}</h2>
-                            <p class="text-sm text-on-surface/78 leading-7" data-field="description">${escapeHtml(businessItem.description || businessItem.summary || '')}</p>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="category">
-                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Category</p>
-                                <p class="text-sm font-bold text-on-surface leading-tight" data-field="category">${escapeHtml(primaryTag)}</p>
-                            </div>
-                            <div class="business-meta-card rounded-2xl px-4 py-4" data-field-group="phone">
-                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Phone</p>
-                                <p class="text-sm font-bold text-on-surface leading-tight" data-field="phone">${escapeHtml(phoneValue || 'Not specified')}</p>
-                            </div>
-                        </div>
-                        <div class="business-contact-card rounded-2xl px-5 py-4" data-field-group="address">
-                            <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Address</p>
-                            <p class="text-sm font-semibold text-on-surface leading-6" data-field="address">${escapeHtml(businessItem.address || 'Address not specified')}</p>
-                        </div>
-                    </div>
-                `;
-
-                return article;
-            };
-
-            const getInitialFilter = () => {
-                const queryFilter = new URLSearchParams(window.location.search).get('category');
-                const hashFilter = window.location.hash ? window.location.hash.slice(1) : '';
-                const candidate = (queryFilter || hashFilter || 'all').toLowerCase();
-                return allowedFilters.has(candidate) ? candidate : 'all';
-            };
-
-            const updateUrlForFilter = (filterValue) => {
-                const url = new URL(window.location.href);
-                if (filterValue === 'all') {
-                    url.searchParams.delete('category');
-                    url.hash = '';
-                } else {
-                    url.searchParams.set('category', filterValue);
-                    url.hash = '';
-                }
-                window.history.replaceState({}, '', url.toString());
-            };
-
-            const loadServerBusinesses = async () => {
-                try {
-                    const response = await fetch('/api/businesses', {
-                        headers: {
-                            'Accept': 'application/json'
-                        },
-                        cache: 'no-store'
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch businesses.');
+                get filteredBusinesses() {
+                    if (this.activeFilter === 'all') {
+                        return this.businesses;
                     }
 
-                    const items = await response.json();
-                    if (!Array.isArray(items) || items.length === 0) {
+                    return this.businesses.filter((business) => business.categories.includes(this.activeFilter));
+                },
+
+                get currentPhotoImage() {
+                    return this.photoModal.images[this.photoModal.index] || '';
+                },
+
+                get photoCounterText() {
+                    const total = this.photoModal.images.length;
+                    return total > 0 ? `${this.photoModal.index + 1} / ${total}` : '0 / 0';
+                },
+
+                async init() {
+                    this.activeFilter = this.getInitialFilter();
+                    this.businesses = [this.normalizeBusiness({
+                        key: 'demo-mintt',
+                        name: 'Mintt @ Banksville',
+                        address: '3033 BANKSVILLE ROAD PITTSBURGH PA 15216',
+                        phone: '412-306-1831',
+                        tags: 'Restaurant',
+                        summary: 'Mintt Indian Cuisine is a casual, BYOB-friendly restaurant offering a diverse array of Indian & Indo-Chinese fare and a lunch buffet. It provides vegan options, Wi-Fi, and all-you-can-eat selections. The restaurant is open until 10 PM and prices range from $10 to $20 per person. It has an offer of no fees on orders above $50.',
+                        imageUrl: 'https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-0.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-1.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-2.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-3.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-4.jpg'
+                    })];
+
+                    await this.loadServerBusinesses();
+                },
+
+                normalizeTags(tags) {
+                    return String(tags || '')
+                        .split(',')
+                        .map((tag) => tag.trim())
+                        .filter(Boolean);
+                },
+
+                normalizeImageUrls(imageValue) {
+                    return String(imageValue || '')
+                        .split(/[;,]/)
+                        .map((url) => url.trim())
+                        .filter(Boolean);
+                },
+
+                normalizeBusiness(item, index = 0) {
+                    const tags = this.normalizeTags(item.tags || item.Tags);
+                    const imageUrls = this.normalizeImageUrls(item.imageUrl || item.ImageUrl);
+                    return {
+                        key: item.key || item.rowKey || item.RowKey || `${item.name || item.Name || 'business'}-${index}`,
+                        name: item.name || item.Name || 'Untitled business',
+                        address: item.address || item.Address || '',
+                        phone: String(item.phone || item.Phone || '').trim(),
+                        tags,
+                        categories: tags.map((tag) => tag.toLowerCase()),
+                        imageUrls,
+                        primaryImage: imageUrls[0] || 'https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-0.jpg',
+                        cardCopy: item.summary || item.Summary || item.description || item.Description || ''
+                    };
+                },
+
+                showReadMore(business) {
+                    return (business.cardCopy || '').length > 180;
+                },
+
+                openDescriptionModal(business) {
+                    this.descriptionModal = {
+                        open: true,
+                        title: business.name || 'Business Description',
+                        body: business.cardCopy || 'No additional description is available.'
+                    };
+                    document.body.classList.add('overflow-hidden');
+                },
+
+                closeDescriptionModal() {
+                    this.descriptionModal.open = false;
+                    if (!this.photoModal.open) {
+                        document.body.classList.remove('overflow-hidden');
+                    }
+                },
+
+                openPhotoGallery(business, index = 0) {
+                    if (!business.imageUrls.length) {
                         return;
                     }
 
-                    items.sort((left, right) => {
-                        const leftTime = Date.parse(left?.createdAtUtc || left?.CreatedAtUtc || '');
-                        const rightTime = Date.parse(right?.createdAtUtc || right?.CreatedAtUtc || '');
-                        const safeLeft = Number.isNaN(leftTime) ? 0 : leftTime;
-                        const safeRight = Number.isNaN(rightTime) ? 0 : rightTime;
-                        return safeRight - safeLeft;
-                    });
+                    this.photoModal = {
+                        open: true,
+                        title: business.name || 'Photo Gallery',
+                        images: business.imageUrls,
+                        index: Math.min(Math.max(index, 0), business.imageUrls.length - 1)
+                    };
+                    document.body.classList.add('overflow-hidden');
+                },
 
-                    const fragment = document.createDocumentFragment();
-                    items.forEach((item) => {
-                        fragment.appendChild(createBusinessCard(item));
-                    });
-                    businessGrid.prepend(fragment);
+                closePhotoGallery() {
+                    this.photoModal.open = false;
+                    if (!this.descriptionModal.open) {
+                        document.body.classList.remove('overflow-hidden');
+                    }
+                },
 
-                    if (feedStatus) {
-                        feedStatus.textContent = `${items.length} local business${items.length === 1 ? ' is' : 'es are'} now showing from recent community submissions.`;
-                        feedStatus.classList.remove('hidden');
+                stepPhotoGallery(delta) {
+                    if (!this.photoModal.open || this.photoModal.images.length <= 1) {
+                        return;
                     }
 
-                    applyFilter(getInitialFilter());
-                } catch (error) {
-                    if (feedStatus) {
-                        feedStatus.textContent = 'Saved businesses could not be loaded right now, so sample listings are being shown.';
-                        feedStatus.classList.remove('hidden');
+                    const total = this.photoModal.images.length;
+                    this.photoModal.index = (this.photoModal.index + delta + total) % total;
+                },
+
+                setFilter(filterValue) {
+                    this.activeFilter = filterValue;
+                    this.updateUrlForFilter(filterValue);
+                },
+
+                showFeedStatus(message, tone = 'neutral') {
+                    this.feedStatus = {
+                        open: true,
+                        message,
+                        tone
+                    };
+                },
+
+                dismissFeedStatus() {
+                    this.feedStatus.open = false;
+                },
+
+                getInitialFilter() {
+                    const allowedFilters = new Set(this.filters.map((filter) => filter.value));
+                    const queryFilter = new URLSearchParams(window.location.search).get('category');
+                    const hashFilter = window.location.hash ? window.location.hash.slice(1) : '';
+                    const candidate = (queryFilter || hashFilter || 'all').toLowerCase();
+                    return allowedFilters.has(candidate) ? candidate : 'all';
+                },
+
+                updateUrlForFilter(filterValue) {
+                    const url = new URL(window.location.href);
+                    if (filterValue === 'all') {
+                        url.searchParams.delete('category');
+                        url.hash = '';
+                    } else {
+                        url.searchParams.set('category', filterValue);
+                        url.hash = '';
+                    }
+                    window.history.replaceState({}, '', url.toString());
+                },
+
+                async loadServerBusinesses() {
+                    try {
+                        const response = await fetch('/api/businesses', {
+                            headers: {
+                                'Accept': 'application/json'
+                            },
+                            cache: 'no-store'
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch businesses.');
+                        }
+
+                        const items = await response.json();
+                        if (!Array.isArray(items) || items.length === 0) {
+                            return;
+                        }
+
+                        items.sort((left, right) => {
+                            const leftTime = Date.parse(left?.createdAtUtc || left?.CreatedAtUtc || '');
+                            const rightTime = Date.parse(right?.createdAtUtc || right?.CreatedAtUtc || '');
+                            const safeLeft = Number.isNaN(leftTime) ? 0 : leftTime;
+                            const safeRight = Number.isNaN(rightTime) ? 0 : rightTime;
+                            return safeRight - safeLeft;
+                        });
+
+                        this.businesses = [
+                            ...items.map((item, index) => this.normalizeBusiness(item, index)),
+                            ...this.businesses
+                        ];
+
+                        this.showFeedStatus(
+                            `${items.length} local business${items.length === 1 ? ' is' : 'es are'} now showing from recent community submissions.`,
+                            'success'
+                        );
+                    } catch (error) {
+                        this.showFeedStatus(
+                            'Saved businesses could not be loaded right now, so sample listings are being shown.',
+                            'error'
+                        );
                     }
                 }
             };
-
-            filterBar.addEventListener('click', (event) => {
-                const button = event.target.closest('[data-filter]');
-                if (!button) {
-                    return;
-                }
-
-                const filterValue = button.dataset.filter;
-                applyFilter(filterValue);
-                updateUrlForFilter(filterValue);
-            });
-
-            applyFilter(getInitialFilter());
-            loadServerBusinesses();
-        })();
+        }
     </script>
 
 </body>

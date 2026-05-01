@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Posts - Indians in Pittsburgh</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -42,6 +44,47 @@
             background:
                 radial-gradient(circle at top right, rgba(140, 245, 228, 0.16), transparent 30%),
                 linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(255, 252, 248, 0.98));
+        }
+        .icon-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 9999px;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+        .dt-layout-row {
+            margin-top: 1rem;
+        }
+        .dt-layout-cell {
+            color: #191C1D;
+        }
+        .dt-info {
+            font-size: 0.875rem;
+            color: rgba(25, 28, 29, 0.65);
+        }
+        .dt-paging {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        .dt-paging-button {
+            border: 1px solid rgba(225, 191, 178, 0.35) !important;
+            border-radius: 0.75rem !important;
+            background: #ffffff !important;
+            color: rgba(25, 28, 29, 0.75) !important;
+            padding: 0.5rem 0.9rem !important;
+            box-shadow: none !important;
+        }
+        .dt-paging-button.current {
+            background: #9F3D00 !important;
+            border-color: #9F3D00 !important;
+            color: #ffffff !important;
+        }
+        .dt-paging-button.disabled {
+            opacity: 0.5;
         }
     </style>
 </head>
@@ -155,44 +198,60 @@
             <div id="admin-panel-posts" class="p-5 md:p-6 border-b border-outline-variant/15">
                 <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
                     <div>
-                        <p class="text-primary text-sm font-bold tracking-widest uppercase mb-2">Filters</p>
+                        <p class="text-primary text-sm font-bold tracking-widest uppercase mb-2">Directory</p>
                         <h2 class="font-headline text-3xl font-extrabold text-on-surface">All Managed Posts</h2>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full lg:max-w-3xl">
-                        <input id="admin-search" class="w-full rounded-xl border border-outline-variant/20 bg-white px-4 py-3 text-sm text-on-surface outline-none focus:border-primary focus:ring-4 focus:ring-primary-fixed-dim/40" type="text" placeholder="Search title, email, EditCode">
-                        <select id="admin-type-filter" class="w-full rounded-xl border border-outline-variant/20 bg-white px-4 py-3 text-sm text-on-surface outline-none focus:border-primary focus:ring-4 focus:ring-primary-fixed-dim/40">
-                            <option value="all">All Types</option>
-                            <option value="event">Events</option>
-                            <option value="business">Businesses</option>
-                        </select>
-                        <select id="admin-status-filter" class="w-full rounded-xl border border-outline-variant/20 bg-white px-4 py-3 text-sm text-on-surface outline-none focus:border-primary focus:ring-4 focus:ring-primary-fixed-dim/40">
-                            <option value="all">All Status</option>
-                            <option value="approved">Approved</option>
-                            <option value="unapproved">Unapproved</option>
-                        </select>
                     </div>
                 </div>
 
                 <div class="mt-6 md:mt-10">
-                    <div id="admin-status" class="hidden mb-6 rounded-2xl border border-outline-variant/20 bg-surface-container-lowest px-5 py-4 text-sm text-on-surface/75 shadow-editorial"></div>
-                    <div id="admin-grid" class="grid grid-cols-1 xl:grid-cols-2 gap-6"></div>
-                    <div id="admin-empty" class="hidden rounded-2xl border border-outline-variant/20 bg-surface-container-lowest px-6 py-8 text-center text-sm text-on-surface/65 shadow-editorial">
-                        No posts matched the current filters.
+                        <div id="admin-status" class="hidden mb-6 rounded-2xl border border-outline-variant/20 bg-surface-container-lowest px-5 py-4 text-sm text-on-surface/75 shadow-editorial"></div>
+                    <div class="overflow-hidden rounded-[1.5rem] border border-outline-variant/15 bg-surface-container-lowest shadow-editorial">
+                        <div class="overflow-x-auto">
+                            <table id="admin-posts-table" class="min-w-full text-sm">
+                                <thead class="bg-surface-container-low text-on-surface/75">
+                                    <tr>
+                                        <th class="px-5 py-4 text-left font-bold uppercase tracking-[0.18em] text-[11px]">Title</th>
+                                        <th class="px-5 py-4 text-left font-bold uppercase tracking-[0.18em] text-[11px]">Type</th>
+                                        <th class="px-5 py-4 text-left font-bold uppercase tracking-[0.18em] text-[11px]">EditCode</th>
+                                        <th class="px-5 py-4 text-left font-bold uppercase tracking-[0.18em] text-[11px]">Submitter Email</th>
+                                        <th class="px-5 py-4 text-center font-bold uppercase tracking-[0.18em] text-[11px]">Actions</th>
+                                        <th class="hidden">Search</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-outline-variant/10"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
+    <div id="admin-summary-modal" class="hidden fixed inset-0 z-[70]">
+        <div class="absolute inset-0 bg-on-surface/55 backdrop-blur-sm" data-admin-summary-close></div>
+        <div class="relative z-[71] min-h-full flex items-center justify-center px-4 py-8">
+            <div class="w-full max-w-2xl rounded-[2rem] bg-surface-container-lowest shadow-editorial border border-outline-variant/15 overflow-hidden">
+                <div class="flex items-start justify-between gap-4 px-6 py-5 border-b border-outline-variant/15">
+                    <div>
+                        <p class="text-primary text-xs font-bold uppercase tracking-[0.22em] mb-2">Post Notes</p>
+                        <h2 id="admin-summary-title" class="font-headline text-3xl font-extrabold text-on-surface">Summary</h2>
+                    </div>
+                    <button type="button" class="rounded-full bg-surface-container-high px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-on-surface/75 hover:text-primary transition-colors" data-admin-summary-close>Close</button>
+                </div>
+                <div class="px-6 py-6">
+                    <p id="admin-summary-body" class="text-base leading-8 text-on-surface/80 whitespace-pre-line"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         (() => {
             const statusBox = document.getElementById('admin-status');
-            const grid = document.getElementById('admin-grid');
-            const emptyState = document.getElementById('admin-empty');
-            const searchInput = document.getElementById('admin-search');
-            const typeFilter = document.getElementById('admin-type-filter');
-            const statusFilter = document.getElementById('admin-status-filter');
+            const postsTable = document.getElementById('admin-posts-table');
+            const summaryModal = document.getElementById('admin-summary-modal');
+            const summaryTitle = document.getElementById('admin-summary-title');
+            const summaryBody = document.getElementById('admin-summary-body');
             const telegramForm = document.getElementById('telegram-mapping-form');
             const telegramIdInput = document.getElementById('telegram-id-input');
             const telegramEmailInput = document.getElementById('telegram-email-input');
@@ -212,6 +271,7 @@
             let allPosts = [];
             let telegramMappings = {};
             let activeAdminTab = 'posts';
+            let postsDataTable = null;
 
             const escapeHtml = (value) => {
                 const span = document.createElement('span');
@@ -237,6 +297,21 @@
             };
 
             const normalizeString = (value) => String(value || '').trim();
+
+            const normalizePostRecord = (post) => ({
+                entityType: normalizeString(post.entityType || post.EntityType),
+                partitionKey: normalizeString(post.partitionKey || post.PartitionKey),
+                rowKey: normalizeString(post.rowKey || post.RowKey),
+                editCode: normalizeString(post.editCode || post.EditCode),
+                submitterEmail: normalizeString(post.submitterEmail || post.SubmitterEmail),
+                title: normalizeString(post.title || post.Title),
+                summary: normalizeString(post.summary || post.Summary),
+                tags: normalizeString(post.tags || post.Tags),
+                imageUrl: normalizeString(post.imageUrl || post.ImageUrl),
+                createdAtUtc: normalizeString(post.createdAtUtc || post.CreatedAtUtc),
+                updatedAtUtc: normalizeString(post.updatedAtUtc || post.UpdatedAtUtc),
+                isApproved: Boolean(post.isApproved ?? post.IsApproved)
+            });
 
             const setAdminTab = (tabName) => {
                 activeAdminTab = tabName === 'telegram' ? 'telegram' : 'posts';
@@ -329,50 +404,105 @@
                 }
             };
 
-            const renderPosts = () => {
-                const query = normalizeString(searchInput.value).toLowerCase();
-                const typeValue = typeFilter.value;
-                const statusValue = statusFilter.value;
+            const openSummaryModal = (title, summary) => {
+                if (!summaryModal || !summaryTitle || !summaryBody) {
+                    return;
+                }
 
-                const filtered = allPosts.filter((post) => {
-                    const typeMatch = typeValue === 'all' || normalizeString(post.entityType).toLowerCase() === typeValue;
-                    const approvalMatch = statusValue === 'all'
-                        || (statusValue === 'approved' && post.isApproved)
-                        || (statusValue === 'unapproved' && !post.isApproved);
-                    const haystack = [
+                summaryTitle.textContent = title || 'Summary';
+                summaryBody.textContent = summary || 'No summary was provided for this post.';
+                summaryModal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            };
+
+            const closeSummaryModal = () => {
+                if (!summaryModal) {
+                    return;
+                }
+
+                summaryModal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            };
+
+            const buildPostsTable = () => {
+                if (!postsTable || postsDataTable) {
+                    return;
+                }
+
+                postsDataTable = new DataTable(postsTable, {
+                    data: [],
+                    pageLength: 10,
+                    order: [],
+                    autoWidth: false,
+                    language: {
+                        emptyTable: 'No posts available yet.',
+                        zeroRecords: 'No posts matched the current filters.'
+                    },
+                    layout: {
+                        topStart: null,
+                        topEnd: null,
+                        bottomStart: 'info',
+                        bottomEnd: 'paging'
+                    },
+                    columns: [
+                        {
+                            data: null,
+                            render: (_data, _type, row) => `
+                                <div class="max-w-md">
+                                    <p class="font-semibold text-on-surface leading-6">${escapeHtml(row.title || 'Untitled')}</p>
+                                    <p class="mt-1 text-xs uppercase tracking-[0.18em] ${row.isApproved ? 'text-secondary' : 'text-primary'}">${row.isApproved ? 'Approved' : 'Unapproved'}</p>
+                                </div>
+                            `
+                        },
+                        {
+                            data: 'entityType',
+                            render: (data) => `<span class="inline-flex rounded-full bg-secondary-container px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[#005048]">${escapeHtml(data || 'Post')}</span>`
+                        },
+                        {
+                            data: 'editCode',
+                            render: (data) => `<code class="rounded bg-surface-container-low px-2 py-1 text-[13px] font-semibold text-on-surface/80">${escapeHtml(data || '')}</code>`
+                        },
+                        { data: 'submitterEmail' },
+                        {
+                            data: null,
+                            orderable: false,
+                            searchable: false,
+                            className: 'text-center',
+                            render: (_data, _type, row) => `
+                                <div class="flex items-center justify-center gap-2">
+                                    <a href="/submit/index.html?type=${normalizeString(row.entityType).toLowerCase() === 'business' ? 'business' : 'event'}&editCode=${encodeURIComponent(row.editCode || '')}" class="icon-button border border-outline-variant/20 bg-white text-on-surface/75 hover:text-primary hover:border-primary/30" title="Open in form" aria-label="Open in form" target="_blank" rel="noopener noreferrer">↗</a>
+                                    <button type="button" class="icon-button border border-outline-variant/20 bg-white text-primary hover:bg-[#fff7f3]" title="Delete post" aria-label="Delete post" data-admin-delete>🗑</button>
+                                    <button type="button" class="icon-button border border-outline-variant/20 bg-white text-secondary hover:bg-[#f1fcfa]" title="View notes" aria-label="View notes" data-admin-notes>📝</button>
+                                </div>
+                            `
+                        },
+                        {
+                            data: 'searchIndex',
+                            visible: false,
+                            searchable: true
+                        }
+                    ]
+                });
+
+            };
+
+            const renderPosts = () => {
+                buildPostsTable();
+
+                const rows = allPosts.map((post) => ({
+                    ...post,
+                    searchIndex: [
                         post.title,
                         post.summary,
                         post.submitterEmail,
                         post.editCode,
                         post.tags
-                    ].join(' ').toLowerCase();
+                    ].join(' ')
+                }));
 
-                    return typeMatch && approvalMatch && (!query || haystack.includes(query));
-                });
-
-                grid.innerHTML = filtered.map((post) => `
-                    <article class="rounded-[1.5rem] border border-outline-variant/15 bg-surface-container-lowest p-6 shadow-editorial" data-post-card data-entity-type="${escapeHtml(post.entityType || '')}" data-partition-key="${escapeHtml(post.partitionKey || '')}" data-row-key="${escapeHtml(post.rowKey || '')}" data-edit-code="${escapeHtml(post.editCode || '')}">
-                        <div class="flex flex-wrap items-center gap-2 mb-4">
-                            <span class="rounded-full bg-secondary-container px-3 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#005048]">${escapeHtml(post.entityType || 'Post')}</span>
-                            <span class="rounded-full ${post.isApproved ? 'bg-[#e8faf4] text-secondary' : 'bg-[#fff3ec] text-primary'} px-3 py-1 text-[11px] font-bold uppercase tracking-[0.22em]">${post.isApproved ? 'Approved' : 'Unapproved'}</span>
-                        </div>
-                        <h3 class="font-headline text-2xl font-extrabold text-on-surface mb-3">${escapeHtml(post.title || 'Untitled')}</h3>
-                        <div class="space-y-2 text-sm text-on-surface/75 leading-7 mb-5">
-                            <p><span class="font-bold text-on-surface">EditCode:</span> <code class="rounded bg-surface-container-low px-2 py-1 text-[13px]">${escapeHtml(post.editCode || '')}</code></p>
-                            <p><span class="font-bold text-on-surface">Submitter:</span> ${escapeHtml(post.submitterEmail || '')}</p>
-                            <p><span class="font-bold text-on-surface">Partition / Row:</span> ${escapeHtml(post.partitionKey || '')} / ${escapeHtml(post.rowKey || '')}</p>
-                            <p><span class="font-bold text-on-surface">Tags:</span> ${escapeHtml(post.tags || 'None')}</p>
-                            <p><span class="font-bold text-on-surface">Summary:</span> ${escapeHtml(post.summary || '')}</p>
-                        </div>
-                        <div class="flex flex-wrap gap-3">
-                            <a href="/submit/index.html?type=${normalizeString(post.entityType).toLowerCase() === 'business' ? 'business' : 'event'}&editCode=${encodeURIComponent(post.editCode || '')}" class="rounded-xl bg-secondary px-5 py-3 text-sm font-bold text-white hover:bg-secondary/90 transition-colors">Open in Form</a>
-                            <button type="button" class="admin-copy rounded-xl bg-surface-container-high px-5 py-3 text-sm font-bold text-on-surface/80 hover:text-primary transition-colors">Copy EditCode</button>
-                            <button type="button" class="admin-delete rounded-xl border border-primary/25 bg-white px-5 py-3 text-sm font-bold text-primary hover:bg-[#fff7f3] transition-colors">Delete</button>
-                        </div>
-                    </article>
-                `).join('');
-
-                emptyState.classList.toggle('hidden', filtered.length > 0);
+                postsDataTable.clear();
+                postsDataTable.rows.add(rows);
+                postsDataTable.draw();
             };
 
             const refreshPosts = async () => {
@@ -394,7 +524,7 @@
                         return;
                     }
 
-                    allPosts = result;
+                    allPosts = result.map(normalizePostRecord);
                     renderPosts();
                     setStatus(`Loaded ${allPosts.length} posts for admin review.`, 'success');
                 } catch (error) {
@@ -423,7 +553,6 @@
 
                     if (!session?.isAdmin) {
                         setStatus('This Gmail account is signed in, but it is not listed in ADMIN_EMAILS for admin access.', 'error');
-                        emptyState.classList.add('hidden');
                         return false;
                     }
 
@@ -434,38 +563,42 @@
                 }
             };
 
-            grid.addEventListener('click', async (event) => {
-                const card = event.target.closest('[data-post-card]');
-                if (!card) {
+            postsTable?.addEventListener('click', async (event) => {
+                if (!postsDataTable) {
                     return;
                 }
 
-                if (event.target.closest('.admin-copy')) {
-                    const code = card.dataset.editCode || '';
-                    try {
-                        await navigator.clipboard.writeText(code);
-                        setStatus(`Copied EditCode ${code}.`, 'success');
-                    } catch (error) {
-                        setStatus('Unable to copy the EditCode right now.', 'error');
-                    }
+                const actionButton = event.target.closest('[data-admin-notes], [data-admin-delete]');
+                if (!actionButton) {
                     return;
                 }
 
-                if (event.target.closest('.admin-delete')) {
-                    const entityType = (card.dataset.entityType || '').toLowerCase();
-                    const partitionKey = card.dataset.partitionKey || '';
-                    const rowKey = card.dataset.rowKey || '';
-                    const editCode = card.dataset.editCode || '';
+                const rowElement = actionButton.closest('tr');
+                const row = postsDataTable.row(rowElement).data();
+                if (!row) {
+                    return;
+                }
+
+                if (actionButton.closest('[data-admin-notes]')) {
+                    openSummaryModal(row.title || 'Summary', row.summary || '');
+                    return;
+                }
+
+                if (actionButton.closest('[data-admin-delete]')) {
+                    const entityType = normalizeString(row.entityType).toLowerCase();
+                    const partitionKey = row.partitionKey || '';
+                    const rowKey = row.rowKey || '';
+                    const editCode = row.editCode || '';
                     const submitPath = entityType === 'business' ? '/api/businesses' : '/api/events';
 
                     if (!window.confirm(`Delete this ${entityType || 'post'}? This cannot be undone.`)) {
                         return;
                     }
 
-                    const deleteButton = event.target.closest('.admin-delete');
+                    const deleteButton = actionButton.closest('[data-admin-delete]');
                     const defaultLabel = deleteButton.textContent;
                     deleteButton.disabled = true;
-                    deleteButton.textContent = 'Deleting...';
+                    deleteButton.textContent = '...';
 
                     try {
                         const response = await fetch(`${submitPath}/${encodeURIComponent(partitionKey)}/${encodeURIComponent(rowKey)}`, {
@@ -486,7 +619,7 @@
                             return;
                         }
 
-                        allPosts = allPosts.filter((post) => !(post.partitionKey === partitionKey && post.rowKey === rowKey && post.entityType?.toLowerCase() === entityType));
+                        allPosts = allPosts.filter((post) => !(post.partitionKey === partitionKey && post.rowKey === rowKey && normalizeString(post.entityType).toLowerCase() === entityType));
                         renderPosts();
                         setStatus('Post deleted successfully.', 'success');
                     } catch (error) {
@@ -495,6 +628,12 @@
                         deleteButton.disabled = false;
                         deleteButton.textContent = defaultLabel;
                     }
+                }
+            });
+
+            summaryModal?.addEventListener('click', (event) => {
+                if (event.target.closest('[data-admin-summary-close]')) {
+                    closeSummaryModal();
                 }
             });
 
@@ -624,9 +763,10 @@
                 });
             });
 
-            [searchInput, typeFilter, statusFilter].forEach((element) => {
-                element.addEventListener('input', renderPosts);
-                element.addEventListener('change', renderPosts);
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closeSummaryModal();
+                }
             });
 
             refreshSession().then((ok) => {
