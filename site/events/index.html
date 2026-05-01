@@ -96,16 +96,13 @@
             </div>
 
             <div class="space-y-5">
-                <div class="flex flex-wrap gap-2 xl:justify-end" data-event-filters>
-                    <button type="button" data-filter="all" class="bg-secondary text-white px-4 py-2 rounded-full text-sm font-bold tracking-wide hover:opacity-90 transition-opacity">All</button>
-                    <button type="button" data-filter="community" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Community</button>
-                    <button type="button" data-filter="culture" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Culture</button>
-                    <button type="button" data-filter="family" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Family</button>
-                    <button type="button" data-filter="food" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Food</button>
-                    <button type="button" data-filter="temple" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Temple</button>
-                    <button type="button" data-filter="professional" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Professional</button>
-                    <button type="button" data-filter="kids" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Kids</button>
-                    <button type="button" data-filter="other" class="bg-secondary-container text-secondary-dim font-bold px-4 py-2 rounded-full text-sm hover:bg-secondary/20 transition-colors !text-[#005048]">Other</button>
+                <div class="xl:pl-10">
+                    <label for="event-created-after" class="block text-[11px] font-bold uppercase tracking-[0.22em] text-on-surface/55 mb-2 xl:text-right">Created On Or After</label>
+                    <input
+                        id="event-created-after"
+                        type="date"
+                        class="w-full rounded-2xl border border-outline-variant/20 bg-surface-container-lowest px-4 py-3 text-sm text-on-surface outline-none focus:border-primary focus:ring-4 focus:ring-primary-fixed-dim/40 xl:text-right"
+                    >
                 </div>
 
                 <div class="gradient-primary rounded-2xl p-7 relative overflow-hidden text-center xl:text-left shadow-editorial">
@@ -195,8 +192,8 @@
 
     <script>
         (() => {
-            const filterBar = document.querySelector('[data-event-filters]');
             const eventGrid = document.querySelector('[data-event-grid]');
+            const createdAfterInput = document.getElementById('event-created-after');
             const loadingPanel = document.getElementById('event-loading-panel');
             const feedStatusSnackbar = document.getElementById('event-feed-status-snackbar');
             const feedStatusText = document.getElementById('event-feed-status-text');
@@ -208,35 +205,11 @@
             const posterModalTitle = document.getElementById('event-poster-modal-title');
             const posterModalImage = document.getElementById('event-poster-modal-image');
 
-            if (!filterBar || !eventGrid) {
+            if (!eventGrid || !createdAfterInput) {
                 return;
             }
 
-            const buttons = Array.from(filterBar.querySelectorAll('[data-filter]'));
-            const getEventCards = () => Array.from(eventGrid.querySelectorAll('[data-event-record]'));
-
-            const setActiveButton = (activeValue) => {
-                buttons.forEach((button) => {
-                    const isActive = button.dataset.filter === activeValue;
-                    button.classList.toggle('bg-secondary', isActive);
-                    button.classList.toggle('!text-white', isActive);
-                    button.classList.toggle('hover:bg-secondary/90', isActive);
-                    button.classList.toggle('bg-secondary-container', !isActive);
-                    button.classList.toggle('text-secondary-dim', !isActive);
-                    button.classList.toggle('!text-[#005048]', !isActive);
-                    button.classList.toggle('hover:bg-secondary/20', !isActive);
-                });
-            };
-
-            const applyFilter = (filterValue) => {
-                getEventCards().forEach((card) => {
-                    const categories = (card.dataset.categories || '').split(/\s+/).filter(Boolean);
-                    const shouldShow = filterValue === 'all' || categories.includes(filterValue);
-                    card.classList.toggle('hidden', !shouldShow);
-                });
-
-                setActiveButton(filterValue);
-            };
+            let allEvents = [];
 
             const escapeHtml = (value) => {
                 const span = document.createElement('span');
@@ -251,10 +224,32 @@
                     .replace(/\n/g, '<br>');
             };
 
-            const normalizeTags = (tags) => String(tags || '')
-                .split(',')
-                .map((tag) => tag.trim())
-                .filter(Boolean);
+            const getCreatedAfterDate = () => {
+                const rawValue = String(createdAfterInput.value || '').trim();
+                if (!rawValue) {
+                    return null;
+                }
+
+                const parsed = new Date(`${rawValue}T00:00:00`);
+                return Number.isNaN(parsed.getTime()) ? null : parsed;
+            };
+
+            const getEventCreatedAt = (eventItem) => {
+                const parsed = Date.parse(eventItem?.createdAtUtc || eventItem?.CreatedAtUtc || '');
+                return Number.isNaN(parsed) ? null : new Date(parsed);
+            };
+
+            const getVisibleEvents = () => {
+                const createdAfterDate = getCreatedAfterDate();
+                if (!createdAfterDate) {
+                    return allEvents;
+                }
+
+                return allEvents.filter((eventItem) => {
+                    const createdAt = getEventCreatedAt(eventItem);
+                    return createdAt ? createdAt >= createdAfterDate : false;
+                });
+            };
 
             const showReadMore = (description) => String(description || '').trim().length > 160;
 
@@ -326,8 +321,6 @@
 
             const createEventCard = (eventItem) => {
                 const article = document.createElement('article');
-                const tags = normalizeTags(eventItem.tags || eventItem.Tags);
-                const categoryTokens = tags.map((tag) => tag.toLowerCase());
                 const imageUrl = String(eventItem.imageUrl || eventItem.ImageUrl || '').trim();
                 const hasImage = Boolean(imageUrl);
                 const timeValue = String(eventItem.time || eventItem.Time || '').trim();
@@ -347,11 +340,7 @@
 
                 article.className = 'event-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow';
                 article.dataset.eventRecord = '';
-                article.dataset.categories = categoryTokens.join(' ');
                 article.innerHTML = `
-                    <div class="flex flex-wrap gap-2 mb-4" data-field="tags">
-                        ${tags.map((tag) => `<span class="bg-secondary-container text-[#005048] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-[0.18em] border border-secondary/10">${escapeHtml(tag)}</span>`).join('')}
-                    </div>
                     <div class="flex flex-col gap-4">
                         <div>
                             <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" data-field="title">${escapeHtml(title)}</h2>
@@ -376,6 +365,27 @@
                 `;
 
                 return article;
+            };
+
+            const renderEvents = () => {
+                const items = getVisibleEvents();
+                eventGrid.innerHTML = '';
+
+                if (!items.length) {
+                    eventGrid.innerHTML = `
+                        <div class="md:col-span-2 xl:col-span-3 rounded-[1.75rem] border border-outline-variant/15 bg-surface-container-lowest px-6 py-8 text-center shadow-editorial">
+                            <p class="font-headline text-2xl font-bold text-on-surface mb-2">No events match this date yet</p>
+                            <p class="text-sm text-on-surface/65">Try an earlier created date to see more recent submissions.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const fragment = document.createDocumentFragment();
+                items.forEach((item) => {
+                    fragment.appendChild(createEventCard(item));
+                });
+                eventGrid.appendChild(fragment);
             };
 
             const loadServerEvents = async () => {
@@ -404,30 +414,18 @@
                         return safeRight - safeLeft;
                     });
 
-                    const fragment = document.createDocumentFragment();
-                    items.forEach((item) => {
-                        fragment.appendChild(createEventCard(item));
-                    });
-                    eventGrid.prepend(fragment);
+                    allEvents = items;
+                    renderEvents();
 
                     setFeedStatus(`${items.length} community event${items.length === 1 ? ' is' : 's are'} now live from recent submissions.`, 'success');
-
-                    applyFilter('all');
                 } catch (error) {
                     setFeedStatus('Saved events could not be loaded right now, so sample listings are being shown.', 'error');
+                    allEvents = [];
+                    renderEvents();
                 } finally {
                     loadingPanel?.classList.add('hidden');
                 }
             };
-
-            filterBar.addEventListener('click', (event) => {
-                const button = event.target.closest('[data-filter]');
-                if (!button) {
-                    return;
-                }
-
-                applyFilter(button.dataset.filter);
-            });
 
             eventGrid.addEventListener('click', (event) => {
                 const readMoreButton = event.target.closest('[data-event-read-more]');
@@ -469,7 +467,10 @@
                 }
             });
 
-            applyFilter('all');
+            createdAfterInput.addEventListener('input', () => {
+                renderEvents();
+            });
+
             loadServerEvents();
         })();
     </script>
