@@ -39,46 +39,21 @@ namespace api.Services
             string intentInstruction = "";
             if (targetIntent == "VALIDATE_EVENT")
             {
-                intentInstruction = $@"You must extract an EVENT. Required fields: Title, Date, Location, Description.
-1. You MUST generate a 1-sentence 'Summary' yourself from the description. Do NOT leave it empty or [MISSING].
-2. For 'Category' and 'Tags', you MUST ONLY pick comma-separated exact strings from this list (if none fit, select 'other'): {eventTagsList}.
-If complete, set IsComplete to true. Set Intent to 'VALIDATE_EVENT'.
-If incomplete:
-- Set IsComplete to false.
-- Fill 'EventDetails' with EVERYTHING you found.
-- In 'UserMessage', provide this template:
-Confirm Event Info:
-Title: [Value or [MISSING]]
-Date: [Value or [MISSING]]
-Time: [Value or [MISSING]]
-Location: [Value or [MISSING]]
-Description: [Value or [MISSING]]
-Category: [Value]
-Tags: [Value]
-
-Please COPY the text above, fill in any [MISSING] blanks, and resubmit.
-<<Event>>";
+                intentInstruction = $@"You must extract an EVENT.
+1. You MUST generate a 1-sentence 'Summary' yourself from the description.
+2. For 'Category' and 'Tags', pick from: {eventTagsList} (default to 'other' if unsure).
+3. If any mandatory fields (Title, Date, Location) are missing, DO NOT ask for them. Instead, use 'Not specified' or 'TBD'.
+4. ALWAYS set IsComplete to true and Intent to 'VALIDATE_EVENT'.
+5. Set UserMessage to 'Success! Your event has been recorded.'";
             }
             else if (targetIntent == "VALIDATE_BUSINESS")
             {
-                intentInstruction = $@"You must extract a BUSINESS. Required fields: Name, Address, Description.
-1. You MUST generate a 1-sentence 'Summary' yourself from the description. Do NOT leave it empty or [MISSING].
-2. For 'Category' and 'Tags', you MUST ONLY pick comma-separated exact strings from this list (if none fit, select 'other'): {businessTagsList}.
-If complete, set IsComplete to true. Set Intent to 'VALIDATE_BUSINESS'.
-If incomplete:
-- Set IsComplete to false.
-- Fill 'BusinessDetails' with EVERYTHING you found.
-- In 'UserMessage', provide this template:
-Confirm Business Info:
-Name: [Value or [MISSING]]
-Address: [Value or [MISSING]]
-Phone: [Value or [MISSING]]
-Description: [Value or [MISSING]]
-Category: [Value]
-Tags: [Value]
-
-Please COPY the text above, fill in any [MISSING] blanks, and resubmit.
-<<Business>>";
+                intentInstruction = $@"You must extract a BUSINESS.
+1. You MUST generate a 1-sentence 'Summary' yourself from the description.
+2. For 'Category' and 'Tags', pick from: {businessTagsList} (default to 'other' if unsure).
+3. If any mandatory fields (Name, Address) are missing, DO NOT ask for them. Instead, use 'Not specified' or 'TBD'.
+4. ALWAYS set IsComplete to true and Intent to 'VALIDATE_BUSINESS'.
+5. Set UserMessage to 'Success! Your business has been recorded.'";
             }
             else
             {
