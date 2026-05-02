@@ -115,6 +115,13 @@
 
                 <a href="/submit/index.html" class="gradient-primary text-white px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity">Post Form</a>
             </div>
+            <div class="md:hidden pb-4">
+                <div class="flex gap-2 overflow-x-auto whitespace-nowrap">
+                    <a href="/events/index.html" class="rounded-full bg-secondary-container px-4 py-2 text-sm font-bold text-[#005048]">Events</a>
+                    <a href="/businesses/index.html" class="rounded-full bg-secondary-container px-4 py-2 text-sm font-bold text-[#005048]">Businesses</a>
+                    <a href="/places/index.html" class="rounded-full bg-secondary-container px-4 py-2 text-sm font-bold text-[#005048]">Places</a>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -544,6 +551,18 @@
                 syncTagPicker(picker);
             };
 
+            const setTagPickerEditable = (picker, isEditable) => {
+                picker.classList.toggle('hidden', !isEditable);
+                picker.dataset.readonly = isEditable ? 'false' : 'true';
+            };
+
+            const setTagPickerValue = (picker, rawValue) => {
+                const hiddenInput = picker.querySelector('.hidden-tag-input');
+                if (hiddenInput) {
+                    hiddenInput.value = String(rawValue || '').trim();
+                }
+            };
+
             const resetFormToCreateMode = (form, options = {}) => {
                 const config = formConfig[form.dataset.formType];
                 const saveButton = form.querySelector('.save-button');
@@ -558,7 +577,10 @@
 
                 tagPickers
                     .filter((picker) => form.contains(picker))
-                    .forEach((picker) => syncTagPickerSelectionFromValue(picker, ''));
+                    .forEach((picker) => {
+                        setTagPickerEditable(picker, true);
+                        syncTagPickerSelectionFromValue(picker, '');
+                    });
 
                 const emailField = form.querySelector('.verification-email');
                 if (emailField) {
@@ -599,7 +621,11 @@
 
                 tagPickers
                     .filter((picker) => form.contains(picker))
-                    .forEach((picker) => syncTagPickerSelectionFromValue(picker, normalized.Tags || ''));
+                    .forEach((picker) => {
+                        syncTagPickerSelectionFromValue(picker, '');
+                        setTagPickerValue(picker, normalized.Tags || '');
+                        setTagPickerEditable(picker, false);
+                    });
 
                 form.elements.EditCode.value = lookupResult.editCode || '';
                 form.elements.PartitionKey.value = lookupResult.partitionKey || '';
@@ -870,15 +896,15 @@
                         return;
                     }
 
+                    const isEditMode = Boolean(editSession && editSession.type === form.dataset.formType && form.elements.PartitionKey.value && form.elements.RowKey.value && form.elements.EditCode.value);
                     const tagsValue = String(form.elements.Tags?.value || '').trim();
-                    if (!tagsValue) {
+                    if (!isEditMode && !tagsValue) {
                         window.alert('Please choose at least one tag before submitting.');
                         return;
                     }
 
                     const payload = getPayloadFromForm(form);
                     const submitButton = form.querySelector('.save-button');
-                    const isEditMode = Boolean(editSession && editSession.type === form.dataset.formType && form.elements.PartitionKey.value && form.elements.RowKey.value && form.elements.EditCode.value);
                     const endpoint = isEditMode
                         ? `${config.submitPath}/${encodeURIComponent(form.elements.PartitionKey.value)}/${encodeURIComponent(form.elements.RowKey.value)}`
                         : config.submitPath;
