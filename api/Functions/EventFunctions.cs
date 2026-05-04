@@ -86,11 +86,7 @@ public sealed class EventFunctions
                 return new BadRequestObjectResult(new { error = requiredError });
             }
 
-            var tagValidation = ValidationHelpers.ValidateTags(body.Tags, TagCatalog.EventTags);
-            if (!tagValidation.Ok)
-            {
-                return new BadRequestObjectResult(new { error = tagValidation.Error, allowedTags = TagCatalog.EventTags });
-            }
+            var normalizedTags = ValidationHelpers.NormalizeTags(body.Tags);
 
             var lookupTable = _tableStorageService.GetTableClient("EditCodeLookup");
             var lookup = await lookupTable.GetEntityAsync<TableEntity>(EditCodeService.LookupPartitionKey, body.EditCode.Trim().ToUpperInvariant());
@@ -116,7 +112,7 @@ public sealed class EventFunctions
             entity.Value["Location"] = body.Location!.Trim();
             entity.Value["Summary"] = body.Summary!.Trim();
             entity.Value["Description"] = body.Description!.Trim();
-            entity.Value["Tags"] = tagValidation.TagsString!;
+            entity.Value["Tags"] = normalizedTags;
             entity.Value["ImageUrl"] = (body.ImageUrl ?? string.Empty).Trim();
             entity.Value["UpdatedAtUtc"] = DateTimeOffset.UtcNow.ToString("O");
 
@@ -196,11 +192,7 @@ public sealed class EventFunctions
             return new BadRequestObjectResult(new { error = requiredError });
         }
 
-        var tagValidation = ValidationHelpers.ValidateTags(body.Tags, TagCatalog.EventTags);
-        if (!tagValidation.Ok)
-        {
-            return new BadRequestObjectResult(new { error = tagValidation.Error, allowedTags = TagCatalog.EventTags });
-        }
+        var normalizedTags = ValidationHelpers.NormalizeTags(body.Tags);
 
         var eventsTable = _tableStorageService.GetTableClient("Events");
         var lookupTable = _tableStorageService.GetTableClient("EditCodeLookup");
@@ -221,7 +213,7 @@ public sealed class EventFunctions
             ["Location"] = body.Location!.Trim(),
             ["Summary"] = body.Summary!.Trim(),
             ["Description"] = body.Description!.Trim(),
-            ["Tags"] = tagValidation.TagsString!,
+            ["Tags"] = normalizedTags,
             ["ImageUrl"] = (body.ImageUrl ?? string.Empty).Trim(),
             ["EditCode"] = editCode,
             ["SubmitterEmail"] = email,

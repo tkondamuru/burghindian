@@ -107,10 +107,28 @@
                 <p class="text-lg text-on-surface/80 leading-relaxed max-w-xl">
                     Find trusted Indian-owned and community-loved restaurants, groceries, and services in and around Pittsburgh.
                 </p>
-                <div x-cloak x-show="selectedCategory" class="mt-4 inline-flex items-center gap-3 rounded-full border border-outline-variant/20 bg-surface-container-lowest px-4 py-2 text-sm shadow-editorial">
-                    <span class="font-bold text-on-surface/80">Showing:</span>
-                    <span class="font-bold text-primary" x-text="selectedCategory"></span>
-                    <button type="button" class="rounded-full bg-surface-container-high px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-on-surface/70 hover:text-primary transition-colors" @click="clearCategoryFilter()">Clear</button>
+                <div class="mt-5">
+                    <p class="mb-3 text-[11px] font-bold uppercase tracking-[0.22em] text-on-surface/55">Browse By Category</p>
+                    <div class="flex flex-wrap gap-3">
+                        <template x-for="category in allCategories" :key="category">
+                            <label class="inline-flex cursor-pointer items-center gap-2 rounded-full border border-outline-variant/20 bg-surface-container-lowest px-4 py-2 text-sm font-semibold text-on-surface/80 shadow-editorial transition-colors hover:border-primary/30">
+                                <input
+                                    type="checkbox"
+                                    class="h-4 w-4 rounded border-outline-variant/40 text-primary focus:ring-primary"
+                                    :checked="selectedCategories.includes(category)"
+                                    @change="toggleCategory(category)"
+                                >
+                                <span x-text="category"></span>
+                            </label>
+                        </template>
+                        <button
+                            x-cloak
+                            x-show="selectedCategories.length"
+                            type="button"
+                            class="rounded-full bg-surface-container-high px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-on-surface/70 hover:text-primary transition-colors"
+                            @click="clearCategoryFilter()"
+                        >Clear</button>
+                    </div>
                 </div>
             </div>
 
@@ -184,20 +202,6 @@
                 </article>
             </template>
         </div>
-
-        <section class="mt-12 rounded-[1.75rem] border border-outline-variant/15 bg-surface-container-lowest p-6 shadow-editorial">
-            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div>
-                    <p class="text-primary text-sm font-bold tracking-widest uppercase mb-2">Check Also</p>
-                    <h2 class="font-headline text-2xl font-extrabold text-on-surface">Other Business Types</h2>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                    <template x-for="category in alternateCategories" :key="category">
-                        <a :href="buildCategoryHref(category)" class="rounded-full bg-secondary-container px-4 py-2 text-sm font-bold text-[#005048] hover:bg-secondary/20 transition-colors" x-text="category"></a>
-                    </template>
-                </div>
-            </div>
-        </section>
 
         <div
             x-cloak
@@ -295,7 +299,8 @@
         function businessDirectory() {
             return {
                 searchTerm: '',
-                selectedCategory: '',
+                allCategories: ['Restaurants', 'Grocery & Markets', 'Temples', 'Services & Others'],
+                selectedCategories: [],
                 businesses: [],
                 isLoading: false,
                 feedStatus: {
@@ -318,7 +323,7 @@
                 get filteredBusinesses() {
                     const query = this.searchTerm.toLowerCase();
                     return this.businesses.filter((business) => {
-                        const matchesCategory = !this.selectedCategory || business.category === this.selectedCategory;
+                        const matchesCategory = this.selectedCategories.length === 0 || this.selectedCategories.includes(business.category);
                         const matchesSearch = !query || [
                             business.name,
                             business.category,
@@ -331,11 +336,6 @@
                     });
                 },
 
-                get alternateCategories() {
-                    const allCategories = ['Restaurants', 'Grocery & Markets', 'Temples', 'Services & Others'];
-                    return allCategories.filter((category) => category !== this.selectedCategory);
-                },
-
                 get currentPhotoImage() {
                     return this.photoModal.images[this.photoModal.index] || '';
                 },
@@ -346,7 +346,7 @@
                 },
 
                 async init() {
-                    this.selectedCategory = this.getInitialCategory();
+                    this.selectedCategories = this.getInitialCategories();
                     this.isLoading = true;
                     this.businesses = [this.normalizeBusiness({
                         key: 'demo-mintt',
@@ -471,7 +471,7 @@
                     this.feedStatus.open = false;
                 },
 
-                getInitialCategory() {
+                getInitialCategories() {
                     const aliases = {
                         restaurants: 'Restaurants',
                         restaurant: 'Restaurants',
@@ -486,20 +486,34 @@
                     };
                     const raw = String(new URLSearchParams(window.location.search).get('category') || '').trim();
                     if (!raw) {
-                        return '';
+                        return [];
                     }
 
-                    return aliases[raw.toLowerCase()] || raw;
+                    const canonical = aliases[raw.toLowerCase()] || raw;
+                    return this.allCategories.includes(canonical) ? [canonical] : [];
                 },
 
-                buildCategoryHref(category) {
-                    return `/businesses/index.html?category=${encodeURIComponent(category)}`;
+                toggleCategory(category) {
+                    if (this.selectedCategories.includes(category)) {
+                        this.selectedCategories = this.selectedCategories.filter((item) => item !== category);
+                    } else {
+                        this.selectedCategories = [...this.selectedCategories, category];
+                    }
+                    this.syncCategoryQuery();
                 },
 
                 clearCategoryFilter() {
-                    this.selectedCategory = '';
+                    this.selectedCategories = [];
+                    this.syncCategoryQuery();
+                },
+
+                syncCategoryQuery() {
                     const url = new URL(window.location.href);
-                    url.searchParams.delete('category');
+                    if (this.selectedCategories.length === 1) {
+                        url.searchParams.set('category', this.selectedCategories[0]);
+                    } else {
+                        url.searchParams.delete('category');
+                    }
                     window.history.replaceState({}, '', url.toString());
                 },
 

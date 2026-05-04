@@ -15,28 +15,15 @@ public static class ValidationHelpers
         return null;
     }
 
-    public static (bool Ok, string? Error, string? TagsString, IReadOnlyList<string>? Tags) ValidateTags(string? rawTags, IReadOnlyList<string> allowedTags)
+    public static string NormalizeTags(string? rawTags)
     {
-        var allowed = new HashSet<string>(allowedTags, StringComparer.Ordinal);
         var requested = (rawTags ?? string.Empty)
             .Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Where(tag => !string.IsNullOrWhiteSpace(tag))
-            .Distinct(StringComparer.Ordinal)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        if (requested.Count == 0)
-        {
-            return (false, "At least one tag is required.", null, null);
-        }
-
-        var invalid = requested.FirstOrDefault(tag => !allowed.Contains(tag));
-        if (invalid is not null)
-        {
-            return (false, $"Invalid tag: {invalid}", null, null);
-        }
-
-        var canonical = allowedTags.Where(requested.Contains).ToList();
-        return (true, null, string.Join(",", canonical), canonical);
+        return string.Join(",", requested);
     }
 
     public static (bool Ok, string? Error, string? Category) ValidateCategory(string? rawCategory, IReadOnlyList<string> allowedCategories)
