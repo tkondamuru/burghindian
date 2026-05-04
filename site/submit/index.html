@@ -280,6 +280,16 @@
                                 <input class="field-control" name="Address" type="text" required>
                             </label>
                             <label class="md:col-span-2">
+                                <span class="field-label">Category</span>
+                                <select class="field-control" name="Category" required>
+                                    <option value="">Select a category</option>
+                                    <option value="Restaurants">Restaurants</option>
+                                    <option value="Grocery & Markets">Grocery & Markets</option>
+                                    <option value="Temples">Temples</option>
+                                    <option value="Services & Others">Services & Others</option>
+                                </select>
+                            </label>
+                            <label class="md:col-span-2">
                                 <span class="field-label">Summary</span>
                                 <input class="field-control" name="Summary" type="text" placeholder="Short one-line summary for cards" required>
                             </label>
@@ -287,27 +297,13 @@
                                 <span class="field-label">Description</span>
                                 <textarea class="field-control min-h-[150px]" name="Description" placeholder="Full business details, specials, services, hours, or notes" required></textarea>
                             </label>
-                            <div class="md:col-span-2" data-tag-picker data-tag-input-name="Tags">
-                                <span class="field-label">Tags</span>
-                                <div class="flex flex-wrap gap-3">
-                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Restaurant"><span class="tag-chip">Restaurant</span></label>
-                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Grocery"><span class="tag-chip">Grocery</span></label>
-                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Temple"><span class="tag-chip">Temple</span></label>
-                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Service"><span class="tag-chip">Service</span></label>
-                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Shopping"><span class="tag-chip">Shopping</span></label>
-                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Education"><span class="tag-chip">Education</span></label>
-                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Health"><span class="tag-chip">Health</span></label>
-                                    <label><input class="tag-toggle sr-only" type="checkbox" value="Other"><span class="tag-chip">Other</span></label>
-                                </div>
-                                <p class="text-sm text-on-surface/60 mt-3">Choose one or more tags for filtering.</p>
-                                <input class="hidden-tag-input" name="Tags" type="hidden">
-                            </div>
                             <label class="md:col-span-2">
                                 <span class="field-label">ImageUrl</span>
                                 <input class="field-control" name="ImageUrl" type="url" placeholder="https://example.com/business-image.jpg">
                             </label>
                         </div>
 
+                        <input name="Tags" type="hidden" value="">
                         <input name="EditCode" type="hidden">
                         <input name="PartitionKey" type="hidden">
                         <input name="RowKey" type="hidden">
@@ -402,7 +398,7 @@
                     createdMessage: 'Business saved successfully and is ready to appear on the public page. Keep this EditCode safe for future changes.',
                     updatedMessage: 'Business updated successfully. Your changes are now saved.',
                     deletedMessage: 'Business deleted successfully.',
-                    fields: ['Name', 'Phone', 'Address', 'Summary', 'Description', 'Tags', 'ImageUrl']
+                    fields: ['Name', 'Phone', 'Address', 'Category', 'Summary', 'Description', 'Tags', 'ImageUrl']
                 }
             };
 
@@ -439,6 +435,7 @@
                     Name: read('name', 'Name'),
                     Phone: read('phone', 'Phone'),
                     Address: read('address', 'Address'),
+                    Category: read('category', 'Category'),
                     Summary: read('summary', 'Summary'),
                     Description: read('description', 'Description'),
                     Tags: read('tags', 'Tags'),
@@ -898,7 +895,7 @@
 
                     const isEditMode = Boolean(editSession && editSession.type === form.dataset.formType && form.elements.PartitionKey.value && form.elements.RowKey.value && form.elements.EditCode.value);
                     const tagsValue = String(form.elements.Tags?.value || '').trim();
-                    if (!isEditMode && !tagsValue) {
+                    if (form.dataset.formType === 'event' && !isEditMode && !tagsValue) {
                         window.alert('Please choose at least one tag before submitting.');
                         return;
                     }

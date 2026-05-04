@@ -2,6 +2,14 @@ namespace WebsiteApi.Services;
 
 public static class TagCatalog
 {
+    public static readonly IReadOnlyList<string> BusinessCategories =
+    [
+        "Restaurants",
+        "Grocery & Markets",
+        "Temples",
+        "Services & Others"
+    ];
+
     public static readonly IReadOnlyList<string> EventTags =
     [
         "Community",

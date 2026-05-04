@@ -107,6 +107,11 @@
                 <p class="text-lg text-on-surface/80 leading-relaxed max-w-xl">
                     Find trusted Indian-owned and community-loved restaurants, groceries, and services in and around Pittsburgh.
                 </p>
+                <div x-cloak x-show="selectedCategory" class="mt-4 inline-flex items-center gap-3 rounded-full border border-outline-variant/20 bg-surface-container-lowest px-4 py-2 text-sm shadow-editorial">
+                    <span class="font-bold text-on-surface/80">Showing:</span>
+                    <span class="font-bold text-primary" x-text="selectedCategory"></span>
+                    <button type="button" class="rounded-full bg-surface-container-high px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-on-surface/70 hover:text-primary transition-colors" @click="clearCategoryFilter()">Clear</button>
+                </div>
             </div>
 
             <div class="space-y-5">
@@ -117,7 +122,7 @@
                             id="business-search"
                             x-model.trim="searchTerm"
                             type="search"
-                            placeholder="Search name, address, or tags"
+                            placeholder="Search name, address, or category"
                             class="w-full rounded-2xl border border-outline-variant/20 bg-surface-container-lowest px-4 py-3 text-sm text-on-surface outline-none border-primary ring-4 ring-primary-fixed-dim/40 xl:text-right"
                         >
                     </div>
@@ -179,6 +184,20 @@
                 </article>
             </template>
         </div>
+
+        <section class="mt-12 rounded-[1.75rem] border border-outline-variant/15 bg-surface-container-lowest p-6 shadow-editorial">
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                    <p class="text-primary text-sm font-bold tracking-widest uppercase mb-2">Check Also</p>
+                    <h2 class="font-headline text-2xl font-extrabold text-on-surface">Other Business Types</h2>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <template x-for="category in alternateCategories" :key="category">
+                        <a :href="buildCategoryHref(category)" class="rounded-full bg-secondary-container px-4 py-2 text-sm font-bold text-[#005048] hover:bg-secondary/20 transition-colors" x-text="category"></a>
+                    </template>
+                </div>
+            </div>
+        </section>
 
         <div
             x-cloak
@@ -276,6 +295,7 @@
         function businessDirectory() {
             return {
                 searchTerm: '',
+                selectedCategory: '',
                 businesses: [],
                 isLoading: false,
                 feedStatus: {
@@ -297,17 +317,23 @@
 
                 get filteredBusinesses() {
                     const query = this.searchTerm.toLowerCase();
-                    if (!query) {
-                        return this.businesses;
-                    }
+                    return this.businesses.filter((business) => {
+                        const matchesCategory = !this.selectedCategory || business.category === this.selectedCategory;
+                        const matchesSearch = !query || [
+                            business.name,
+                            business.category,
+                            business.address,
+                            business.phone,
+                            business.tags.join(' '),
+                            business.cardCopy
+                        ].join(' ').toLowerCase().includes(query);
+                        return matchesCategory && matchesSearch;
+                    });
+                },
 
-                    return this.businesses.filter((business) => [
-                        business.name,
-                        business.address,
-                        business.phone,
-                        business.tags.join(' '),
-                        business.cardCopy
-                    ].join(' ').toLowerCase().includes(query));
+                get alternateCategories() {
+                    const allCategories = ['Restaurants', 'Grocery & Markets', 'Temples', 'Services & Others'];
+                    return allCategories.filter((category) => category !== this.selectedCategory);
                 },
 
                 get currentPhotoImage() {
@@ -320,10 +346,12 @@
                 },
 
                 async init() {
+                    this.selectedCategory = this.getInitialCategory();
                     this.isLoading = true;
                     this.businesses = [this.normalizeBusiness({
                         key: 'demo-mintt',
                         name: 'Mintt @ Banksville',
+                        category: 'Restaurants',
                         address: '3033 BANKSVILLE ROAD PITTSBURGH PA 15216',
                         phone: '412-306-1831',
                         summary: 'Mintt Indian Cuisine is a casual, BYOB-friendly restaurant offering a diverse array of Indian & Indo-Chinese fare and a lunch buffet. It provides vegan options, Wi-Fi, and all-you-can-eat selections. The restaurant is open until 10 PM and prices range from $10 to $20 per person. It has an offer of no fees on orders above $50.',
@@ -353,6 +381,7 @@
                     return {
                         key: item.key || item.rowKey || item.RowKey || `${item.name || item.Name || 'business'}-${index}`,
                         name: item.name || item.Name || 'Untitled business',
+                        category: item.category || item.Category || '',
                         address: item.address || item.Address || '',
                         phone: String(item.phone || item.Phone || '').trim(),
                         tags,
@@ -440,6 +469,38 @@
 
                 dismissFeedStatus() {
                     this.feedStatus.open = false;
+                },
+
+                getInitialCategory() {
+                    const aliases = {
+                        restaurants: 'Restaurants',
+                        restaurant: 'Restaurants',
+                        grocery: 'Grocery & Markets',
+                        groceries: 'Grocery & Markets',
+                        markets: 'Grocery & Markets',
+                        'grocery-markets': 'Grocery & Markets',
+                        temples: 'Temples',
+                        temple: 'Temples',
+                        services: 'Services & Others',
+                        'services-others': 'Services & Others'
+                    };
+                    const raw = String(new URLSearchParams(window.location.search).get('category') || '').trim();
+                    if (!raw) {
+                        return '';
+                    }
+
+                    return aliases[raw.toLowerCase()] || raw;
+                },
+
+                buildCategoryHref(category) {
+                    return `/businesses/index.html?category=${encodeURIComponent(category)}`;
+                },
+
+                clearCategoryFilter() {
+                    this.selectedCategory = '';
+                    const url = new URL(window.location.href);
+                    url.searchParams.delete('category');
+                    window.history.replaceState({}, '', url.toString());
                 },
 
                 async loadServerBusinesses() {

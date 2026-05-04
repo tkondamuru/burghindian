@@ -76,6 +76,7 @@ public sealed class BusinessFunctions
             {
                 ["Name"] = body.Name,
                 ["Address"] = body.Address,
+                ["Category"] = body.Category,
                 ["Summary"] = body.Summary,
                 ["Description"] = body.Description
             });
@@ -85,10 +86,10 @@ public sealed class BusinessFunctions
                 return new BadRequestObjectResult(new { error = requiredError });
             }
 
-            var tagValidation = ValidationHelpers.ValidateTags(body.Tags, TagCatalog.BusinessTags);
-            if (!tagValidation.Ok)
+            var categoryValidation = ValidationHelpers.ValidateCategory(body.Category, TagCatalog.BusinessCategories);
+            if (!categoryValidation.Ok)
             {
-                return new BadRequestObjectResult(new { error = tagValidation.Error, allowedTags = TagCatalog.BusinessTags });
+                return new BadRequestObjectResult(new { error = categoryValidation.Error, allowedCategories = TagCatalog.BusinessCategories });
             }
 
             var lookupTable = _tableStorageService.GetTableClient("EditCodeLookup");
@@ -112,9 +113,9 @@ public sealed class BusinessFunctions
             entity.Value["Name"] = body.Name!.Trim();
             entity.Value["Address"] = body.Address!.Trim();
             entity.Value["Phone"] = (body.Phone ?? string.Empty).Trim();
+            entity.Value["Category"] = categoryValidation.Category!;
             entity.Value["Summary"] = body.Summary!.Trim();
             entity.Value["Description"] = body.Description!.Trim();
-            entity.Value["Tags"] = tagValidation.TagsString!;
             entity.Value["ImageUrl"] = (body.ImageUrl ?? string.Empty).Trim();
             entity.Value["UpdatedAtUtc"] = DateTimeOffset.UtcNow.ToString("O");
 
@@ -151,6 +152,7 @@ public sealed class BusinessFunctions
                     Name = entity.GetString("Name"),
                     Address = entity.GetString("Address"),
                     Phone = entity.GetString("Phone"),
+                    Category = entity.GetString("Category"),
                     Summary = entity.GetString("Summary"),
                     Description = entity.GetString("Description"),
                     Tags = entity.GetString("Tags"),
@@ -183,6 +185,7 @@ public sealed class BusinessFunctions
         {
             ["Name"] = body.Name,
             ["Address"] = body.Address,
+            ["Category"] = body.Category,
             ["Summary"] = body.Summary,
             ["Description"] = body.Description
         });
@@ -192,10 +195,10 @@ public sealed class BusinessFunctions
             return new BadRequestObjectResult(new { error = requiredError });
         }
 
-        var tagValidation = ValidationHelpers.ValidateTags(body.Tags, TagCatalog.BusinessTags);
-        if (!tagValidation.Ok)
+        var categoryValidation = ValidationHelpers.ValidateCategory(body.Category, TagCatalog.BusinessCategories);
+        if (!categoryValidation.Ok)
         {
-            return new BadRequestObjectResult(new { error = tagValidation.Error, allowedTags = TagCatalog.BusinessTags });
+            return new BadRequestObjectResult(new { error = categoryValidation.Error, allowedCategories = TagCatalog.BusinessCategories });
         }
 
         var businessTable = _tableStorageService.GetTableClient("Businesses");
@@ -214,9 +217,10 @@ public sealed class BusinessFunctions
             ["Name"] = body.Name!.Trim(),
             ["Address"] = body.Address!.Trim(),
             ["Phone"] = (body.Phone ?? string.Empty).Trim(),
+            ["Category"] = categoryValidation.Category!,
             ["Summary"] = body.Summary!.Trim(),
             ["Description"] = body.Description!.Trim(),
-            ["Tags"] = tagValidation.TagsString!,
+            ["Tags"] = string.Empty,
             ["ImageUrl"] = (body.ImageUrl ?? string.Empty).Trim(),
             ["EditCode"] = editCode,
             ["SubmitterEmail"] = email,
