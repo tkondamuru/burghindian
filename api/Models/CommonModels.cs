@@ -10,6 +10,11 @@ public sealed class DeletePostRequest
     public string? EditCode { get; set; }
 }
 
+public sealed class IngestDeleteRequest
+{
+    public bool Confirm { get; set; }
+}
+
 public sealed class UpdateEventRequest : EventSubmissionRequest
 {
     public string? EditCode { get; set; }
