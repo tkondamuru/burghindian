@@ -1,0 +1,30 @@
+{# Pre-rendered business card. Mirrors the Alpine x-for card in site/businesses/index.html.
+   Cards live in the main grid (SEO / no-JS friendly). Alpine binds the @click
+   handlers below on init; search/category filtering toggles these cards in the
+   DOM via data attributes, and modals look the record up by data-key. #}
+<article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-key="{{ key }}" data-category="{{ category }}" data-search="{{ search_text }}">
+    <div class="relative rounded-2xl overflow-hidden border border-outline-variant/10 mb-4">
+        <img src="{{ primary_image }}" alt="{{ name }}" class="w-full h-44 object-cover" loading="lazy">
+        {% if image_urls|length > 1 %}
+        <button type="button" data-key="{{ key }}" @click="openPhotoGallery($event.currentTarget.dataset.key, 0)" class="absolute right-3 top-3 rounded-full bg-on-surface/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-white hover:bg-on-surface/85 transition-colors">{{ image_urls|length }} Photos</button>
+        {% endif %}
+    </div>
+
+    <div class="flex flex-col gap-4 h-full">
+        <div>
+            <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight">{{ name }}</h2>
+            <p class="text-sm text-on-surface/78 leading-7 line-clamp-3">{{ card_copy }}</p>
+            {% if show_read_more %}
+            <button type="button" data-key="{{ key }}" @click="openDescriptionModal($event.currentTarget.dataset.key)" class="mt-2 text-sm font-bold text-primary hover:text-primary-container transition-colors">Read more</button>
+            {% endif %}
+        </div>
+
+        <div class="business-contact-card rounded-2xl px-5 py-4">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+                <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em]">Address</p>
+                <p class="text-xs font-bold text-primary/80 uppercase tracking-[0.18em]">{{ phone }}</p>
+            </div>
+            <p class="text-sm font-semibold text-on-surface leading-6">{{ address }}</p>
+        </div>
+    </div>
+</article>
