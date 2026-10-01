@@ -8,16 +8,36 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install listing generator dependencies
+        run: pip install -r tools/staticgen/requirements.txt
+
+      - name: Bake listing pages from live API
+        run: |
+          python tools/staticgen/build.py \
+            --site-src site \
+            --out /tmp/sitegen \
+            --source api \
+            --api-base https://gentle-desert-0872cca0f.7.azurestaticapps.net \
+            --force
+          cp /tmp/sitegen/events/index.html site/events/index.html
+          cp /tmp/sitegen/businesses/index.html site/businesses/index.html
 
       - name: Deploy static site and managed API
         uses: Azure/static-web-apps-deploy@v1

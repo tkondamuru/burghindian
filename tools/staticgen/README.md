@@ -8,13 +8,19 @@ listing fetches.
 
 1. Listings are written to Azure Table Storage (website submit UI, or Marley
    via the `/api/ingest/*` endpoint).
-2. The **Sync listings to static site** GitHub Actions workflow
-   (`.github/workflows/sync-listings.yml`, manual trigger) runs this generator
-   with `--source api` against the live site's anonymous GET endpoints.
-3. It rewrites `site/events/index.html` and `site/businesses/index.html` with
-   the cards baked in, commits, and pushes only when something changed.
-4. The push triggers the existing Static Web Apps CI/CD workflow, which
-   deploys the site (~1-2 minutes).
+2. The Static Web Apps CI/CD workflow
+   (`.github/workflows/azure-static-web-apps-gentle-desert-0872cca0f.yml`)
+   runs this generator on every deploy with `--source api` against the live
+   site's anonymous GET endpoints. It rewrites `site/events/index.html` and
+   `site/businesses/index.html` with the cards baked in, right before the
+   Azure deploy step uploads `site/`.
+3. To publish new listings, trigger the workflow manually (**Run workflow**
+   button in the GitHub app's Actions tab). The site is live ~1-2 minutes
+   later. Normal pushes to `main` also regenerate, so code changes never
+   ship stale listings.
+
+`site/` in the repo always holds the dynamic page shells (the source); the
+baked HTML is a build artifact produced at deploy time, never committed.
 
 ## Run locally
 
