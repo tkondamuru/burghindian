@@ -336,9 +336,10 @@
                 const imageUrl = String(eventItem.imageUrl || eventItem.ImageUrl || '').trim();
                 const hasImage = Boolean(imageUrl);
                 const timeValue = String(eventItem.time || eventItem.Time || '').trim();
+                const dateValue = String(eventItem.date || eventItem.Date || '').trim();
+                const datetimeText = `${dateValue} ${timeValue}`.trim() || 'No time specified';
                 const fullDescription = eventItem.description || eventItem.Description || eventItem.summary || eventItem.Summary || '';
                 const title = eventItem.title || eventItem.Title || 'Untitled event';
-                const date = eventItem.date || eventItem.Date || 'Not specified';
                 const location = eventItem.location || eventItem.Location || 'Location not specified';
                 const readMoreMarkup = showReadMore(fullDescription)
                     ? `<button type="button" class="text-sm font-bold text-primary hover:text-primary-container transition-colors" data-event-read-more data-event-title="${escapeHtml(title)}" data-event-description="${escapeHtml(fullDescription)}">Read more</button>`
@@ -359,15 +360,9 @@
                             <p class="text-sm text-on-surface/78 leading-7 line-clamp-3 mb-3" data-field="description">${escapeHtml(fullDescription)}</p>
                             ${actionMarkup}
                         </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="date">
-                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Date</p>
-                                <p class="text-sm font-bold text-on-surface leading-tight" data-field="date">${escapeHtml(date)}</p>
-                            </div>
-                            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="time">
-                                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Time</p>
-                                <p class="text-sm font-bold text-on-surface leading-tight" data-field="time">${escapeHtml(timeValue || 'Not specified')}</p>
-                            </div>
+                        <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="datetime">
+                            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Date & Time</p>
+                            <p class="text-sm font-bold text-on-surface leading-tight" data-field="datetime">${escapeHtml(datetimeText)}</p>
                         </div>
                         <div class="event-location-card rounded-2xl px-5 py-4" data-field-group="location">
                             <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Location</p>
