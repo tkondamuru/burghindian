@@ -389,7 +389,7 @@ public sealed class IngestFunctions
         }
     }
 
-    private static IActionResult? CheckAuth(HttpRequest req)
+    internal static IActionResult? CheckAuth(HttpRequest req)
     {
         var expected = Environment.GetEnvironmentVariable(IngestKeySetting);
         if (string.IsNullOrWhiteSpace(expected))
