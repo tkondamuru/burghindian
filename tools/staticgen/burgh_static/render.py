@@ -50,8 +50,8 @@ def prepare_event(item):
     image_url = (item.get("imageUrl") or "").strip()
     return {
         "title": title,
-        "date": item.get("date") or "Not specified",
-        "time": item.get("time") or "Not specified",
+        "date": item.get("date") or "",
+        "time": item.get("time") or "",
         "location": item.get("location") or "Location not specified",
         "full_description": full_description,
         "image_url": image_url,

@@ -15,15 +15,10 @@
             </div>
             {% endif %}
         </div>
-        <div class="grid grid-cols-2 gap-3">
-            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="date">
-                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Date</p>
-                <p class="text-sm font-bold text-on-surface leading-tight" data-field="date">{{ date }}</p>
-            </div>
-            <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="time">
-                <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Time</p>
-                <p class="text-sm font-bold text-on-surface leading-tight" data-field="time">{{ time }}</p>
-            </div>
+        {% set datetime_text = ((date or '') + ' ' + (time or '')).strip() %}
+        <div class="event-meta-card rounded-2xl px-4 py-4" data-field-group="datetime">
+            <p class="text-[11px] font-bold text-primary/70 uppercase tracking-[0.22em] mb-2">Date &amp; Time</p>
+            <p class="text-sm font-bold text-on-surface leading-tight" data-field="datetime">{{ datetime_text if datetime_text else 'No time specified' }}</p>
         </div>
         <div class="event-location-card rounded-2xl px-5 py-4" data-field-group="location">
             <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em] mb-2">Location</p>
