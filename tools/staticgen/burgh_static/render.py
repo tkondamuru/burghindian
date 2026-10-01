@@ -44,14 +44,21 @@ def sort_newest_first(items):
     return sorted(items, key=key, reverse=True)
 
 
+def _clean_legacy_unspecified(value):
+    """Old entries stored the literal 'Not specified' for missing date/time.
+    Treat it as empty so the card shows the fallback instead."""
+    text = (value or "").strip()
+    return "" if text.lower() == "not specified" else text
+
+
 def prepare_event(item):
     title = item.get("title") or "Untitled event"
     full_description = item.get("description") or item.get("summary") or ""
     image_url = (item.get("imageUrl") or "").strip()
     return {
         "title": title,
-        "date": item.get("date") or "",
-        "time": item.get("time") or "",
+        "date": _clean_legacy_unspecified(item.get("date")),
+        "time": _clean_legacy_unspecified(item.get("time")),
         "location": item.get("location") or "Location not specified",
         "full_description": full_description,
         "image_url": image_url,
