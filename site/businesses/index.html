@@ -139,7 +139,6 @@
                         <input
                             id="business-search"
                             x-model.trim="searchTerm"
-                            @input="applyFilters()"
                             type="search"
                             placeholder="Search name, address, or category"
                             class="w-full rounded-2xl border border-outline-variant/20 bg-surface-container-lowest px-4 py-3 text-sm text-on-surface outline-none border-primary ring-4 ring-primary-fixed-dim/40 xl:text-right"
@@ -156,141 +155,53 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" data-business-grid>
-
-<article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-key="20260504123935490-DEAC5" data-category="Grocery &amp; Markets" data-search="Patel Brothers Grocery &amp; Markets 312 Mall Plaza Blvd, Monroeville, PA 15146 (412) 372-2758 grocery shopping Patel Brothers is a grocery chain offering Indian foods, beauty products, spiritual items, bakery services, and on-site parking.">
-    <div class="relative rounded-2xl overflow-hidden border border-outline-variant/10 mb-4">
-        <img src="https://stburghindian8808.blob.core.windows.net/business-photos/patel-brothers-20260504/photo-0.jpg" alt="Patel Brothers" class="w-full h-44 object-cover" loading="lazy">
-        
-        <button type="button" data-key="20260504123935490-DEAC5" @click="openPhotoGallery($event.currentTarget.dataset.key, 0)" class="absolute right-3 top-3 rounded-full bg-on-surface/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-white hover:bg-on-surface/85 transition-colors">5 Photos</button>
-        
-    </div>
-
-    <div class="flex flex-col gap-4 h-full">
-        <div>
-            <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight">Patel Brothers</h2>
-            <p class="text-sm text-on-surface/78 leading-7 line-clamp-3">Patel Brothers is a grocery chain offering Indian foods, beauty products, spiritual items, bakery services, and on-site parking.</p>
-            
-        </div>
-
-        <div class="business-contact-card rounded-2xl px-5 py-4">
-            <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
-                <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em]">Address</p>
-                <p class="text-xs font-bold text-primary/80 uppercase tracking-[0.18em]">(412) 372-2758</p>
-            </div>
-            <p class="text-sm font-semibold text-on-surface leading-6">312 Mall Plaza Blvd, Monroeville, PA 15146</p>
-        </div>
-    </div>
-</article>
-
-<article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-key="20260504123742494-821DE" data-category="Temples" data-search="Sri Shirdi Sai Baba Temple - Pittsburgh Temples 1451 Abers Creek Rd, Monroeville, PA 15146 (412) 374-9244 temple service Sri Shirdi Sai Baba Temple in Pittsburgh offers daily Aarati services to devotees.">
-    <div class="relative rounded-2xl overflow-hidden border border-outline-variant/10 mb-4">
-        <img src="https://stburghindian8808.blob.core.windows.net/business-photos/sri-shirdi-sai-baba-temple---pittsburgh-20260504/photo-0.jpg" alt="Sri Shirdi Sai Baba Temple - Pittsburgh" class="w-full h-44 object-cover" loading="lazy">
-        
-        <button type="button" data-key="20260504123742494-821DE" @click="openPhotoGallery($event.currentTarget.dataset.key, 0)" class="absolute right-3 top-3 rounded-full bg-on-surface/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-white hover:bg-on-surface/85 transition-colors">5 Photos</button>
-        
-    </div>
-
-    <div class="flex flex-col gap-4 h-full">
-        <div>
-            <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight">Sri Shirdi Sai Baba Temple - Pittsburgh</h2>
-            <p class="text-sm text-on-surface/78 leading-7 line-clamp-3">Sri Shirdi Sai Baba Temple in Pittsburgh offers daily Aarati services to devotees.</p>
-            
-        </div>
-
-        <div class="business-contact-card rounded-2xl px-5 py-4">
-            <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
-                <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em]">Address</p>
-                <p class="text-xs font-bold text-primary/80 uppercase tracking-[0.18em]">(412) 374-9244</p>
-            </div>
-            <p class="text-sm font-semibold text-on-surface leading-6">1451 Abers Creek Rd, Monroeville, PA 15146</p>
-        </div>
-    </div>
-</article>
-
-<article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-key="20260504044424834-718CD" data-category="Temples" data-search="Sri Venkateswara Temple Temples 1230 S McCully Dr, Pittsburgh, PA 15235 (412) 373-3380 temple Sri Venkateswara Temple is one of the earliest traditional Hindu Temples located in Penn Hills, a suburb of Pittsburgh, PA.">
-    <div class="relative rounded-2xl overflow-hidden border border-outline-variant/10 mb-4">
-        <img src="https://stburghindian8808.blob.core.windows.net/business-photos/sri-venkateswara-temple-20260504/photo-0.jpg" alt="Sri Venkateswara Temple" class="w-full h-44 object-cover" loading="lazy">
-        
-        <button type="button" data-key="20260504044424834-718CD" @click="openPhotoGallery($event.currentTarget.dataset.key, 0)" class="absolute right-3 top-3 rounded-full bg-on-surface/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-white hover:bg-on-surface/85 transition-colors">5 Photos</button>
-        
-    </div>
-
-    <div class="flex flex-col gap-4 h-full">
-        <div>
-            <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight">Sri Venkateswara Temple</h2>
-            <p class="text-sm text-on-surface/78 leading-7 line-clamp-3">Sri Venkateswara Temple is one of the earliest traditional Hindu Temples located in Penn Hills, a suburb of Pittsburgh, PA.</p>
-            
-        </div>
-
-        <div class="business-contact-card rounded-2xl px-5 py-4">
-            <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
-                <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em]">Address</p>
-                <p class="text-xs font-bold text-primary/80 uppercase tracking-[0.18em]">(412) 373-3380</p>
-            </div>
-            <p class="text-sm font-semibold text-on-surface leading-6">1230 S McCully Dr, Pittsburgh, PA 15235</p>
-        </div>
-    </div>
-</article>
-
-<article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-key="20260501212643573-545B5" data-category="Restaurants" data-search="Udipi Cafe Restaurants 4141 Old William Penn Hwy, Monroeville, PA 15146 (412) 373-5581 vegetarian Indian cuisine Southern Indian vegan options gluten-free dining Udipi Cafe is a popular all-vegetarian Indian restaurant specializing in Southern Indian cuisine with options for vegan and gluten-free diets.">
-    <div class="relative rounded-2xl overflow-hidden border border-outline-variant/10 mb-4">
-        <img src="https://stburghindian8808.blob.core.windows.net/business-photos/udipi-cafe-20260501/photo-0.jpg" alt="Udipi Cafe" class="w-full h-44 object-cover" loading="lazy">
-        
-        <button type="button" data-key="20260501212643573-545B5" @click="openPhotoGallery($event.currentTarget.dataset.key, 0)" class="absolute right-3 top-3 rounded-full bg-on-surface/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-white hover:bg-on-surface/85 transition-colors">5 Photos</button>
-        
-    </div>
-
-    <div class="flex flex-col gap-4 h-full">
-        <div>
-            <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight">Udipi Cafe</h2>
-            <p class="text-sm text-on-surface/78 leading-7 line-clamp-3">Udipi Cafe is a popular all-vegetarian Indian restaurant specializing in Southern Indian cuisine with options for vegan and gluten-free diets.</p>
-            
-        </div>
-
-        <div class="business-contact-card rounded-2xl px-5 py-4">
-            <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
-                <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em]">Address</p>
-                <p class="text-xs font-bold text-primary/80 uppercase tracking-[0.18em]">(412) 373-5581</p>
-            </div>
-            <p class="text-sm font-semibold text-on-surface leading-6">4141 Old William Penn Hwy, Monroeville, PA 15146</p>
-        </div>
-    </div>
-</article>
-
-<article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow" data-business-key="20260501173320955-E0258" data-category="Restaurants" data-search="Tatva | Indian Remixed Restaurants 12009 Perry Hwy, Wexford, PA 15090 (724) 260-6081 Indian Indo-Chinese Thai fusion vegan options sports Tatva | Indian Remixed is a modern Indian restaurant in Wexford, PA, offering Indo-Chinese and Thai fusion dishes with bold flavors.">
-    <div class="relative rounded-2xl overflow-hidden border border-outline-variant/10 mb-4">
-        <img src="https://stburghindian8808.blob.core.windows.net/business-photos/tatva-|-indian-remixed-20260501/photo-0.jpg" alt="Tatva | Indian Remixed" class="w-full h-44 object-cover" loading="lazy">
-        
-        <button type="button" data-key="20260501173320955-E0258" @click="openPhotoGallery($event.currentTarget.dataset.key, 0)" class="absolute right-3 top-3 rounded-full bg-on-surface/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-white hover:bg-on-surface/85 transition-colors">5 Photos</button>
-        
-    </div>
-
-    <div class="flex flex-col gap-4 h-full">
-        <div>
-            <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight">Tatva | Indian Remixed</h2>
-            <p class="text-sm text-on-surface/78 leading-7 line-clamp-3">Tatva | Indian Remixed is a modern Indian restaurant in Wexford, PA, offering Indo-Chinese and Thai fusion dishes with bold flavors.</p>
-            
-        </div>
-
-        <div class="business-contact-card rounded-2xl px-5 py-4">
-            <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
-                <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em]">Address</p>
-                <p class="text-xs font-bold text-primary/80 uppercase tracking-[0.18em]">(724) 260-6081</p>
-            </div>
-            <p class="text-sm font-semibold text-on-surface leading-6">12009 Perry Hwy, Wexford, PA 15090</p>
-        </div>
-    </div>
-</article>
-            <div id="business-empty-state" class="hidden md:col-span-2 xl:col-span-3 rounded-[1.75rem] border border-outline-variant/15 bg-surface-container-lowest px-6 py-8 text-center shadow-editorial">
-                <p class="font-headline text-2xl font-bold text-on-surface mb-2">No businesses match your filters</p>
-                <p class="text-sm text-on-surface/65">Try a different keyword or clear the category filters.</p>
+        <div x-cloak x-show="isLoading" class="mb-6 rounded-[1.75rem] border border-outline-variant/15 bg-surface-container-lowest px-5 py-5 shadow-editorial">
+            <div class="flex items-center gap-4">
+                <div class="h-11 w-11 shrink-0 rounded-full border-4 border-primary/15 border-t-primary animate-spin"></div>
+                <div>
+                    <p class="font-headline text-xl font-bold text-on-surface">Loading community businesses</p>
+                    <p class="text-sm text-on-surface/65">Azure is warming up the directory. Listings should appear in a moment.</p>
+                </div>
             </div>
         </div>
 
-        <div
-            x-cloak
-            x-show="feedStatus.open && feedStatus.message"        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <template x-for="business in filteredBusinesses" :key="business.key">
+                <article class="business-shell rounded-2xl p-5 shadow-editorial border border-outline-variant/10 hover:shadow-xl transition-shadow">
+                    <div class="relative rounded-2xl overflow-hidden border border-outline-variant/10 mb-4">
+                        <img :src="business.primaryImage" :alt="business.name || 'Business listing'" class="w-full h-44 object-cover" loading="lazy">
+                        <button
+                            x-show="business.imageUrls.length > 1"
+                            type="button"
+                            class="absolute right-3 top-3 rounded-full bg-on-surface/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-white hover:bg-on-surface/85 transition-colors"
+                            @click="openPhotoGallery(business, 0)"
+                            x-text="`${business.imageUrls.length} Photos`"></button>
+                    </div>
+
+                    <div class="flex flex-col gap-4 h-full">
+                        <div>
+                            <h2 class="font-headline text-2xl font-extrabold text-on-surface mb-2 tracking-tight" x-text="business.name || 'Untitled business'"></h2>
+                            <p class="text-sm text-on-surface/78 leading-7 line-clamp-3" x-text="business.cardCopy"></p>
+                            <button
+                                x-cloak
+                                x-show="showReadMore(business)"
+                                type="button"
+                                class="mt-2 text-sm font-bold text-primary hover:text-primary-container transition-colors"
+                                @click="openDescriptionModal(business)"
+                            >Read more</button>
+                        </div>
+
+                        <div class="business-contact-card rounded-2xl px-5 py-4">
+                            <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+                                <p class="text-[11px] font-bold text-secondary/80 uppercase tracking-[0.22em]">Address</p>
+                                <p class="text-xs font-bold text-primary/80 uppercase tracking-[0.18em]" x-text="business.phone || 'Phone not specified'"></p>
+                            </div>
+                            <p class="text-sm font-semibold text-on-surface leading-6" x-text="business.address || 'Address not specified'"></p>
+                        </div>
+                    </div>
+                </article>
+            </template>
+        </div>
 
         <div
             x-cloak
@@ -384,16 +295,14 @@
         </div>
     </footer>
 
-    <script type="application/json" id="pre-rendered-businesses">
-[{"partitionKey": "2026-05", "rowKey": "20260504123935490-DEAC5", "createdAtUtc": "2026-05-04T12:39:35.4907434+00:00", "updatedAtUtc": "2026-05-04T12:39:35.4907434+00:00", "name": "Patel Brothers", "address": "312 Mall Plaza Blvd, Monroeville, PA 15146", "phone": "(412) 372-2758", "category": "Grocery & Markets", "summary": "Patel Brothers is a grocery chain offering Indian foods, beauty products, spiritual items, bakery services, and on-site parking.", "description": "This grocery chain sells Indian foods, plus beauty products, spiritual items & more. It offers on-site parking, bakery, and accepts credit cards. Opens at 11 AM.", "tags": "grocery,shopping", "imageUrl": "https://stburghindian8808.blob.core.windows.net/business-photos/patel-brothers-20260504/photo-0.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/patel-brothers-20260504/photo-1.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/patel-brothers-20260504/photo-2.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/patel-brothers-20260504/photo-3.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/patel-brothers-20260504/photo-4.jpg"}, {"partitionKey": "2026-05", "rowKey": "20260504123742494-821DE", "createdAtUtc": "2026-05-04T12:37:42.4948692+00:00", "updatedAtUtc": "2026-05-04T12:37:42.4948692+00:00", "name": "Sri Shirdi Sai Baba Temple - Pittsburgh", "address": "1451 Abers Creek Rd, Monroeville, PA 15146", "phone": "(412) 374-9244", "category": "Temples", "summary": "Sri Shirdi Sai Baba Temple in Pittsburgh offers daily Aarati services to devotees.", "description": "Sri Shirdi Sai Baba Temple - Pittsburgh conducts daily Aarati activities at 9:00 AM, 12:00 PM, and 6:00 PM to spiritually engage the local community.", "tags": "temple, service", "imageUrl": "https://stburghindian8808.blob.core.windows.net/business-photos/sri-shirdi-sai-baba-temple---pittsburgh-20260504/photo-0.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/sri-shirdi-sai-baba-temple---pittsburgh-20260504/photo-1.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/sri-shirdi-sai-baba-temple---pittsburgh-20260504/photo-2.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/sri-shirdi-sai-baba-temple---pittsburgh-20260504/photo-3.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/sri-shirdi-sai-baba-temple---pittsburgh-20260504/photo-4.jpg"}, {"partitionKey": "2026-05", "rowKey": "20260504044424834-718CD", "createdAtUtc": "2026-05-04T04:44:24.8349682+00:00", "updatedAtUtc": "2026-05-04T04:44:24.8349682+00:00", "name": "Sri Venkateswara Temple", "address": "1230 S McCully Dr, Pittsburgh, PA 15235", "phone": "(412) 373-3380", "category": "Temples", "summary": "Sri Venkateswara Temple is one of the earliest traditional Hindu Temples located in Penn Hills, a suburb of Pittsburgh, PA.", "description": "One of the earliest traditional Hindu Temples located in Penn Hills, an eastern suburb of Pittsburgh, PA.", "tags": "temple", "imageUrl": "https://stburghindian8808.blob.core.windows.net/business-photos/sri-venkateswara-temple-20260504/photo-0.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/sri-venkateswara-temple-20260504/photo-1.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/sri-venkateswara-temple-20260504/photo-2.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/sri-venkateswara-temple-20260504/photo-3.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/sri-venkateswara-temple-20260504/photo-4.jpg"}, {"partitionKey": "2026-05", "rowKey": "20260501212643573-545B5", "createdAtUtc": "2026-05-01T21:26:43.5730578+00:00", "updatedAtUtc": "2026-05-04T04:13:26.9783317+00:00", "name": "Udipi Cafe", "address": "4141 Old William Penn Hwy, Monroeville, PA 15146", "phone": "(412) 373-5581", "category": "Restaurants", "summary": "Udipi Cafe is a popular all-vegetarian Indian restaurant specializing in Southern Indian cuisine with options for vegan and gluten-free diets.", "description": "A popular, all-vegetarian Indian restaurant specializing in Southern Indian cuisine like dosas, uttapams, and idlis, with options for vegan and gluten-free diets. Open until 9 PM. Offers no fees on orders above $50. Price range: $10–20 per person.", "tags": "vegetarian, Indian cuisine, Southern Indian, vegan options, gluten-free, dining", "imageUrl": "https://stburghindian8808.blob.core.windows.net/business-photos/udipi-cafe-20260501/photo-0.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/udipi-cafe-20260501/photo-1.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/udipi-cafe-20260501/photo-2.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/udipi-cafe-20260501/photo-3.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/udipi-cafe-20260501/photo-4.jpg"}, {"partitionKey": "2026-05", "rowKey": "20260501173320955-E0258", "createdAtUtc": "2026-05-01T17:33:20.9558917+00:00", "updatedAtUtc": "2026-05-04T04:13:40.1587472+00:00", "name": "Tatva | Indian Remixed", "address": "12009 Perry Hwy, Wexford, PA 15090", "phone": "(724) 260-6081", "category": "Restaurants", "summary": "Tatva | Indian Remixed is a modern Indian restaurant in Wexford, PA, offering Indo-Chinese and Thai fusion dishes with bold flavors.", "description": "Modern Indian restaurant in Allegheny County, Pennsylvania, known for Indo-Chinese and Thai fusion offering a \"remixed\" take on traditional Indian cuisine with bold flavors, Price range: $20-30 per person, Closes soon at 2:30 PM, Reopens at 5 PM, Reservations required, Vegan options available, Good for watching sports", "tags": "Indian, Indo-Chinese, Thai fusion, vegan options, sports", "imageUrl": "https://stburghindian8808.blob.core.windows.net/business-photos/tatva-|-indian-remixed-20260501/photo-0.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/tatva-|-indian-remixed-20260501/photo-1.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/tatva-|-indian-remixed-20260501/photo-2.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/tatva-|-indian-remixed-20260501/photo-3.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/tatva-|-indian-remixed-20260501/photo-4.jpg"}]
-    </script>
     <script>
         function businessDirectory() {
             return {
                 searchTerm: '',
                 allCategories: ['Restaurants', 'Grocery & Markets', 'Temples', 'Services & Others'],
                 selectedCategories: [],
-                businessByKey: {},
+                businesses: [],
+                isLoading: false,
                 feedStatus: {
                     open: false,
                     message: '',
@@ -411,30 +320,20 @@
                     index: 0
                 },
 
-                applyFilters() {
-                    const query = this.searchTerm.trim().toLowerCase();
-                    // NOTE: document-scoped lookup, not this.$el: inside @input/@change
-                    // handlers Alpine binds $el to the event's element, not the x-data root.
-                    const grid = document.querySelector('[data-business-grid]');
-                    if (!grid) {
-                        return;
-                    }
-                    let visibleCount = 0;
-                    grid.querySelectorAll('[data-business-key]').forEach((card) => {
-                        const matchesCategory = this.selectedCategories.length === 0
-                            || this.selectedCategories.includes(card.dataset.category || '');
-                        const matchesSearch = !query
-                            || (card.dataset.search || '').toLowerCase().includes(query);
-                        const show = matchesCategory && matchesSearch;
-                        card.classList.toggle('hidden', !show);
-                        if (show) {
-                            visibleCount += 1;
-                        }
+                get filteredBusinesses() {
+                    const query = this.searchTerm.toLowerCase();
+                    return this.businesses.filter((business) => {
+                        const matchesCategory = this.selectedCategories.length === 0 || this.selectedCategories.includes(business.category);
+                        const matchesSearch = !query || [
+                            business.name,
+                            business.category,
+                            business.address,
+                            business.phone,
+                            business.tags.join(' '),
+                            business.cardCopy
+                        ].join(' ').toLowerCase().includes(query);
+                        return matchesCategory && matchesSearch;
                     });
-                    const emptyState = document.getElementById('business-empty-state');
-                    if (emptyState) {
-                        emptyState.classList.toggle('hidden', visibleCount > 0);
-                    }
                 },
 
                 get currentPhotoImage() {
@@ -448,23 +347,8 @@
 
                 async init() {
                     this.selectedCategories = this.getInitialCategories();
-                    try {
-                        const embeddedData = document.getElementById('pre-rendered-businesses');
-                        const items = embeddedData ? JSON.parse(embeddedData.textContent || '[]') : [];
-                        items.sort((left, right) => {
-                            const leftTime = Date.parse(left?.createdAtUtc || left?.CreatedAtUtc || '');
-                            const rightTime = Date.parse(right?.createdAtUtc || right?.CreatedAtUtc || '');
-                            const safeLeft = Number.isNaN(leftTime) ? 0 : leftTime;
-                            const safeRight = Number.isNaN(rightTime) ? 0 : rightTime;
-                            return safeRight - safeLeft;
-                        });
-                        this.businessByKey = {};
-                        items.forEach((item, index) => {
-                            const business = this.normalizeBusiness(item, index);
-                            this.businessByKey[business.key] = business;
-                        });
-                        if (items.length === 0) {
-                            const demo = this.normalizeBusiness({
+                    this.isLoading = true;
+                    this.businesses = [this.normalizeBusiness({
                         key: 'demo-mintt',
                         name: 'Mintt @ Banksville',
                         category: 'Restaurants',
@@ -472,21 +356,9 @@
                         phone: '412-306-1831',
                         summary: 'Mintt Indian Cuisine is a casual, BYOB-friendly restaurant offering a diverse array of Indian & Indo-Chinese fare and a lunch buffet. It provides vegan options, Wi-Fi, and all-you-can-eat selections. The restaurant is open until 10 PM and prices range from $10 to $20 per person. It has an offer of no fees on orders above $50.',
                         imageUrl: 'https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-0.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-1.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-2.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-3.jpg;https://stburghindian8808.blob.core.windows.net/business-photos/mintt-indian-cuisine-20260430/photo-4.jpg'
-                    });
-                            this.businessByKey[demo.key] = demo;
-                        } else {
-                            this.showFeedStatus(
-                                `${items.length} local business${items.length === 1 ? ' is' : 'es are'} now showing from community submissions.`,
-                                'success'
-                            );
-                        }
-                    } catch (error) {
-                        this.showFeedStatus(
-                            'Business listings are bundled with this page and could not be read.',
-                            'error'
-                        );
-                    }
-                    this.applyFilters();
+                    })];
+
+                    await this.loadServerBusinesses();
                 },
 
                 normalizeTags(tags) {
@@ -537,12 +409,11 @@
                         .replace(/\n/g, '<br>');
                 },
 
+                showReadMore(business) {
+                    return (business.cardCopy || '').length > 180;
+                },
 
-                openDescriptionModal(businessKey) {
-                    const business = this.businessByKey[businessKey];
-                    if (!business) {
-                        return;
-                    }
+                openDescriptionModal(business) {
                     this.descriptionModal = {
                         open: true,
                         title: business.name || 'Business Description',
@@ -558,11 +429,7 @@
                     }
                 },
 
-                openPhotoGallery(businessKey, index = 0) {
-                    const business = this.businessByKey[businessKey];
-                    if (!business) {
-                        return;
-                    }
+                openPhotoGallery(business, index = 0) {
                     if (!business.imageUrls.length) {
                         return;
                     }
@@ -633,14 +500,11 @@
                         this.selectedCategories = [...this.selectedCategories, category];
                     }
                     this.syncCategoryQuery();
-                    this.syncCategoryQuery();
-                    this.applyFilters();
                 },
 
                 clearCategoryFilter() {
                     this.selectedCategories = [];
                     this.syncCategoryQuery();
-                    this.applyFilters();
                 },
 
                 syncCategoryQuery() {
@@ -653,7 +517,50 @@
                     window.history.replaceState({}, '', url.toString());
                 },
 
+                async loadServerBusinesses() {
+                    try {
+                        const response = await fetch('/api/businesses', {
+                            headers: {
+                                'Accept': 'application/json'
+                            },
+                            cache: 'no-store'
+                        });
 
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch businesses.');
+                        }
+
+                        const items = await response.json();
+                        if (!Array.isArray(items) || items.length === 0) {
+                            return;
+                        }
+
+                        items.sort((left, right) => {
+                            const leftTime = Date.parse(left?.createdAtUtc || left?.CreatedAtUtc || '');
+                            const rightTime = Date.parse(right?.createdAtUtc || right?.CreatedAtUtc || '');
+                            const safeLeft = Number.isNaN(leftTime) ? 0 : leftTime;
+                            const safeRight = Number.isNaN(rightTime) ? 0 : rightTime;
+                            return safeRight - safeLeft;
+                        });
+
+                        this.businesses = [
+                            ...items.map((item, index) => this.normalizeBusiness(item, index)),
+                            ...this.businesses
+                        ];
+
+                        this.showFeedStatus(
+                            `${items.length} local business${items.length === 1 ? ' is' : 'es are'} now showing from recent community submissions.`,
+                            'success'
+                        );
+                    } catch (error) {
+                        this.showFeedStatus(
+                            'Saved businesses could not be loaded right now, so sample listings are being shown.',
+                            'error'
+                        );
+                    } finally {
+                        this.isLoading = false;
+                    }
+                }
             };
         }
     </script>

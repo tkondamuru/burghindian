@@ -1,13 +1,13 @@
 """Render pre-rendered listing pages from normalized datasets.
 
-Takes the current site/events/index.html and site/businesses/index.html from the
-repo and applies deterministic transforms:
-  events:      cards baked into the grid + dataset embedded as JSON; the
-               existing filter/modal JS reads the embedded JSON instead of
-               fetch('/api/events').
-  businesses:  Alpine component seeds from embedded JSON instead of
-               fetch('/api/businesses'); <noscript> block carries static cards
-               for crawlers / no-JS users.
+Takes the dynamic site/events/index.html and site/businesses/index.html page
+shells from the repo and bakes the listing cards directly into the DOM:
+  events:      event cards are the primary DOM (data-created-at); the date
+               filter toggles .hidden on baked cards; empty state pre-rendered.
+               No fetch('/api/events'), no embedded dataset JSON.
+  businesses:  business cards are the primary DOM (data-business-key); Alpine
+               only manages search/filter/modal state over the baked cards.
+               No fetch('/api/businesses'), no embedded dataset JSON.
 """
 import json
 import re
